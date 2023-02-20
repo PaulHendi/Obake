@@ -1,0 +1,30 @@
+{
+  "name": "obake",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PaulHendi/Obake.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/PaulHendi/Obake/issues"
+  },
+  "homepage": "https://github.com/PaulHendi/Obake#readme",
+  "dependencies": {
+    "@chainlink/contracts": "^0.6.1",
+    "@nomicfoundation/hardhat-toolbox": "^2.0.1",
+    "@openzeppelin/contracts": "^4.8.1",
+    "dotenv": "^16.0.3",
+    "hardhat": "^2.12.7"
+  }
+}
