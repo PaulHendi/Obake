@@ -3,16 +3,18 @@ pragma solidity ^0.8.9;
 
 import "./randomness.sol";
 import "../node_modules/@openzeppelin/contracts/token/ERC721/IERC721.sol";
+import "hardhat/console.sol";
 
 contract Lottery  {
 
+    // TODO : set a maximum ticket amount per tx
 
     event LotteryStarted(uint256 lotteryId, address NFTcontract, uint256 NFTid, uint256 ticket_amount, uint256 ticket_price);
     event LotteryEntered(uint256 lotteryId, address player, uint256 ticket_amount);
     event LotteryEnded(uint256 lotteryId, bool tickets_fully_sold);
     event LotteryWinner(uint256 lotteryId, address winner);
 
-    enum LOTTERY_STATE { OPEN, CLOSED, CALCULATING_WINNER }
+    enum LOTTERY_STATE { CLOSED, OPEN, CALCULATING_WINNER }
 
     RandomNumberConsumer public randomness_contract;
     
@@ -24,14 +26,15 @@ contract Lottery  {
 
     // Lottery struct to store lottery info
     struct lottery {
-        address owner;               // Owner of the lottery
-        LOTTERY_STATE lottery_state; // State of the lottery
-        uint256 ticket_price;        // Price of a ticket
-        uint256 ticket_amount;       // Amount of tickets to be sold
-        uint256 ticket_sold;         // Amount of tickets sold
-        address NFTcontract;         // NFT contract address to be won
-        uint256 NFTid;               // NFT id to be won
-        address payable[] players;   // Players who bought tickets
+        address owner;                              // Owner of the lottery
+        LOTTERY_STATE lottery_state;                // State of the lottery
+        uint256 ticket_price;                       // Price of a ticket
+        uint256 ticket_amount;                      // Amount of tickets to be sold
+        uint256 ticket_sold;                        // Amount of tickets sold
+        address NFTcontract;                        // NFT contract address to be won
+        uint256 NFTid;                              // NFT id to be won
+        address[] players;                          // Players who bought tickets
+        mapping(address => uint256) player_total_paid; // Player => amount of tickets
     }
 
     // LotteryId => lottery
@@ -66,9 +69,10 @@ contract Lottery  {
     }
 
     
-    constructor(address randomness_address) {
+    constructor(address randomness_address, address _funds_manager) {
         owner = msg.sender;
         randomness_contract = RandomNumberConsumer(randomness_address);
+        funds_manager = _funds_manager;
         lotteryId = 1;
     }
 
@@ -126,7 +130,7 @@ contract Lottery  {
     function enter(uint256 _lotteryId, uint256 _ticket_amount) public payable {
 
         // Requires the ticket price to be correct
-        require(msg.value == lotteries[_lotteryId].ticket_price, "Wrong price, check the ticket price");
+        require(msg.value == _ticket_amount*lotteries[_lotteryId].ticket_price, "Wrong price, check the ticket price");
 
         // Requires the lottery to be opened
         require(lotteries[_lotteryId].lottery_state == LOTTERY_STATE.OPEN, "The lottery hasn't even started!");
@@ -135,7 +139,10 @@ contract Lottery  {
         require((lotteries[_lotteryId].ticket_sold + _ticket_amount) <= lotteries[_lotteryId].ticket_amount, "The lottery is full");
 
         // Add the address of the buyer to the lottery info
-        lotteries[_lotteryId].players.push(payable(msg.sender));
+        lotteries[_lotteryId].players.push(msg.sender);
+
+        // Add the amount of tickets bought by the player
+        lotteries[_lotteryId].player_total_paid[msg.sender] += _ticket_amount*lotteries[_lotteryId].ticket_price;
 
         // Increment the amount of tickets sold
         lotteries[_lotteryId].ticket_sold += _ticket_amount;
@@ -167,10 +174,21 @@ contract Lottery  {
             IERC721(lotteries[_lotteryId].NFTcontract).transferFrom(address(this), 
                                                                     lotteries[_lotteryId].owner, 
                                                                     lotteries[_lotteryId].NFTid);
+
+            // Transfer the ticket price back to the players     
+            for (uint256 i = 0; i < lotteries[_lotteryId].players.length; i++) {
+                address _current_player = lotteries[_lotteryId].players[i];
+                uint256 _total_paid = lotteries[_lotteryId].player_total_paid[_current_player];
+                payable(_current_player).transfer(_total_paid);
+            }        
+            
+            // Reset the lottery for the owner
+            ownerLotteryId[msg.sender] = 0;
             
         }
         else {
             
+            console.log("Calculating winner");
             // Ask ChainLink for a random number to calculate the winner if the lottery is fully sold
             _tickets_fully_sold = true;
             lotteries[_lotteryId].lottery_state = LOTTERY_STATE.CALCULATING_WINNER;
@@ -211,7 +229,7 @@ contract Lottery  {
 
         // Calculate the winner
         uint256 index = randomness % lotteries[curr_lottery_id].players.length;
-        address payable winner = lotteries[curr_lottery_id].players[index];
+        address winner = lotteries[curr_lottery_id].players[index];
 
         // Transfer the NFT to the winner
         IERC721(lotteries[curr_lottery_id].NFTcontract).transferFrom(address(this), 
@@ -234,9 +252,14 @@ contract Lottery  {
         // Transfer the amount collected to the owner
         payable(lotteries[curr_lottery_id].owner).transfer(_owner_amount);
 
+        // Reset the lottery for the owner
+        ownerLotteryId[msg.sender] == 0;
+
         // Emit the event
         emit LotteryWinner(curr_lottery_id, winner);
     }
+
+
 
 
     /**
@@ -252,7 +275,7 @@ contract Lottery  {
     * @dev Getter to get the players of a given lottery
     * @param _lotteryId Id of the lottery
     */
-    function get_players(uint256 _lotteryId) public view returns (address payable[] memory) {
+    function get_players(uint256 _lotteryId) public view returns (address[] memory) {
         return lotteries[_lotteryId].players;
     }
     
