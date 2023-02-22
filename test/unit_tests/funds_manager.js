@@ -23,7 +23,7 @@ describe("FundsManager", function () {
 
             funds_manager = await ethers.getContractFactory("FundsManager");
 
-            // Alice and Bob are the addresses of the randomness and staking contracts (Respectively)
+            // Alice and Bob are the addresses of the random and staking contracts (Respectively)
             funds_manager_deployed = await funds_manager.deploy(alice.address, bob.address);
     
             await funds_manager_deployed.deployed(); 

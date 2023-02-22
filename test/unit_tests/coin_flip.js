@@ -3,8 +3,8 @@ const { expect } = require("chai");
 
 describe("CoinFlip", function() {
 
-    let coin_flip, randomness;
-    let coin_flip_deployed, randomness_deployed;
+    let coin_flip, random;
+    let coin_flip_deployed, random_deployed;
 
     let owner, alice, bob;
 
@@ -18,10 +18,10 @@ describe("CoinFlip", function() {
         alice = new ethers.Wallet(process.env.PRIVATE_KEY_ALICE, provider);
         bob = new ethers.Wallet(process.env.PRIVATE_KEY_BOB, provider);
 
-        randomness = await ethers.getContractFactory("RandomNumberConsumer");
+        random = await ethers.getContractFactory("RandomNumberConsumer");
         coin_flip = await ethers.getContractFactory("CoinFlip");
 
-        randomness_deployed = await randomness.attach("0xe9Be55Af103f318CECcaC9E2b6De7a0484A8328c");
+        random_deployed = await random.attach("0xe9Be55Af103f318CECcaC9E2b6De7a0484A8328c");
         coin_flip_deployed = await coin_flip.attach("0x7761c0D0A9537C5142Cd8DfF04Ed36F5C3DBA2C0");
 
 
