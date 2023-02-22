@@ -1,16 +1,17 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.17;
 
-import "./Interfaces/IERC20.sol";
-import "./Interfaces/IUniswapV2Router01.sol";
+import "./interfaces/IERC20.sol";
+import "./interfaces/IUniswapV2Router01.sol";
+import "./utils/Ownable.sol";
 
-contract FundsManager {
+contract FundsManager is Ownable {
 
-    // Owner address (needed for tests only)
-    address public owner;
+    // Event to be emitted when funds are received
+    event ReceivedFunds(address indexed sender, uint256 amount);
 
-    // Address of the randomness contract 
-    address public randomness_contract;
+    // Address of the random contract 
+    address public random_contract;
 
     // Address of the staking contract
     address public staking_contract;
@@ -38,25 +39,90 @@ contract FundsManager {
     IERC20 private constant link = IERC20(LINK);
 
 
-    constructor(address _randomness_contract, address _staking_contract) {
-        owner = msg.sender;
-        randomness_contract = _randomness_contract;
+    constructor(address _random_contract, address _staking_contract) {
+        random_contract = _random_contract;
         staking_contract = _staking_contract;
     }
 
 
-    modifier onlyOwner() {
-        require(msg.sender == owner, "Only owner can call this function.");
-        _;
-    }
 
 
     /**
-    * Set the randomness contract address (in case of an update of the contract)
-    * @param _randomness_contract The randomness contract address
+    * Swap FTM to LINK
+    * @param _amount The amount of FTM to swap
     */
-    function setRandomnessContract(address _randomness_contract) public onlyOwner {
-        randomness_contract = _randomness_contract;
+    function swapFTMToLink(uint256 _amount) internal {
+
+        // Define the path
+        address[] memory path = new address[](2);
+        path[0] = WFTM;
+        path[1] = LINK;
+
+        router.swapExactETHForTokens{value: _amount}(0, 
+                                                     path, 
+                                                     random_contract, 
+                                                     block.timestamp);
+    }
+
+
+    /** 
+    * Handle the funds received by the contract
+    */
+    function handle_funds() internal {
+
+        uint256 _link_balance = IERC20(LINK).balanceOf(random_contract);
+        if (_link_balance < min_link_balance) {
+
+            // Define the amount of FTM to swap to Link
+            uint256 _balance_to_be_swapped = address(this).balance * percentage_balance_link / percentage_balance_link_divisor;
+            
+            // Define the amount of FTM to send to the staking contract
+            uint256 _balance_to_be_sent = address(this).balance - _balance_to_be_swapped;
+            
+            // Swap FTM to Link            
+            swapFTMToLink(_balance_to_be_swapped);
+
+            // Send the rest of the balance to the staking contract
+            payable(staking_contract).transfer(_balance_to_be_sent);
+        }
+        else {
+            // Send the whole balance to the staking contract
+            payable(staking_contract).transfer(address(this).balance);
+        }
+
+
+    }
+
+    // This function is called when the contract receives funds
+    fallback() external payable {
+        handle_funds();
+        emit ReceivedFunds(msg.sender, msg.value);
+    }
+
+    // This function is called when the contract receives funds
+    receive() external payable {
+        handle_funds();
+        emit ReceivedFunds(msg.sender, msg.value);
+    }
+
+    // Note : For tests only
+    function emergencyWithdraw() public onlyOwner{
+        payable(owner()).transfer(address(this).balance);
+        IERC20(LINK).transfer(owner(), IERC20(LINK).balanceOf(address(this)));
+    }
+
+
+    // ***************************************************************************** //
+    //                               SETTERS                                         //
+    // ***************************************************************************** //
+
+
+    /**
+    * Set the random contract address (in case of an update of the contract)
+    * @param _random_contract The random contract address
+    */
+    function setRandomContract(address _random_contract) public onlyOwner {
+        random_contract = _random_contract;
     }
 
 
@@ -85,70 +151,4 @@ contract FundsManager {
     }
 
 
-    /**
-    * Swap FTM to LINK
-    * @param _amount The amount of FTM to swap
-    */
-    function swapFTMToLink(uint256 _amount) internal {
-
-        // Define the path
-        address[] memory path = new address[](2);
-        path[0] = WFTM;
-        path[1] = LINK;
-
-        router.swapExactETHForTokens{value: _amount}(0, 
-                                                     path, 
-                                                     randomness_contract, 
-                                                     block.timestamp);
-    }
-
-
-    /** 
-    * Handle the funds received by the contract
-    */
-    function handle_funds() internal {
-
-        // 1. Get the amount of LINK to send to the randomness contract
-        // 2. Swap FTM to LINK
-        // 3. Send LINK to the randomness contract
-        // 4. Send the rest of the balance to the staking contract
-
-        uint256 _link_balance = IERC20(LINK).balanceOf(randomness_contract);
-        if (_link_balance < min_link_balance) {
-
-            // Define the amount of FTM to swap to Link
-            uint256 _balance_to_be_swapped = address(this).balance * percentage_balance_link / percentage_balance_link_divisor;
-            
-            // Define the amount of FTM to send to the staking contract
-            uint256 _balance_to_be_sent = address(this).balance - _balance_to_be_swapped;
-            
-            // Swap FTM to Link            
-            swapFTMToLink(_balance_to_be_swapped);
-
-            // Send the rest of the balance to the staking contract
-            payable(staking_contract).transfer(_balance_to_be_sent);
-        }
-        else {
-            // Send the whole balance to the staking contract
-            payable(staking_contract).transfer(address(this).balance);
-        }
-
-
-    }
-
-    // This function is called when the contract receives funds
-    fallback() external payable {
-        handle_funds();
-    }
-
-    // This function is called when the contract receives funds
-    receive() external payable {
-        handle_funds();
-    }
-
-    // Note : For tests only
-    function emergencyWithdraw() public onlyOwner{
-        payable(owner).transfer(address(this).balance);
-        IERC20(LINK).transfer(owner, IERC20(LINK).balanceOf(address(this)));
-    }
 }

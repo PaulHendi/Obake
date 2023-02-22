@@ -1,25 +1,28 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.17;
 
-import "../node_modules/@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
-import "../node_modules/@openzeppelin/contracts/utils/Counters.sol";
-import "../node_modules/@openzeppelin/contracts/access/Ownable.sol";
+import "./utils/ERC1155.sol";
+import "./utils/Counters.sol";
+import "./utils/Ownable.sol";
 
 
 contract Obake is ERC1155, Ownable {
-    using Counters for Counters.Counter; // Todo : check if this is needed
+    using Counters for Counters.Counter;
 
     Counters.Counter public supply;
 
-    uint256 public cost = 0.01 ether; // Deploying on Fantom Opera, so 0.01 FTM 
-    uint256 public maxSupply = 2500;
-    uint256 public maxMintAmountPerTx = 5;
+    uint256 public cost = 0.01 ether;      // Deploying on Fantom, so 0.01 FTM 
+    uint256 public maxSupply = 2500;       // Maximum supply of tokens
+    uint256 public maxMintAmountPerTx = 5; // Maximum amount of tokens that can be minted per transaction
 
+    // Paused state (to pause the minting of tokens)
     bool public paused = true;
 
+    // Token ID (Unique for every NFT)
     uint256 public constant ID = 1;
 
     constructor(string memory uri) ERC1155(uri) {}
+
 
     /**
     * @return the name of the token.
@@ -36,24 +39,25 @@ contract Obake is ERC1155, Ownable {
         return "OBK"; 
     } 
 
-    /**
-    * Modifier to check if the mint amount is valid and the total supply does not exceed the maximum supply.
-    */
-    modifier mintCompliance(uint256 _mintAmount) { 
-        require(_mintAmount > 0 && _mintAmount <= maxMintAmountPerTx, "Invalid mint amount!"); 
-        require(supply.current() + _mintAmount <= maxSupply, "Max supply exceeded!"); 
-        _; 
-    }
+
 
     /**
     * Function to mint tokens.
     * @param _mintAmount - amount of tokens to mint
     */
-    function mint(uint256 _mintAmount) public payable mintCompliance(_mintAmount) { 
+    function mint(uint256 _mintAmount) public payable { 
+
         // Requires the contract to not be paused 
-        require(!paused, "The contract is paused!"); 
+        require(!paused, "The contract is paused!");         
+
+        // Requires that the mint amount is greater than 0 and less than or equal to the maximum mint amount per transaction
+        require(_mintAmount > 0 && _mintAmount <= maxMintAmountPerTx, "Invalid mint amount!"); 
+
+        // Requires that the total supply does not exceed the maximum supply
+        require(supply.current() + _mintAmount <= maxSupply, "Max supply reached!"); 
+
         // Requires that the payment is enough for all tokens being minted 
-        require(msg.value >= cost * _mintAmount, "Insufficient funds!"); 
+        require(msg.value == cost * _mintAmount, "Incorrect amount!");    
 
         // Update the supply
         for (uint256 i = 0; i < _mintAmount; i++) {
@@ -66,28 +70,13 @@ contract Obake is ERC1155, Ownable {
 
 
     /**
-    * Function to set the cost per NFT (in FTM)
-    * @param _cost - amount of tokens to burn
-    */
-    function setCost(uint256 _cost) public onlyOwner { 
-        cost = _cost; 
-    }
-
-    /**
-    * Function to set the maximum of NFT that can be minted per transaction.
-    * @param _maxMintAmountPerTx - maximum supply of tokens
-    */
-    function setMaxMintAmountPerTx(uint256 _maxMintAmountPerTx) public onlyOwner {
-        maxMintAmountPerTx = _maxMintAmountPerTx;
-    }
-
-    /**
     * Function the contract to paused/not paused.
     * @param _state - maximum supply of tokens
     */
     function setPaused(bool _state) public onlyOwner {
         paused = _state;
     }
+
 
     /**
     * Function to withdraw the FTM from the contract (callable by the owner).
@@ -97,5 +86,11 @@ contract Obake is ERC1155, Ownable {
         // Requires the transfer succeeds 
         require(os, "Failed to transfer funds to owner"); 
     }
+
+
+    // This is only for testing purposes
+    function setMaxMintAmountPerTx(uint256 _maxMintAmountPerTx) public onlyOwner {
+        maxMintAmountPerTx = _maxMintAmountPerTx;
+    }    
 
 }

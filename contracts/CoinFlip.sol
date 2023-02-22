@@ -1,11 +1,12 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.17;
 
-import "./randomness.sol";
+import "./Random.sol";
+import "./utils/Ownable.sol";
 
-contract CoinFlip {
+contract CoinFlip is Ownable {
 
-    RandomNumberConsumer public randomness_contract;
+    RandomNumberConsumer public random_contract;
 
     event FTMReceived(address sender, uint256 amount);
     event GamePlay(address player, uint256 amount, uint256 bet, uint256 request_id);
@@ -51,28 +52,18 @@ contract CoinFlip {
     address public funds_manager;
 
     // Minimum fee to be sent to the funds manager
-    uint256 public min_fee = 0.1 ether; // TODO : to be changed before launching
+    uint256 public min_fee_balance = 0.03 ether; // TODO : to be changed before launching
 
-    // Owner of the contract
-    address public owner;
-
-
-    // Modifier to check if the caller is the owner
-    modifier onlyOwner() {
-        require(msg.sender == owner, "Only the owner can call this function.");
-        _;
-    }
 
 
     /**
         * @dev Constructor
-        * @param _randomness_address Address of the RandomNumberConsumer contract
+        * @param _random_address Address of the RandomNumberConsumer contract
         * @param _funds_manager Address of the funds manager contract
     */
-    constructor(address _randomness_address, address _funds_manager) {
-        randomness_contract = RandomNumberConsumer(_randomness_address);
+    constructor(address _random_address, address _funds_manager) {
+        random_contract = RandomNumberConsumer(_random_address);
         funds_manager = _funds_manager;
-        owner = msg.sender;
     }
 
     /**
@@ -111,7 +102,7 @@ contract CoinFlip {
 
 
         // Call the getRandom function of the RandomNumberConsumer contract                                  
-        uint256 requestId = randomness_contract.getRandom();
+        uint256 requestId = random_contract.getRandom();
 
         // Store the game data
         games[requestId] = Game(msg.sender,
@@ -135,7 +126,7 @@ contract CoinFlip {
     function flip_result(uint256 requestId, uint256 random_number) public {
 
         // Check if the caller is the RandomNumberConsumer contract
-        require(msg.sender == address(randomness_contract), 
+        require(msg.sender == address(random_contract), 
                             "Only the RandomNumberConsumer contract can call this function");
 
         // Check if the game has not already ended
@@ -163,10 +154,10 @@ contract CoinFlip {
             fee_balance += _fee;
 
             // Check if the fee balance is greater than the minimum fee and send it to the funds manager
-            if (fee_balance>=min_fee) {
+            if (fee_balance>=min_fee_balance) {
                 send_fee_balance();
             }
-
+            
             // Calculate the amount won
             uint256 amount_won = games[requestId].amount * 2 - _fee;
 
@@ -196,11 +187,17 @@ contract CoinFlip {
         payable(msg.sender).transfer(address(this).balance);
     }
 
+
+    // ***************************************************************************** //
+    //                               SETTERS                                         //
+    // ***************************************************************************** //
+
     /**
     * @dev Function to set the address of the RandomNumberConsumer contract
+    * @param random_address Address of the RandomNumberConsumer contract
     */
-    function setRandomnessContract(address randomness_address) public onlyOwner {
-        randomness_contract = RandomNumberConsumer(randomness_address);
+    function setRandomContract(address random_address) public onlyOwner {
+        random_contract = RandomNumberConsumer(random_address);
     }
 
     /**
@@ -226,10 +223,11 @@ contract CoinFlip {
     }
 
     /**
-    * @dev Function to set the minimum fee
+    * @dev Function to set the minimum fee balance
+    * @param _min_fee_balance Minimum fee balance
     */
-    function setMinFee(uint256 _min_fee) public onlyOwner {
-        min_fee = _min_fee;
+    function setMinFee(uint256 _min_fee_balance) public onlyOwner {
+        min_fee_balance = _min_fee_balance;
     }
 
 

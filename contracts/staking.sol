@@ -1,14 +1,12 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.17;
 
-import "../node_modules/@openzeppelin/contracts/token/ERC1155/utils/ERC1155Holder.sol";
-import "../node_modules/@openzeppelin/contracts/token/ERC1155/IERC1155.sol";
+import "./utils/ERC1155Holder.sol";
+import "./interfaces/IERC1155.sol";
+import "./utils/Ownable.sol";
 
-contract Staking is ERC1155Holder {
+contract Staking is ERC1155Holder, Ownable{
 
-    // Todo : For this kind of staking contract, we need to lock the tokens for a certain period of time
-    // If not a user just claimed rewards as much as possible and he would own more than other staking for a long time
-    // Meanwhile, we will focus on a different staking contract
 
     IERC1155 public immutable stakingToken;
 
@@ -22,8 +20,6 @@ contract Staking is ERC1155Holder {
     uint public totalStaked;  
 
 
-    address public owner;
-
     // The default duration of staking is 1 day
     uint256 public staking_duration = 1 days;
 
@@ -33,7 +29,7 @@ contract Staking is ERC1155Holder {
         uint256 reward_rate;
     }
 
-    StakingInfo public staking_info = StakingInfo(0,0); // Not sure if this is necessary
+    StakingInfo public staking_info; // Need to initialize it ?
 
     // User address => rewards to be claimed
     mapping(address => uint) public rewards;
@@ -53,9 +49,7 @@ contract Staking is ERC1155Holder {
     
 
     
-
     constructor(address _stakingNFT) {
-        owner = msg.sender;
         stakingToken = IERC1155(_stakingNFT);
     }
 
@@ -82,6 +76,8 @@ contract Staking is ERC1155Holder {
     }  
 
 
+    
+
     /**
      * Main external function for user to stake tokens
      * @notice - user must approve the contract to transfer tokens before calling this function
@@ -91,7 +87,7 @@ contract Staking is ERC1155Holder {
         require(_amount > 0, "amount = 0");
         
         // Transfers token from user to the contract
-        stakingToken.safeTransferFrom(msg.sender, address(this), 0, _amount, "");
+        stakingToken.safeTransferFrom(msg.sender, address(this), 1, _amount, "");
 
         // Updates total staked amount
         totalStaked += _amount;
@@ -195,9 +191,8 @@ contract Staking is ERC1155Holder {
      * Allows owner to withdraw all funds from the contract
      * @notice - This function is only for testing (not wasting faucet funds)
      */
-    function emergencyWithdraw() external {
-        require(msg.sender == owner, "not authorized");
-        payable(owner).transfer(address(this).balance);
+    function emergencyWithdraw() external onlyOwner{
+        payable(owner()).transfer(address(this).balance);
     }
 
 
@@ -236,6 +231,22 @@ contract Staking is ERC1155Holder {
         manage_new_funds();
         emit FTMReceived(msg.sender, msg.value);
     }
+
+
+    // ***************************************************************************** //
+    //                               SETTERS                                         //
+    // ***************************************************************************** //
+
+
+
+    /**
+     * Allows owner to set the staking duration
+     * @param _duration - new staking duration
+     */
+     function setStakingDuration(uint256 _duration) external onlyOwner {
+        staking_duration = _duration;
+    }
+
     
 
 }
