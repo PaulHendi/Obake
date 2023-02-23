@@ -1,0 +1,1045 @@
+{
+  "_format": "hh-sol-cache-2",
+  "files": {
+    "/Users/pilu/Desktop/Obake/contracts/CoinFlip.sol": {
+      "lastModificationDate": 1677072511605,
+      "contentHash": "e116a13fc8e32b722b87f6d0f60f9e16",
+      "sourceName": "contracts/CoinFlip.sol",
+      "solcConfig": {
+        "version": "0.8.17",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./Random.sol",
+        "./utils/Ownable.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.17"
+      ],
+      "artifacts": [
+        "CoinFlip"
+      ]
+    },
+    "/Users/pilu/Desktop/Obake/contracts/Random.sol": {
+      "lastModificationDate": 1677073210853,
+      "contentHash": "8333d982ba67a6010a91dc4dd6287cab",
+      "sourceName": "contracts/Random.sol",
+      "solcConfig": {
+        "version": "0.8.17",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./utils/VRFV2WrapperConsumerBase.sol",
+        "./utils/Ownable.sol",
+        "./CoinFlip.sol",
+        "./Raffle.sol"
+      ],
+      "versionPragmas": [
+        "0.8.17"
+      ],
+      "artifacts": [
+        "RandomNumberConsumer"
+      ]
+    },
+    "/Users/pilu/Desktop/Obake/contracts/utils/Ownable.sol": {
+      "lastModificationDate": 1677055759382,
+      "contentHash": "61ce03690eb7b8a0d87763f289f105e8",
+      "sourceName": "contracts/utils/Ownable.sol",
+      "solcConfig": {
+        "version": "0.8.17",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./Context.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "Ownable"
+      ]
+    },
+    "/Users/pilu/Desktop/Obake/contracts/utils/VRFV2WrapperConsumerBase.sol": {
+      "lastModificationDate": 1677055997485,
+      "contentHash": "c1e04192163ce7a235d9f3b86298ba65",
+      "sourceName": "contracts/utils/VRFV2WrapperConsumerBase.sol",
+      "solcConfig": {
+        "version": "0.8.17",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../interfaces/LinkTokenInterface.sol",
+        "../interfaces/VRFV2WrapperInterface.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "VRFV2WrapperConsumerBase"
+      ]
+    },
+    "/Users/pilu/Desktop/Obake/contracts/Raffle.sol": {
+      "lastModificationDate": 1677083524075,
+      "contentHash": "a4536b70eafee1e81b1844f0741f2a44",
+      "sourceName": "contracts/Raffle.sol",
+      "solcConfig": {
+        "version": "0.8.17",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./Random.sol",
+        "./interfaces/IERC721.sol",
+        "hardhat/console.sol",
+        "./utils/Ownable.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.9"
+      ],
+      "artifacts": [
+        "Raffle"
+      ]
+    },
+    "/Users/pilu/Desktop/Obake/contracts/interfaces/LinkTokenInterface.sol": {
+      "lastModificationDate": 1677055932317,
+      "contentHash": "da5a0c3bd86c896f6a407f909c57edf3",
+      "sourceName": "contracts/interfaces/LinkTokenInterface.sol",
+      "solcConfig": {
+        "version": "0.8.17",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "LinkTokenInterface"
+      ]
+    },
+    "/Users/pilu/Desktop/Obake/contracts/interfaces/VRFV2WrapperInterface.sol": {
+      "lastModificationDate": 1677055946862,
+      "contentHash": "6848d0e769b460011d3edf1a2047cc51",
+      "sourceName": "contracts/interfaces/VRFV2WrapperInterface.sol",
+      "solcConfig": {
+        "version": "0.8.17",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "VRFV2WrapperInterface"
+      ]
+    },
+    "/Users/pilu/Desktop/Obake/contracts/utils/Context.sol": {
+      "lastModificationDate": 1677055625384,
+      "contentHash": "5f2c5c4b6af2dd4551027144797bc8be",
+      "sourceName": "contracts/utils/Context.sol",
+      "solcConfig": {
+        "version": "0.8.17",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "Context"
+      ]
+    },
+    "/Users/pilu/Desktop/Obake/contracts/interfaces/IERC721.sol": {
+      "lastModificationDate": 1677055020369,
+      "contentHash": "5239df8ffa28a473fe49a73be07133da",
+      "sourceName": "contracts/interfaces/IERC721.sol",
+      "solcConfig": {
+        "version": "0.8.17",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.17"
+      ],
+      "artifacts": [
+        "IERC165",
+        "IERC721",
+        "IERC721Receiver"
+      ]
+    },
+    "/Users/pilu/Desktop/Obake/node_modules/hardhat/console.sol": {
+      "lastModificationDate": 1676884654052,
+      "contentHash": "4ff3cd2f6272c9a6516e9ee4f2b967d3",
+      "sourceName": "hardhat/console.sol",
+      "solcConfig": {
+        "version": "0.8.17",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        ">= 0.4.22 <0.9.0"
+      ],
+      "artifacts": [
+        "console"
+      ]
+    },
+    "/Users/pilu/Desktop/Obake/contracts/utils/ERC20.sol": {
+      "lastModificationDate": 1677061224217,
+      "contentHash": "41f823c1e2cf1bded9ba72670ea8cfec",
+      "sourceName": "contracts/utils/ERC20.sol",
+      "solcConfig": {
+        "version": "0.8.17",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../interfaces/IERC20.sol",
+        "../interfaces/IERC20Metadata.sol",
+        "./Context.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "ERC20"
+      ]
+    },
+    "/Users/pilu/Desktop/Obake/contracts/interfaces/IERC20.sol": {
+      "lastModificationDate": 1676887323048,
+      "contentHash": "bf569232796891a64641829f8a71fb10",
+      "sourceName": "contracts/interfaces/IERC20.sol",
+      "solcConfig": {
+        "version": "0.8.17",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.17"
+      ],
+      "artifacts": [
+        "IERC20"
+      ]
+    },
+    "/Users/pilu/Desktop/Obake/contracts/interfaces/IERC20Metadata.sol": {
+      "lastModificationDate": 1677061228554,
+      "contentHash": "7d180a51f2ae3e249b0aaee46c94c996",
+      "sourceName": "contracts/interfaces/IERC20Metadata.sol",
+      "solcConfig": {
+        "version": "0.8.17",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./IERC20.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "IERC20Metadata"
+      ]
+    },
+    "/Users/pilu/Desktop/Obake/contracts/FundsManager.sol": {
+      "lastModificationDate": 1677083431940,
+      "contentHash": "dc118b0aea4bbcce4c3676ed416b7b60",
+      "sourceName": "contracts/FundsManager.sol",
+      "solcConfig": {
+        "version": "0.8.17",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./interfaces/IERC20.sol",
+        "./interfaces/IUniswapV2Router01.sol",
+        "./utils/Ownable.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.17"
+      ],
+      "artifacts": [
+        "FundsManager"
+      ]
+    },
+    "/Users/pilu/Desktop/Obake/contracts/interfaces/IUniswapV2Router01.sol": {
+      "lastModificationDate": 1677055866133,
+      "contentHash": "4f3c41383b1f4f416d69f0e74d127140",
+      "sourceName": "contracts/interfaces/IUniswapV2Router01.sol",
+      "solcConfig": {
+        "version": "0.8.17",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        ">=0.6.2"
+      ],
+      "artifacts": [
+        "IUniswapV2Router01"
+      ]
+    },
+    "/Users/pilu/Desktop/Obake/contracts/utils/ERC1155.sol": {
+      "lastModificationDate": 1677056114128,
+      "contentHash": "6dfedcd9b4cf2202f3e468e7f130400a",
+      "sourceName": "contracts/utils/ERC1155.sol",
+      "solcConfig": {
+        "version": "0.8.17",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../interfaces/IERC1155.sol",
+        "../interfaces/IERC1155Receiver.sol",
+        "../interfaces/IERC1155MetadataURI.sol",
+        "./Address.sol",
+        "./Context.sol",
+        "./ERC165.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "ERC1155"
+      ]
+    },
+    "/Users/pilu/Desktop/Obake/contracts/interfaces/IERC1155.sol": {
+      "lastModificationDate": 1677055362794,
+      "contentHash": "7244e7737e20d84665e0e0c3b21c5793",
+      "sourceName": "contracts/interfaces/IERC1155.sol",
+      "solcConfig": {
+        "version": "0.8.17",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./IERC165.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "IERC1155"
+      ]
+    },
+    "/Users/pilu/Desktop/Obake/contracts/interfaces/IERC1155Receiver.sol": {
+      "lastModificationDate": 1677055350613,
+      "contentHash": "867f973f8d7fcf472933efe86da56e2a",
+      "sourceName": "contracts/interfaces/IERC1155Receiver.sol",
+      "solcConfig": {
+        "version": "0.8.17",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./IERC165.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "IERC1155Receiver"
+      ]
+    },
+    "/Users/pilu/Desktop/Obake/contracts/interfaces/IERC1155MetadataURI.sol": {
+      "lastModificationDate": 1677055690486,
+      "contentHash": "42ebf434917ba17c9152ec05241eb5ed",
+      "sourceName": "contracts/interfaces/IERC1155MetadataURI.sol",
+      "solcConfig": {
+        "version": "0.8.17",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./IERC1155.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "IERC1155MetadataURI"
+      ]
+    },
+    "/Users/pilu/Desktop/Obake/contracts/utils/Address.sol": {
+      "lastModificationDate": 1677055625403,
+      "contentHash": "f31ad6fc4bbf9c06203987220156a6ba",
+      "sourceName": "contracts/utils/Address.sol",
+      "solcConfig": {
+        "version": "0.8.17",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.1"
+      ],
+      "artifacts": [
+        "Address"
+      ]
+    },
+    "/Users/pilu/Desktop/Obake/contracts/utils/ERC165.sol": {
+      "lastModificationDate": 1677056022927,
+      "contentHash": "51d6a4d64a59fd5adc24021268695665",
+      "sourceName": "contracts/utils/ERC165.sol",
+      "solcConfig": {
+        "version": "0.8.17",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../interfaces/IERC165.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "ERC165"
+      ]
+    },
+    "/Users/pilu/Desktop/Obake/contracts/interfaces/IERC165.sol": {
+      "lastModificationDate": 1677055233882,
+      "contentHash": "03e6768535ac4da0e9756f1d8a4a018a",
+      "sourceName": "contracts/interfaces/IERC165.sol",
+      "solcConfig": {
+        "version": "0.8.17",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "IERC165"
+      ]
+    },
+    "/Users/pilu/Desktop/Obake/contracts/utils/ERC1155Receiver.sol": {
+      "lastModificationDate": 1677056099257,
+      "contentHash": "c636a11dea0c44e1c42c463edb2496fd",
+      "sourceName": "contracts/utils/ERC1155Receiver.sol",
+      "solcConfig": {
+        "version": "0.8.17",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../interfaces/IERC1155Receiver.sol",
+        "./ERC165.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "ERC1155Receiver"
+      ]
+    },
+    "/Users/pilu/Desktop/Obake/contracts/utils/ERC1155Holder.sol": {
+      "lastModificationDate": 1677055284706,
+      "contentHash": "88079762e28b246888129028f757e047",
+      "sourceName": "contracts/utils/ERC1155Holder.sol",
+      "solcConfig": {
+        "version": "0.8.17",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./ERC1155Receiver.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "ERC1155Holder"
+      ]
+    },
+    "/Users/pilu/Desktop/Obake/contracts/Staking.sol": {
+      "lastModificationDate": 1677105641092,
+      "contentHash": "392d58123fd1884c5ff82bd26ba2135c",
+      "sourceName": "contracts/Staking.sol",
+      "solcConfig": {
+        "version": "0.8.17",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./utils/ERC1155Holder.sol",
+        "./interfaces/IERC1155.sol",
+        "./utils/Ownable.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.17"
+      ],
+      "artifacts": [
+        "Staking"
+      ]
+    },
+    "/Users/pilu/Desktop/Obake/contracts/MintObake.sol": {
+      "lastModificationDate": 1677102831430,
+      "contentHash": "6e24e224056e9c8c1b7af936b1c99572",
+      "sourceName": "contracts/MintObake.sol",
+      "solcConfig": {
+        "version": "0.8.17",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./utils/ERC1155.sol",
+        "./utils/Counters.sol",
+        "./utils/Ownable.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.17"
+      ],
+      "artifacts": [
+        "Obake"
+      ]
+    },
+    "/Users/pilu/Desktop/Obake/contracts/utils/Counters.sol": {
+      "lastModificationDate": 1677055727553,
+      "contentHash": "74654e3ae5d7f39555055dfe244dab7a",
+      "sourceName": "contracts/utils/Counters.sol",
+      "solcConfig": {
+        "version": "0.8.17",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "Counters"
+      ]
+    },
+    "/Users/pilu/Desktop/Obake/contracts/utils/ERC721.sol": {
+      "lastModificationDate": 1677056025615,
+      "contentHash": "04b376f11326dabb8b73923667780871",
+      "sourceName": "contracts/utils/ERC721.sol",
+      "solcConfig": {
+        "version": "0.8.17",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../interfaces/IERC721.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.17"
+      ],
+      "artifacts": [
+        "ERC721"
+      ]
+    }
+  }
+}
