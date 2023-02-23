@@ -1,0 +1,23 @@
+{
+    "include": [
+      "src",
+      "types",
+      "playwright",
+      "test"
+    ],
+    "compilerOptions": {
+      "outDir": "dist",
+      "module": "commonjs",
+      "target": "ES2018",
+      "moduleResolution": "node",
+      "esModuleInterop": true,
+      "jsx": "react-jsx",
+      "declaration": true,
+      "baseUrl": "./",
+      "strict": true,
+      "skipLibCheck": true,
+      "forceConsistentCasingInFileNames": true,
+      "resolveJsonModule": true,
+      "allowSyntheticDefaultImports": true
+    }
+  }
