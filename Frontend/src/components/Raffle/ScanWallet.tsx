@@ -2,14 +2,18 @@ import React from "react";
 import  axios  from "axios";
 
 import {ScanWalletContainer, ImageContainer, ImageButton} from "../../styles/ScanWallet.style";
+import { useEthers } from "@usedapp/core";
 
 export default function ScanWallet() {
-  let url = 'https://api.covalenthq.com/v1/4002/address/0x29Fd00FA40c90aec39AC604D875907874f237baA/balances_v2/?quote-currency=USD&format=JSON&nft=true&no-nft-fetch=false&key=ckey_96a32bab72724e39a3e5011afe2';
+  const {account} = useEthers()
 
   const [nft, setNFT] = React.useState<{[fieldName: string]: string}> ({});
 
+  console.log(account);
+  let url = `https://api.covalenthq.com/v1/4002/address/${account}/balances_v2/?quote-currency=USD&format=JSON&nft=true&no-nft-fetch=false&key=ckey_96a32bab72724e39a3e5011afe2`;
 
   React.useEffect(() => {
+
     axios.get(url).then(response => {
       let nft_url : any = {}
       for (let i = 0;i<response.data.data.items.length;i++){
@@ -33,7 +37,6 @@ export default function ScanWallet() {
 function handleClick(key: any) {
     console.log(key)
   }
-console.log(nft)
 
   return (
     <div>

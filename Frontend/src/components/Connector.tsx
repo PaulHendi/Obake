@@ -25,8 +25,11 @@ interface ConnectorProps {
   }
 
 function Connector({config} : ConnectorProps) {
-    const { account, activateBrowserWallet, deactivate,chainId } = useEthers()
-    const userBalance = useEtherBalance(account)
+    const { account, activateBrowserWallet, deactivate, chainId, switchNetwork } = useEthers()
+
+    //if(chainId !== 4002) {
+    //  await switchNetwork(4002); // Okay ça marche mais async fout la merde je crois
+    //}
 
     const ConnectButton = () => (
         <div>

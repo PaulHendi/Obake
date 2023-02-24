@@ -4,6 +4,7 @@ import { useCall, useLogs, useTokenBalance, useContractFunction } from '@usedapp
 import SFT from '../../abi/SFT.json'
 import { MintNFTContainer } from '../../styles/MintNFT.style'
 import { StatusAnimation } from '../TransactionAnimation'
+import { useEthers } from '@usedapp/core'
 
 export default function MintNFT() {
     const MintNFTContractAddress = "0x6643fBC0D66fc580de15a0A0678D4c1f41b0071b" 
@@ -12,8 +13,9 @@ export default function MintNFT() {
     const { state, send } = useContractFunction(contract, 'mint', { transactionName: 'mint' })
     const MINT_PRICE = 0.01;
 
-    const mint = () => {
-          
+
+    const mint = async () => {
+
       // Get ouiput from input field
       const amount = document.getElementsByClassName('NFT_number')[0].value as number
       const price = (amount*MINT_PRICE).toString()
