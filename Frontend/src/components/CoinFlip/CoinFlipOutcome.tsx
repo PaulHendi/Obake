@@ -3,22 +3,28 @@ import { utils } from 'ethers'
 import { useCall, useLogs, useTokenBalance, useContractFunction, useEthers } from '@usedapp/core'
 import CoinFlip from '../../abi/CoinFlip.json'
 
-interface TokenID {
-    tokenID: string
-}
 
-export default function DidWin() {
+
+export default function Outcome() {
 
 
     const CoinFlipContractAddress = "0xb999a44A9f014B7151cF11fCd11c5749A6e2E461"
-    let tokenID = "" //for the moment
+    let tokenID : string = "" //for the moment
     const CoinFlipInterface = new utils.Interface(CoinFlip.abi)
     const coinFlipcontract = CoinFlipContractAddress && (new Contract(CoinFlipContractAddress, CoinFlipInterface) )
     const { account } = useEthers()
 
 
+    // const call_status =
+    //     useCall( account &&  {
+    //         contract: coinFlipcontract, // instance of called contract
+    //         method: "getGameInfo", // Method to be called
+    //         args: [account], // Method arguments - address 
+    //         }) ?? {};
+
+
     const call_id_status =
-        useCall( {
+        useCall( account && {
             contract: coinFlipcontract, // instance of called contract
             method: "request_ids", // Method to be called
             args: [account], // Method arguments - address to be checked for balance
@@ -29,7 +35,7 @@ export default function DidWin() {
         tokenID = call_id_status["value"].toString() as string
     }
 
-    const call_games_status =
+    const call_status =
         useCall( {
             contract: coinFlipcontract, // instance of called contract
             method: "games", // Method to be called
@@ -38,8 +44,8 @@ export default function DidWin() {
         ) ?? {};
 
     let result = ""
-    if ("value" in call_games_status) {
-        let value = call_games_status["value"]
+    if ("value" in call_status) {
+        let value = call_status["value"]
         if (value["ended"] && value["won"]) {
             result = "You won!"
         }

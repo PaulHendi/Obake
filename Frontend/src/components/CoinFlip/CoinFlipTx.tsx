@@ -2,11 +2,11 @@ import { Contract } from '@ethersproject/contracts'
 import { utils } from 'ethers'
 import { useCall, useLogs, useTokenBalance, useContractFunction } from '@usedapp/core'
 import CoinFlip from '../../abi/CoinFlip.json'
-import DidWin from './DidWin'
-import {CoinFlipContainer,Wrapper, CustomInput, LabelInput, RadioInput, Label} from  "../../styles/HeadsOrTail.jsx"
+import Outcome from './CoinFlipOutcome'
+import {CoinFlipContainer,Wrapper, CustomInput, LabelInput, RadioInput, Label} from  "../../styles/HeadsOrTail.js"
 import { StatusAnimation } from '../TransactionAnimation'
 
-export default function Play() {
+export default function CoinFlipPlay() {
     const CoinFlipContractAddress = "0xb999a44A9f014B7151cF11fCd11c5749A6e2E461"
     const CoinFlipInterface = new utils.Interface(CoinFlip.abi)
     const contract = CoinFlipContractAddress && (new Contract(CoinFlipContractAddress, CoinFlipInterface) )
@@ -74,7 +74,7 @@ export default function Play() {
         </Wrapper>
         <button onClick={() => play()}>Play</button>
         <StatusAnimation transaction={state} />
-        {state.status=="Success" ? <DidWin/> : null}
+        {state.status=="Success" && <Outcome/>}
         
       </CoinFlipContainer>
       

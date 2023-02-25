@@ -47,7 +47,7 @@ export const StatusAnimation = ({ transaction }: StatusAnimationProps) => {
 
   return (
     <AnimationWrapper>
-      <AnimatePresence initial={false} exitBeforeEnter>
+      <AnimatePresence initial={false} mode="wait">
         {showTransactionStatus && transactionErrored(transaction) && (
           <StatusBlock
             color="red"

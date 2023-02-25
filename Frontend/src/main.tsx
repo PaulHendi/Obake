@@ -7,14 +7,11 @@ import {
   Config,
   MetamaskConnector,
   FantomTestnet,
-  Fantom,
-  useEthers
 } from '@usedapp/core'
 
 const doc = document.getElementById('root') as HTMLElement;
 
 const readOnlyUrls: Config['readOnlyUrls'] = {
-  [Fantom.chainId]: 'https://rpc.ankr.com/fantom',
   [FantomTestnet.chainId]: 'https://rpc.ankr.com/fantom_testnet',
 }
 

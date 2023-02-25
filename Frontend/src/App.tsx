@@ -1,13 +1,15 @@
 import './App.css'
 import {BrowserRouter as Router, Routes, Route} from 'react-router-dom'
-import Navbar from "./components/Navbar"
 import {Config} from '@usedapp/core'
-import Play from './components/CoinFlip/Transaction'
-import MintNFT from './components/MintNFT/Transaction'
+
+import Navbar from "./components/Navbar"
+import CoinFlipPlay from './components/CoinFlip/CoinFlipTx'
+import MintNFT from './components/MintNFT/MintNFTTx'
 import ScanWallet from './components/Raffle/ScanWallet'
 import Home from './components/Home'
 import Footer from './components/Footer'
 import Staking from './components/Staking/Staking'
+import RaffleMain from './components/Raffle/RaffleMain'
 
 interface ConfigProps {
   config: Config
@@ -22,8 +24,10 @@ function App({config} : ConfigProps) {
       <Routes>
         <Route path="/" element={<Home/>} />
         <Route path="/mint" element={<MintNFT/>} />
-        <Route path="/Raffle" element={<ScanWallet/>} />
-        <Route path="/coinflip" element={<Play/>} />
+        <Route path="/raffle" element={<RaffleMain/>} />
+        <Route path="/raffle/join_raffle" />
+        <Route path="/raffle/start_new_raffle" element={<ScanWallet/>} />
+        <Route path="/coinflip" element={<CoinFlipPlay/>} />
         <Route path="/staking" element={<Staking/>} />
       </Routes>
       <Footer/>

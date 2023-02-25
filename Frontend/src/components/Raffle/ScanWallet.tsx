@@ -1,7 +1,7 @@
 import React from "react";
 import  axios  from "axios";
 
-import {ScanWalletContainer, ImageContainer, ImageButton} from "../../styles/ScanWallet.style";
+import {ScanWalletContainer, ImageContainer} from "../../styles/ScanWallet.style";
 import { useEthers } from "@usedapp/core";
 
 export default function ScanWallet() {
@@ -10,7 +10,8 @@ export default function ScanWallet() {
   const [nft, setNFT] = React.useState<{[fieldName: string]: string}> ({});
 
   console.log(account);
-  let url = `https://api.covalenthq.com/v1/4002/address/${account}/balances_v2/?quote-currency=USD&format=JSON&nft=true&no-nft-fetch=false&key=ckey_96a32bab72724e39a3e5011afe2`;
+  let address : string = "0x29Fd00FA40c90aec39AC604D875907874f237baA"
+  let url = `https://api.covalenthq.com/v1/4002/address/${address}/balances_v2/?quote-currency=USD&format=JSON&nft=true&no-nft-fetch=false&key=ckey_96a32bab72724e39a3e5011afe2`;
 
   React.useEffect(() => {
 
@@ -23,7 +24,7 @@ export default function ScanWallet() {
                 let image_url : string = response.data.data.items[i].nft_data[j].external_data.image.replace("https://ipfs.io", "https://gateway.pinata.cloud");
                 let nft_name : string = response.data.data.items[i].nft_data[j].external_data.name;
                 let nft_description : string = response.data.data.items[i].contract_address.slice(0, 6) ;
-                nft_url[nft_name] =  image_url;
+                nft_url[nft_name + "_" + nft_description] =  image_url;
               }
           }
       }
@@ -40,7 +41,7 @@ function handleClick(key: any) {
 
   return (
     <div>
-      <h1>Scan Wallet</h1>
+      <h1>Select one of your NFT</h1>
    
     <ScanWalletContainer>
       
@@ -49,7 +50,7 @@ function handleClick(key: any) {
       {Object.keys(nft).map((key) => {
         return ( <ImageContainer onClick={() => handleClick(key)}>  
                     <img src={nft[key]} key={key}/>
-                    <h1>{key}</h1> 
+                    <h1>{key.split("_")[0]}</h1> 
                 </ImageContainer>)
       })}
                 
