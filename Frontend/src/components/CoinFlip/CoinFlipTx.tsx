@@ -5,8 +5,10 @@ import CoinFlip from '../../abi/CoinFlip.json'
 import Outcome from './CoinFlipOutcome'
 import {CoinFlipContainer,Wrapper, CustomInput, LabelInput, RadioInput, Label} from  "../../styles/HeadsOrTail.js"
 import { StatusAnimation } from '../TransactionAnimation'
+import { useEthers } from '@usedapp/core'
 
 export default function CoinFlipPlay() {
+    const {account} = useEthers();
     const CoinFlipContractAddress = "0xb999a44A9f014B7151cF11fCd11c5749A6e2E461"
     const CoinFlipInterface = new utils.Interface(CoinFlip.abi)
     const contract = CoinFlipContractAddress && (new Contract(CoinFlipContractAddress, CoinFlipInterface) )
@@ -72,7 +74,7 @@ export default function CoinFlipPlay() {
               </Label>
            </CustomInput>
         </Wrapper>
-        <button onClick={() => play()}>Play</button>
+        <button onClick={() => play()} disabled={!account}>Play</button>
         <StatusAnimation transaction={state} />
         {state.status=="Success" && <Outcome/>}
         
