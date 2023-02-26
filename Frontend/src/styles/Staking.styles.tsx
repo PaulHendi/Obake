@@ -4,39 +4,29 @@ import styled from "styled-components";
 export const StakingContainer = styled.div`
 
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    margin-top: 2%;
-    margin-bottom: 10%;
+    border-radius: 4px;
     margin-left: 30%;
     margin-right: 30%;
+    margin-top: 2%;
+    margin-bottom: 2%;
+    height: 100%;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;    
     background-color: #F5F5F5;
-    border-radius: 10px;
-    padding: 5px;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: large;
-    text-align: center;
-    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
-    
-    h1 {
-    font-size: 24px;
-    margin-top: 0;
-    }
-    p {
-        font-size: 16px;
-        line-height: 1.5;
-        margin-bottom: 20px;
-    }
+    padding: 20px;
+    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
+    -webkit-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
     
 `
 
 export const Input = styled.input`
     border-radius:24px;
-    height: 100%;
+    //height: 100%;
     text-align: center;
-    padding: 0 0 0 0;
-    margin: 0 0 0 0;
+    //padding: 0 0 0 0;
+    //margin: 0 0 0 0;
     border: 0;
     -moz-appearance: textfield;
     &::-webkit-outer-spin-button,
@@ -51,7 +41,6 @@ export const InputRow = styled.div`
 display: flex;
 margin: 0 auto;
 color: dark gray;
-align-items: center;
 border: gray 1px solid;
 border-radius: 24px;
 overflow: hidden;
@@ -65,13 +54,4 @@ export const SmallButton = styled.button`
   height: unset;
   padding: 8px 24px;
   border-radius: 24px;
-  &:disabled {
-    color: dark gray;
-    cursor: unset;
-  }
-  &:disabled:hover,
-  &:disabled:focus {
-    background-color: unset;
-    color: unset;
-  }
 `

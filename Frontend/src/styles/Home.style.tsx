@@ -6,7 +6,7 @@ export const HomeContainer = styled.div`
     //align-items: center;
     //justify-content: center;
     margin-top: 1%;
-    margin-bottom: 10%;
+    margin-bottom: 1%;
     margin-left: 1%;
     margin-right: 1%;
     background-color: #FFFFFF;

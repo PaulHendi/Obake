@@ -25,7 +25,6 @@ function App({config} : ConfigProps) {
         <Route path="/" element={<Home/>} />
         <Route path="/mint" element={<MintNFT/>} />
         <Route path="/raffle" element={<RaffleMain/>} />
-        <Route path="/raffle/join_raffle" />
         <Route path="/raffle/start_new_raffle" element={<ScanWallet/>} />
         <Route path="/coinflip" element={<CoinFlipPlay/>} />
         <Route path="/staking" element={<Staking/>} />

@@ -20,10 +20,8 @@ export const CoinFlipContainer = styled.div`
     button{
         width: 30%;
         height: 30px;
-        border-radius: 5px;
-        
-        padding: 5px;
-        margin: 5px;
+        border-radius: 24px;
+        margin: 5%;
         font-size: large;
         font-family: Arial, Helvetica, sans-serif;
         text-align: center;
