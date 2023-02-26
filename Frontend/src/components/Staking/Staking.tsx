@@ -26,6 +26,17 @@ export default function(){
 
     }
 
+
+
+    const UserReward = () => {
+        const user_reward = useCall({contract : contract, method : 'user_reward', args : [account]})
+        return ( 
+            <div>
+                <p>Current user reward is : </p>
+                <p>{user_reward}</p>
+            </div>)
+    }
+
     return(
         <StakingContainer>
             <h1>Staking</h1>
@@ -34,7 +45,8 @@ export default function(){
                 <Input type="number" placeholder="amount" name="NFT_to_stake"/>
                 <SmallButton onClick={() => stake()} disabled={!account || disabled}>Stake</SmallButton>
             </InputRow>
-            <p>Current staking contract balance is : </p>
+            {account && <UserReward />}
+            
             <StatusAnimation transaction={state} />
         </StakingContainer>
     );
