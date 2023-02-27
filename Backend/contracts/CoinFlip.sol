@@ -1,12 +1,15 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.17;
 
+import "./FundsManager.sol";
 import "./Random.sol";
 import "./utils/Ownable.sol";
+
 
 contract CoinFlip is Ownable {
 
     RandomNumberConsumer public random_contract;
+    FundsManager public funds_manager;
 
     event FTMReceived(address sender, uint256 amount);
     event GamePlay(address player, uint256 amount, uint256 bet, uint256 request_id);
@@ -48,11 +51,9 @@ contract CoinFlip is Ownable {
     // Fee balance to be sent to the funds manager
     uint256 public fee_balance;
 
-    // Address of the funds manager
-    address public funds_manager;
 
     // Minimum fee to be sent to the funds manager
-    uint256 public min_fee_balance = 0.03 ether; // TODO : to be changed before launching
+    uint256 public min_fee_balance = 0.01 ether; // TODO : to be changed before launching
 
 
 
@@ -63,7 +64,7 @@ contract CoinFlip is Ownable {
     */
     constructor(address _random_address, address _funds_manager) {
         random_contract = RandomNumberConsumer(_random_address);
-        funds_manager = _funds_manager;
+        funds_manager = FundsManager(_funds_manager);
     }
 
     /**
@@ -98,8 +99,8 @@ contract CoinFlip is Ownable {
         require(!isPlaying[msg.sender], "You are already playing a game, wait for the outcome");
 
         // Check if the contract has enough funds to pay the winner (better revert if not)
-        require(address(this).balance >= (min_balance_factor * msg.value), "Contract balance too low");         
-
+        require(address(this).balance >= (min_balance_factor * msg.value), "Contract balance too low");    
+        
 
         // Call the getRandom function of the RandomNumberConsumer contract                                  
         uint256 requestId = random_contract.getRandom();
@@ -153,10 +154,12 @@ contract CoinFlip is Ownable {
             // Update the fee balance
             fee_balance += _fee;
 
+
             // Check if the fee balance is greater than the minimum fee and send it to the funds manager
             if (fee_balance>=min_fee_balance) {
                 send_fee_balance();
             }
+
             
             // Calculate the amount won
             uint256 amount_won = games[requestId].amount * 2 - _fee;
@@ -174,17 +177,25 @@ contract CoinFlip is Ownable {
     }
 
     /**
-    * @dev Function to send the fee balance to the funds manager
+    * Function to send the fee balance to the funds manager
     */
     function send_fee_balance() internal {
         uint256 _fee_balance = fee_balance;
         fee_balance = 0;
-        payable(funds_manager).transfer(_fee_balance);
+        funds_manager.handle_funds{value: _fee_balance}();
     }
 
     // Tmp function to withdraw funds TODO : remove before launching
     function withdraw() public onlyOwner {
         payable(msg.sender).transfer(address(this).balance);
+    }
+
+    /**
+    * Function to get the game info (for the frontend, one call instead of 2)
+    * @param user Address of the player
+    */
+    function getGameInfo(address user) external view returns (Game memory) {
+        return games[request_ids[user]];
     }
 
 
@@ -201,10 +212,11 @@ contract CoinFlip is Ownable {
     }
 
     /**
-    * @dev Function to set the address of the funds manager
+    * @dev Function to set the contract of the funds manager
+    * @param _funds_manager_address Address of the funds manager contract
     */
-    function setFundsManager(address _funds_manager) public onlyOwner {
-        funds_manager = _funds_manager;
+    function setFundsManagerContract(address _funds_manager_address) public onlyOwner {
+        funds_manager = FundsManager(_funds_manager_address);
     }
 
     /**
