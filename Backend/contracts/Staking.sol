@@ -202,34 +202,20 @@ contract Staking is ERC1155Holder, Ownable{
     * It checks if the staking period is over and if so, it calculates the reward rate
     * and updates the staking info
     */
-    function manage_new_funds() private {
+    function manage_new_funds() public payable { // TODO : needs a require statement
         uint256 time_since_staking_started = block.timestamp - staking_info.start;
 
         // Note : We need a minimum amount for staking
-        if (time_since_staking_started > staking_duration && address(this).balance > 0.5 ether) {
+        if (time_since_staking_started > staking_duration) {// && address(this).balance > 0.5 ether) {
 
             // If the period is over, calculate the reward rate
             staking_info.reward_rate = address(this).balance / staking_duration;
             staking_info.start = block.timestamp;
 
         }
-
-        
         
     }
 
-    // The reward is also updated whenever a user stakes or unstakes
-    fallback() external payable {
-        // Fallback function
-        manage_new_funds();
-        emit FTMReceived(msg.sender, msg.value);
-    }
-
-    receive() external payable {
-        // Receive function
-        manage_new_funds();
-        emit FTMReceived(msg.sender, msg.value);
-    }
 
 
     // ***************************************************************************** //
