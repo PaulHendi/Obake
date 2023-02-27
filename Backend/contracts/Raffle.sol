@@ -2,11 +2,14 @@
 pragma solidity ^0.8.9;
 
 import "./Random.sol";
+import "./FundsManager.sol";
 import "./interfaces/IERC721.sol";
-import "hardhat/console.sol";
 import "./utils/Ownable.sol";
 
 contract Raffle is Ownable {
+
+    FundsManager public funds_manager;
+    RandomNumberConsumer public random_contract;
 
 
     // Event to be emitted when a raffle is started
@@ -24,11 +27,6 @@ contract Raffle is Ownable {
 
     enum RAFFLE_STATE { CLOSED, OPEN, CALCULATING_WINNER }
 
-    RandomNumberConsumer public random_contract;
-    
-
-    // Address of the funds manager
-    address public funds_manager;
 
     // Raffle struct to store raffle info
     struct raffle {
@@ -75,9 +73,9 @@ contract Raffle is Ownable {
 
 
     
-    constructor(address random_address, address _funds_manager) {
+    constructor(address random_address, address _funds_manager_address) {
         random_contract = RandomNumberConsumer(random_address);
-        funds_manager = _funds_manager;
+        funds_manager = FundsManager(_funds_manager_address);
         raffleId = 1;
     }
 
@@ -193,7 +191,6 @@ contract Raffle is Ownable {
         }
         else {
             
-            console.log("Calculating winner");
             // Ask ChainLink for a random number to calculate the winner if the raffle is fully sold
             _tickets_fully_sold = true;
             lotteries[_raffleId].raffle_state = RAFFLE_STATE.CALCULATING_WINNER;
@@ -273,8 +270,10 @@ contract Raffle is Ownable {
     function send_fee_balance() internal {
         uint256 _fee_balance = fee_balance;
         fee_balance = 0;
-        payable(funds_manager).transfer(_fee_balance);
+        funds_manager.handle_funds{value: _fee_balance}();
     }
+
+
 
     /** 
     * Getter to get the players of a given raffle

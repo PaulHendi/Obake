@@ -1,23 +1,25 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.17;
 
+import "./Staking.sol";
 import "./interfaces/IERC20.sol";
 import "./interfaces/IUniswapV2Router01.sol";
 import "./utils/Ownable.sol";
 
+
 contract FundsManager is Ownable {
+
+    Staking public staking_contract;
 
     // Event to be emitted when funds are received
     event ReceivedFunds(address indexed sender, uint256 amount);
 
     // Address of the random contract 
-    address public random_contract;
+    address public random_contract_address;
 
-    // Address of the staking contract
-    address public staking_contract;
 
     // Minimum Link balance 
-    uint256 public min_link_balance = 1 ether; // (Link also has 18 decimals)
+    uint256 public min_link_balance = 0.1 ether; // (Link also has 18 decimals)
 
     // Percentage of the balance to swap to Link, the rest is kept in FTM and sent to the staking contract
     uint256 public percentage_balance_link = 20; // 20% of the balance
@@ -39,9 +41,9 @@ contract FundsManager is Ownable {
     IERC20 private constant link = IERC20(LINK);
 
 
-    constructor(address _random_contract, address _staking_contract) {
-        random_contract = _random_contract;
-        staking_contract = _staking_contract;
+    constructor(address _random_contract_address, address _staking_contract_address) {
+        random_contract_address = _random_contract_address;
+        staking_contract = Staking(_staking_contract_address);
     }
 
 
@@ -60,7 +62,7 @@ contract FundsManager is Ownable {
 
         router.swapExactETHForTokens{value: _amount}(0, 
                                                      path, 
-                                                     random_contract, 
+                                                     random_contract_address, 
                                                      block.timestamp);
     }
 
@@ -68,9 +70,10 @@ contract FundsManager is Ownable {
     /** 
     * Handle the funds received by the contract
     */
-    function handle_funds() internal {
+    function handle_funds() public payable {  // TODO : needs a require statement
 
-        uint256 _link_balance = IERC20(LINK).balanceOf(random_contract);
+        uint256 _link_balance = IERC20(LINK).balanceOf(random_contract_address);
+
         if (_link_balance < min_link_balance) {
 
             // Define the amount of FTM to swap to Link
@@ -83,26 +86,14 @@ contract FundsManager is Ownable {
             swapFTMToLink(_balance_to_be_swapped);
 
             // Send the rest of the balance to the staking contract
-            payable(staking_contract).transfer(_balance_to_be_sent);
+            staking_contract.manage_new_funds{value: _balance_to_be_sent}();
         }
         else {
             // Send the whole balance to the staking contract
-            payable(staking_contract).transfer(address(this).balance);
+            staking_contract.manage_new_funds{value: address(this).balance}();
         }
 
 
-    }
-
-    // This function is called when the contract receives funds
-    fallback() external payable {
-        handle_funds();
-        emit ReceivedFunds(msg.sender, msg.value);
-    }
-
-    // This function is called when the contract receives funds
-    receive() external payable {
-        handle_funds();
-        emit ReceivedFunds(msg.sender, msg.value);
     }
 
     // Note : For tests only
@@ -119,19 +110,19 @@ contract FundsManager is Ownable {
 
     /**
     * Set the random contract address (in case of an update of the contract)
-    * @param _random_contract The random contract address
+    * @param _random_contract_address The random contract address
     */
-    function setRandomContract(address _random_contract) public onlyOwner {
-        random_contract = _random_contract;
+    function setRandomContract(address _random_contract_address) public onlyOwner {
+        random_contract_address = _random_contract_address;
     }
 
 
     /**
     * Set the staking contract address (in case of an update of the contract)
-    * @param _staking_contract The staking contract address
+    * @param _staking_contract_address The staking contract address
     */
-    function setStakinContract(address _staking_contract) public onlyOwner {
-        staking_contract = _staking_contract;
+    function setStakinContract(address _staking_contract_address) public onlyOwner {
+        staking_contract = Staking(_staking_contract_address);
     }
 
     /**
