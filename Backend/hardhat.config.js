@@ -5,7 +5,7 @@ require("dotenv").config();
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
   solidity: "0.8.17",
-//  defaultNetwork: "fantom_testnet",
+  defaultNetwork: "fantom_testnet",
   networks: {
     fantom: {
       url: "https://rpc.ankr.com/fantom",
@@ -17,7 +17,7 @@ module.exports = {
     }
   },
   mocha: {
-    timeout: 100000
+    timeout: 150000
   },
   etherscan: {
     apiKey: process.env.FTMSCAN_API_KEY

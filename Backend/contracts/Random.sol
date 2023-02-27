@@ -1,10 +1,11 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.17;
+pragma solidity ^0.8.17;
 
-import "./utils/VRFV2WrapperConsumerBase.sol";
-import "./utils/Ownable.sol";
 import "./CoinFlip.sol";
 import "./Raffle.sol";
+import "./utils/VRFV2WrapperConsumerBase.sol";
+import "./utils/Ownable.sol";
+
 
 contract RandomNumberConsumer is VRFV2WrapperConsumerBase, Ownable {
     
@@ -17,7 +18,7 @@ contract RandomNumberConsumer is VRFV2WrapperConsumerBase, Ownable {
     mapping(uint256 => uint256) public random_numbers; 
 
     // Works for now
-    uint32 callbackGasLimit = 1000000; // Increase in case of fund manager that needs gas to swap to link and send FTM..
+    uint32 callbackGasLimit = 2400000; // Increase in case of fund manager that needs gas to swap to link and send FTM..
 
     // 5 confirmations
     uint16 requestConfirmations = 3; 

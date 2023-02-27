@@ -78,12 +78,12 @@ async function main() {
 
     // What's missing : Basically only unpausing contracts, then everything is ready :)
 
-    // MintObake deployed to: 0x570341dEd80483EB439eE4fFfF42f88C1934f6ac
-    // Staking deployed to: 0x52a6D23F0C04d284663dde33689D5e5ef0587E8a
-    // Random deployed to: 0xfb6Ce4041D8C2F72FF92AC19f973Cba5FBCec12e
-    // FundsManager deployed to: 0xBA4efD034B06f9b68848833a7781E9542BCebFb7
-    // CoinFlip deployed to: 0xe66AcB2F2aCD4684FAC07C3A2e926F49AC0eB036
-    // Raffle deployed to: 0x867F9a7d498790C24838D31F6C061423552e39CB
+    // MintObake deployed to: 0x975C87aAabb4dc42336b3E7bb9f1Bd922a7b7CeC
+    // Staking deployed to: 0xC26d81929ABC1E74bF39bcA1D0EC7001628e273E
+    // Random deployed to: 0xF87133647aC1748D0e439de5C18eeeF99163e0fe
+    // FundsManager deployed to: 0xa81Caa87B38aD4585EF9F3F1f5D2d27fCE9F824E
+    // CoinFlip deployed to: 0xc40b2CA628e3a1CACCe531F1927246CE27bc59B0
+    // Raffle deployed to: 0xe1eff0832aDac5910B110DDD5E4B9C4FB9b21A47
 
 }
 
