@@ -9,7 +9,7 @@ import { useEthers } from '@usedapp/core'
 
 export default function CoinFlipPlay() {
     const {account} = useEthers();
-    const CoinFlipContractAddress = "0xb999a44A9f014B7151cF11fCd11c5749A6e2E461"
+    const CoinFlipContractAddress = "0xc40b2CA628e3a1CACCe531F1927246CE27bc59B0"
     const CoinFlipInterface = new utils.Interface(CoinFlip.abi)
     const contract = CoinFlipContractAddress && (new Contract(CoinFlipContractAddress, CoinFlipInterface) )
     const { state, send } = useContractFunction(contract, 'play', { transactionName: 'play' })

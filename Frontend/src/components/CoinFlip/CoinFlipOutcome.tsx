@@ -8,7 +8,7 @@ import CoinFlip from '../../abi/CoinFlip.json'
 export default function Outcome() {
 
 
-    const CoinFlipContractAddress = "0xb999a44A9f014B7151cF11fCd11c5749A6e2E461"
+    const CoinFlipContractAddress = "0xc40b2CA628e3a1CACCe531F1927246CE27bc59B0"
     let tokenID : string = "" //for the moment
     const CoinFlipInterface = new utils.Interface(CoinFlip.abi)
     const coinFlipcontract = CoinFlipContractAddress && (new Contract(CoinFlipContractAddress, CoinFlipInterface) )

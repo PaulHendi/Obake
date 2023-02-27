@@ -3,16 +3,16 @@ import {StakingContainer, Input, InputRow, SmallButton} from "../../styles/Staki
 import { Contract } from '@ethersproject/contracts'
 import { utils } from 'ethers'
 import { useCall, useLogs, useTokenBalance, useContractFunction, useEthers } from '@usedapp/core'
-import CoinFlip from '../../abi/CoinFlip.json'
+import Staking from '../../abi/Staking.json'
 import {WalletIcon, SpinnerIcon, CheckIcon, ExclamationIcon} from "../../assets/Icons";
 import { StatusAnimation } from "../TransactionAnimation";
 import { useState } from "react";
 
 export default function(){
-    const StakingContractAddress = "0xb999a44A9f014B7151cF11fCd11c5749A6e2E461"
-    const StakingInterface = new utils.Interface(CoinFlip.abi)
+    const StakingContractAddress = "0xC26d81929ABC1E74bF39bcA1D0EC7001628e273E"
+    const StakingInterface = new utils.Interface(Staking.abi)
     const contract = StakingContractAddress && (new Contract(StakingContractAddress, StakingInterface) )
-    const { state, send } = useContractFunction(contract, 'play', { transactionName: 'play' })
+    const { state, send } = useContractFunction(contract, 'stake', { transactionName: 'stake' })
     const { account } = useEthers()
     const [disabled, setDisabled] = useState(false)
 
@@ -29,11 +29,11 @@ export default function(){
 
 
     const UserReward = () => {
-        const user_reward = useCall({contract : contract, method : 'user_reward', args : [account]})
+        const user_reward = useCall({contract : contract, method : 'getRewards', args : [account]})
         return ( 
             <div>
                 <p>Current user reward is : </p>
-                <p>{user_reward}</p>
+                <p>{user_reward?.value?.toString() && utils.formatEther(user_reward?.value?.toString())} FTM</p>
             </div>)
     }
 
