@@ -5,14 +5,14 @@ import Obake from '../../abi/Obake.json'
 import { MintNFTContainer, Input, InputRow, SmallButton } from '../../styles/MintNFT.style'
 import { StatusAnimation } from '../TransactionAnimation'
 import { useEthers, useTransactions } from '@usedapp/core'
+import { MINTNFT_ADDRESS } from '../../env'
 
 
 export default function MintNFT() {
     const { transactions } = useTransactions()
 
-    const MintNFTContractAddress = "0x975C87aAabb4dc42336b3E7bb9f1Bd922a7b7CeC" 
     const MintNFTInterface = new utils.Interface(Obake.abi)
-    const contract = MintNFTContractAddress && (new Contract(MintNFTContractAddress, MintNFTInterface) )
+    const contract = new Contract(MINTNFT_ADDRESS, MintNFTInterface) 
     const { state, send } = useContractFunction(contract, 'mint', { transactionName: 'mint' })
     const {account} = useEthers();
     const MINT_PRICE = 0.01;  // Todo : get price from contract
@@ -73,7 +73,7 @@ export default function MintNFT() {
           <Input type="number" placeholder="How many NFT?" className='NFT_number' />
           <SmallButton onClick={() => mint()} disabled={!account}>Mint</SmallButton>
         </InputRow>
-        <StatusAnimation transaction={state} />
+      {state.status !== 'PendingSignature' && <StatusAnimation transaction={state} />}
       {state.status === 'Success' && transactions.length !== 0 && <GetTx/>}
 
                
