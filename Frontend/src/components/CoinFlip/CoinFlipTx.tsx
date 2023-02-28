@@ -1,18 +1,18 @@
 import { Contract } from '@ethersproject/contracts'
 import { utils } from 'ethers'
-import { useCall, useLogs, useTokenBalance, useContractFunction } from '@usedapp/core'
+import { useCall, useContractFunction } from '@usedapp/core'
 import CoinFlip from '../../abi/CoinFlip.json'
-import Outcome from './CoinFlipOutcome'
 import {CoinFlipContainer,Wrapper, CustomInput, LabelInput, RadioInput, Label} from  "../../styles/HeadsOrTail.js"
 import { StatusAnimation } from '../TransactionAnimation'
 import { useEthers } from '@usedapp/core'
+import { COINFLIP_ADDRESS } from '../../env'
+
 
 export default function CoinFlipPlay() {
     const {account} = useEthers();
-    const CoinFlipContractAddress = "0xc40b2CA628e3a1CACCe531F1927246CE27bc59B0"
     const CoinFlipInterface = new utils.Interface(CoinFlip.abi)
-    const contract = CoinFlipContractAddress && (new Contract(CoinFlipContractAddress, CoinFlipInterface) )
-    const { state, send } = useContractFunction(contract, 'play', { transactionName: 'play' })
+    const coinFlipcontract = new Contract(COINFLIP_ADDRESS, CoinFlipInterface) 
+    const { state, send } = useContractFunction(coinFlipcontract, 'play', { transactionName: 'play' })
   
     const play = () => {
       // Get output from input field
@@ -33,6 +33,36 @@ export default function CoinFlipPlay() {
 
     }
     
+
+
+    const Outcome = () => {
+
+      const call_status =
+          useCall( account &&  {
+              contract: coinFlipcontract, // instance of called contract
+              method: "getGameInfo", // Method to be called
+              args: [account], // Method arguments - address 
+              }) ?? {};
+  
+  
+      let result = ""
+      if ("value" in call_status) {
+          let value = call_status["value"][0] 
+          if (value["ended"] && value["won"]) {
+              result = "You won! :)"
+          }
+          else if (value["ended"] && !value["won"]) {
+              result = "You lost! :( Better luck next time!"
+          }
+          else {
+              result = "Wait a bit for the outcome ..."
+          }
+      }    
+  
+      return (<div>
+                  <h1>Results</h1>
+                  <p>{result}</p>
+              </div>)}
         
      
     return (
@@ -75,7 +105,7 @@ export default function CoinFlipPlay() {
            </CustomInput>
         </Wrapper>
         <button onClick={() => play()} disabled={!account}>Play</button>
-        <StatusAnimation transaction={state} />
+        {state.status !== 'PendingSignature' &&<StatusAnimation transaction={state} />}
         {state.status=="Success" && <Outcome/>}
         
       </CoinFlipContainer>
