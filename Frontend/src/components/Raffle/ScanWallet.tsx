@@ -11,20 +11,22 @@ import { Contract } from '@ethersproject/contracts'
 import { useContractFunction, useTransactions, transactionErrored } from "@usedapp/core";
 import { StatusAnimation } from '../TransactionAnimation'
 
+import {RAFFLE_ADDRESS} from "../../env";
+
+
 
 export default function ScanWallet() {
   const { transactions } = useTransactions()
   const {account} = useEthers()
 
-  const RaffleContractAddress = "0xe1eff0832aDac5910B110DDD5E4B9C4FB9b21A47" 
   const RaffleInterface = new utils.Interface(Raffle.abi)
-  const RaffleContract = RaffleContractAddress && (new Contract(RaffleContractAddress, RaffleInterface) )  
+  const RaffleContract = new Contract(RAFFLE_ADDRESS, RaffleInterface) 
 
   const { state, send } = useContractFunction(RaffleContract, 'start_new_raffle', { transactionName: 'start_new_raffle' })
   const state_start_raffle = state;
   const start_raffle = send ;
 
-  
+
 
 
   const [nft_selected, setNFTSelected] = React.useState("");
@@ -58,7 +60,7 @@ export default function ScanWallet() {
                 let nft_sc : string = response.data.data.items[i].contract_address;
                 let nft_id : string = response.data.data.items[i].nft_data[j].token_id;
                 //nft_url[nft_name + "_" + nft_description] =  image_url;
-                nft_url[nft_name] = {"url" : image_url, "sc_contract" : nft_sc, "id" : nft_id}
+                nft_url[nft_name+ "_" + nft_sc.slice(0,6)] = {"url" : image_url, "sc_contract" : nft_sc, "id" : nft_id}
               }
           }
       }
@@ -91,7 +93,7 @@ export default function ScanWallet() {
 
   const approveContract = (contract : Contract, id: number) => {
     const { state, send } = useContractFunction(contract, 'approve', { transactionName: 'approve' })
-    void send(RaffleContractAddress, id);
+    void send(RAFFLE_ADDRESS, id);
   }
 
 
@@ -108,7 +110,7 @@ export default function ScanWallet() {
              args :[nft_selected["id"]]})
 
 
-    if(reponse?.value?.toString() !== RaffleContractAddress) {
+    if(reponse?.value?.toString() !== RAFFLE_ADDRESS) {
       return (
         <StartLotteryContainer>
           <img src={nft_selected["url"]}/>
