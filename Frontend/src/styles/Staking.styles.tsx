@@ -44,6 +44,7 @@ color: dark gray;
 border: gray 1px solid;
 border-radius: 24px;
 overflow: hidden;
+margin-top: 1%;
 `
 
 
@@ -55,3 +56,21 @@ export const SmallButton = styled.button`
   padding: 8px 24px;
   border-radius: 24px;
 `
+
+export const UserRewardContainer = styled.div`
+    display: flex;
+    margin-left: 0%;
+    margin-right: 0%;
+    margin-top: 2%;
+    margin-bottom: 2%;
+    height: 100%;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #F5F5F5;
+    padding: 0px;
+    p{
+        margin-top: 1%;
+        margin-bottom: 1%;
+    }  
+    `

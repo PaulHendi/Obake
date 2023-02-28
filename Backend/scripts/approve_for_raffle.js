@@ -40,6 +40,10 @@ async function main() {
         // Check that the NFT was approved with isApprovedForAll
         let approved_for_all = await beagle_deployed.isApprovedForAll(owner.address, raffle_address);
         console.log("Approved for all:", approved_for_all);
+
+        // Get token URI
+        let token_uri = await beagle_deployed.tokenURI(nft_id);
+        console.log("Token URI:", token_uri);
     
 }
 

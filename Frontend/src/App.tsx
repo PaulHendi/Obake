@@ -11,6 +11,7 @@ import Footer from './components/Footer'
 import Staking from './components/Staking/Staking'
 import RaffleMain from './components/Raffle/RaffleMain'
 
+
 interface ConfigProps {
   config: Config
 }

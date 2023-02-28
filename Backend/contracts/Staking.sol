@@ -7,6 +7,8 @@ import "./utils/Ownable.sol";
 
 contract Staking is ERC1155Holder, Ownable{
 
+    // Todo : isStaking for each user
+
 
     IERC1155 public immutable stakingToken;
 

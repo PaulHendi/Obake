@@ -29,4 +29,24 @@ export const JoinRaffleContainer = styled.div`
     box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
     -webkit-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
     -moz-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
+
+    img{
+        width: 50%;
+        height: 50%;
+        margin-left: 1%;
+
+    }
+    p{
+        margin-left: 1%;
+        margin-right: 1%;
+        margin-top: 1%;
+        margin-bottom: 1%;
+
+    }
+    h1{
+        margin-left: 1%;
+        margin-right: 1%;
+        margin-top: 1%;
+        margin-bottom: 1%;
+    }
 `;
