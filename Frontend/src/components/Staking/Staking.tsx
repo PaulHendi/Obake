@@ -2,10 +2,12 @@ import { useState, useEffect } from "react";
 import {StakingContainer, Input, InputRow, SmallButton, UserRewardContainer} from "../../styles/Staking.styles";
 import { Contract } from '@ethersproject/contracts'
 import { utils, ethers } from 'ethers'
-import { useCall, useContractFunction, useEthers, useTransactions } from '@usedapp/core'
+import { useCall, useContractFunction, useEthers } from '@usedapp/core'
 import Staking from '../../abi/Staking.json'
+import Obake from   '../../abi/Obake.json'
 import { StatusAnimation } from "../TransactionAnimation";
-import { STAKING_ADDRESS } from "../../env";
+import { STAKING_ADDRESS, MINTNFT_ADDRESS, PROVIDER_URL } from "../../env";
+import GetTxInfo  from '../GetTxInfo'
 
 
 const formatter = new Intl.NumberFormat('en-us', {
@@ -14,42 +16,106 @@ const formatter = new Intl.NumberFormat('en-us', {
   })
 
 export default function(){
-    const StakingInterface = new utils.Interface(Staking.abi)
-    const provider = new ethers.providers.JsonRpcProvider("https://rpc.ankr.com/fantom_testnet")
-    const contract = new Contract(STAKING_ADDRESS, StakingInterface, provider) 
 
-    const { state : state_stake, send : stakeTx } = useContractFunction(contract, 'stake', { transactionName: 'stake' })
-    const { state : state_unstake, send : unstakeTx } = useContractFunction(contract, 'unstake', { transactionName: 'unstake' })
-    const { state : state_claimReward, send : claimRewardTx } = useContractFunction(contract, 'claimRewards', { transactionName: 'claimRewards' });
+
+    // Todo : Correct some worflow problems 
+    // But basically we have all the elements
+
+    const StakingInterface = new utils.Interface(Staking.abi)
+    const ObakeInterface = new utils.Interface(Obake.abi)
+    const provider = new ethers.providers.JsonRpcProvider(PROVIDER_URL)
+    const StakingContract = new Contract(STAKING_ADDRESS, StakingInterface, provider) 
+    const ObakeContract = new Contract(MINTNFT_ADDRESS, ObakeInterface, provider)
+
+    const { state : state_stake, send : stakeTx } = useContractFunction(StakingContract, 'stake', { transactionName: 'stake' })
+    const { state : state_unstake, send : unstakeTx } = useContractFunction(StakingContract, 'unstake', { transactionName: 'unstake' })
+    const { state : state_claimReward, send : claimRewardTx } = useContractFunction(StakingContract, 'claimRewards', { transactionName: 'claimRewards' });
+    const { state : state_approve, send : approveContract } = useContractFunction(ObakeContract, 'setApprovalForAll', { transactionName: 'setApprovalForAll' });
 
     const { account } = useEthers()
-    const { transactions } = useTransactions()
     const [disabled, setDisabled] = useState(false)
-    const [isStaking, setIsStaking] = useState(false)
+    const [userInfo, setUserInfo] = useState({loading: true, balance: 0, isStaking : false});
+    const [userApproved, setUserApproved] = useState({loading: true, approved : false});
+
+
+    // Note : There's still an error of promise due to useEffect it seems
+    // However it seems to work fine, and I don't how to debug it yet
 
     useEffect(() => {
-        contract.balanceOf(account).then((res:BigInt) => {
-        if (parseInt(res.toString())> 0) setIsStaking(true)});
+        StakingContract.balanceOf(account).then((res:BigInt) => {
+                let balance_user : number = parseInt(res.toString());
+                if (balance_user > 0) setUserInfo({loading: false, balance: balance_user, isStaking : true})
+                else setUserInfo({loading: false, balance: 0, isStaking : false})})
+
+        ObakeContract.isApprovedForAll(account, STAKING_ADDRESS).then((res:boolean) => {
+            let approved : boolean = res;
+            setUserApproved({loading: false, approved : approved})
+        })
+        
     }, [account])
 
 
-    const stake = () => {
+
+    const { loading : loading_user_info, balance, isStaking } = userInfo;
+    const { loading : loading_user_approved, approved } = userApproved;
+
+
+
+    const stake = async () => {
         setDisabled(true);
         const NFT_to_stake = document.getElementsByName('NFT_to_stake')[0] as HTMLInputElement
         void stakeTx(NFT_to_stake.value)
     }
 
-    const unstake = () => {
+    const unstake = async () => {
         setDisabled(true);
         const NFT_to_unstake = document.getElementsByName('NFT_to_unstake')[0] as HTMLInputElement
         void unstakeTx(NFT_to_unstake.value)
     }
 
+    const claimReward = async () => {
+        setDisabled(true);
+        void claimRewardTx();
+    }
+
+    const approveStakingContract = async () => {
+        setDisabled(true);
+        void approveContract(STAKING_ADDRESS, true);
+    }
+ 
+    const StartStaking = () => {
+
+        if (loading_user_approved || approved) {
+            return (
+                <div>
+                    <p>You can stake your NFTs here</p>
+                    <InputRow>
+                        <Input type="number" placeholder="amount" name="NFT_to_stake"/>
+                        <SmallButton onClick={() => stake()} disabled={!account || disabled}>Stake</SmallButton>
+                    </InputRow>
+                </div>)
+        }
+        else  {
+
+
+            return (
+                <div>
+                    <p>You need to approve the contract to stake your NFTs</p>
+                    <SmallButton onClick={() => approveStakingContract()} disabled={!account || disabled}>Approve</SmallButton>
+                </div>
+            )
+        }
+        
+
+    }
+
 
     const UserReward = () => {
 
-        const user_reward_reponse = useCall({contract : contract, method : 'getRewards', args : [account]})
-        const user_reward : string = user_reward_reponse?.value?.toString();
+        const user_reward_reponse = useCall({contract : StakingContract, method : 'getRewards', args : [account]})
+        const user_reward  = user_reward_reponse?.value?.toString();
+
+
         return ( 
             <UserRewardContainer>
                 <p>Current user reward : </p>
@@ -57,57 +123,38 @@ export default function(){
             </UserRewardContainer>)
     }
 
-    const claimReward = () => {
-        setDisabled(true);
-        void claimRewardTx();
-    }
-
-
-    const GetTx = () => {
-
-        setDisabled(false);
-        let tx = transactions[0].receipt?.transactionHash;
-        let tx_link = "https://testnet.ftmscan.com/tx/" + tx;
-  
-        // Get first six and last four characters of the hash
-        let tx_hash = tx?.slice(0, 6) + "..." + tx?.slice(-4);
-  
-        return (  <a href={tx_link} target="_blank">{tx_hash}</a> )
-         
-      }
-
 
     return(
         <StakingContainer>
             <h1>Staking</h1>
-            <p>You can stake your NFTs here</p>
-            <InputRow>
-                <Input type="number" placeholder="amount" name="NFT_to_stake"/>
-                <SmallButton onClick={() => stake()} disabled={!account || disabled}>Stake</SmallButton>
-            </InputRow>
-
-            {account && isStaking  && <UserReward />}
-            {account && isStaking &&  
-                
-                    <SmallButton onClick={() => claimReward()} disabled={!account || disabled}>ClaimReward</SmallButton>
-                 }   
-
-            {account && isStaking && (<p>You can unstake your NFTs here</p>)}
-            {account && isStaking &&  
             
-            <InputRow>
-                
-                <Input type="number" placeholder="amount" name="NFT_to_unstake"/>
-                <SmallButton onClick={() => unstake()} disabled={!account || disabled}>Unstake</SmallButton>
-            </InputRow> }   
+            <StartStaking/>
+
+            {account && loading_user_info ? <p>Loading...</p> : isStaking  && 
+            <div>
+                <UserReward />
+                <SmallButton onClick={() => claimReward()} disabled={!account || disabled}>ClaimReward</SmallButton>
+            
+                <div>
+                    <p>You can unstake your NFTs here</p>
+                    <p>Staking : {balance}</p>
+                </div>
+             
+                <InputRow>
+                    <Input type="number" placeholder="amount" name="NFT_to_unstake"/>
+                    <SmallButton onClick={() => unstake()} disabled={!account || disabled}>Unstake</SmallButton>
+                </InputRow> 
+            </div>}   
 
             {state_stake.status !== 'None' && <StatusAnimation transaction={(state_stake)}/>}
             {state_unstake.status !== 'None'  && <StatusAnimation transaction={(state_unstake)}/>}
             {state_claimReward.status !== 'None'  && <StatusAnimation transaction={(state_claimReward)}/>}
+            {state_approve.status !== 'None'  && <StatusAnimation transaction={(state_approve)}/>}
             
             {(state_stake.status === 'Success' || 
              state_unstake.status === 'Success' ||
-             state_claimReward.status === 'Success') && transactions.length !== 0 && <GetTx/>}
+             state_claimReward.status === 'Success' ||
+             state_approve.status === 'Success')  && <GetTxInfo/>}
 
         </StakingContainer>
     );

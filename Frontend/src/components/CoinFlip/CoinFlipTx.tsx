@@ -6,16 +6,26 @@ import {CoinFlipContainer,Wrapper, CustomInput, LabelInput, RadioInput, Label} f
 import { StatusAnimation } from '../TransactionAnimation'
 import { useEthers } from '@usedapp/core'
 import { COINFLIP_ADDRESS } from '../../env'
+import GetTxInfo  from '../GetTxInfo'
 
 
 export default function CoinFlipPlay() {
+
+
+    // TODO : 
+    // Reorg a bit
+    // See if there's a way to wait for the results and not display previous results 
+    // If won include a link to the Tx on FTMScan
+    // Add an animation of a spinning coin while waiting for the outcome
+
     const {account} = useEthers();
     const CoinFlipInterface = new utils.Interface(CoinFlip.abi)
     const coinFlipcontract = new Contract(COINFLIP_ADDRESS, CoinFlipInterface) 
     const { state, send } = useContractFunction(coinFlipcontract, 'play', { transactionName: 'play' })
   
+
+
     const play = () => {
-      // Get output from input field
 
       const element_heads_or_tail = document.getElementsByName('heads_or_tail')[0] as HTMLInputElement
       const element_price_first = document.getElementsByName('price')[0] as HTMLInputElement
@@ -24,8 +34,7 @@ export default function CoinFlipPlay() {
       const choice = element_heads_or_tail.checked as boolean
       const price =  element_price_first.checked as boolean ? 0.1 : element_price_second.checked as boolean ? 0.5 : 1
                                             
-      console.log(choice)
-      console.log(price)
+
       if (choice) {
         void send(1, {value: utils.parseEther(price.toString()), gasLimit: 2500000})}
       else {
@@ -106,6 +115,7 @@ export default function CoinFlipPlay() {
         </Wrapper>
         <button onClick={() => play()} disabled={!account}>Play</button>
         {state.status !== 'PendingSignature' &&<StatusAnimation transaction={state} />}
+        {state.status === 'Success' && <GetTxInfo/>}
         {state.status=="Success" && <Outcome/>}
         
       </CoinFlipContainer>

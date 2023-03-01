@@ -50,3 +50,63 @@ export const JoinRaffleContainer = styled.div`
         margin-bottom: 1%;
     }
 `;
+
+
+export const ImageContainer = styled.div`
+    margin-left: 1%;
+    margin-top: 2%;
+    margin-bottom: 2%;
+    width:50%;
+    border:none;
+    border-radius: 5%;
+    background-color: #F5F5F5;
+    
+
+    img{
+        width: 98%;
+        height: 98%;
+        border-radius: 24px;
+    }
+    p{
+        margin-left: 1%;
+        margin-right: 1%;
+        margin-top: 1%;
+        margin-bottom: 1%;
+    }
+    
+    `
+
+
+export const Input = styled.input`
+    border-radius:24px;
+    //height: 100%;
+    text-align: center;
+    border: 0;
+    -moz-appearance: textfield;
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+`
+
+export const InputRow = styled.div`
+    display: flex;
+    margin: 0;
+    color: dark gray;
+    border: gray 1px solid;
+    border-radius: 24px;
+    overflow: hidden;
+`
+
+
+export const SmallButton = styled.button`
+  display: flex;
+  justify-content: center;
+  //min-width: 95px;
+  width: 100%;
+  padding: 8px 24px;
+  border-radius: 24px;
+
+`
