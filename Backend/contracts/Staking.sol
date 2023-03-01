@@ -7,8 +7,6 @@ import "./utils/Ownable.sol";
 
 contract Staking is ERC1155Holder, Ownable{
 
-    // Todo : isStaking for each user
-
 
     IERC1155 public immutable stakingToken;
 
@@ -31,7 +29,7 @@ contract Staking is ERC1155Holder, Ownable{
         uint256 reward_rate;
     }
 
-    StakingInfo public staking_info; // Need to initialize it ?
+    StakingInfo public staking_info; 
 
     // User address => rewards to be claimed
     mapping(address => uint) public rewards;

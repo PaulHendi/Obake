@@ -22,7 +22,7 @@ describe("obake", function() {
 
     });
 
-    // Additional tests : 
+    // Additional tests done : 
     // - Name and symbol of the token visible on the explorer, yes
     // - Image accessible on a markeplace, yes (tested on opensea)
     // - Metadata accessible on a marketplace, yes (tested on opensea)
@@ -54,6 +54,9 @@ describe("obake", function() {
 
     });
 
+
+    // The requires works on a forked testnet but not on the testnet directly
+    // Maybe an issue from Hardhat/chai 
 
     // it("should test requires", async function() {
     

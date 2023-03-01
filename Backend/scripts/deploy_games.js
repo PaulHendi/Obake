@@ -24,7 +24,7 @@ async function main() {
     console.log("Raffle address:", raffle_deployed.address);  
 
     // Wait for the transaction to be confirmed (5 confirmations)
-    await raffle_deployed.deployTransaction.wait(1)
+    await raffle_deployed.deployTransaction.wait(2)
 
     // 3) Deploy CoinFlip using the address of the random number generator
     const coinflip = await ethers.getContractFactory("CoinFlip");
@@ -33,16 +33,16 @@ async function main() {
     console.log("CoinFlip address:", coinflip_deployed.address);
 
     // Wait for the transaction to be confirmed (5 confirmations)
-    await coinflip_deployed.deployTransaction.wait(1)
+    await coinflip_deployed.deployTransaction.wait(2)
 
     
     // 3) Set the raffle address in the random number consumer
-    await(await randomn_deployed.set_contracts(coinflip_deployed.address, raffle_deployed.address)).wait(1);
+    await(await randomn_deployed.set_contracts(coinflip_deployed.address, raffle_deployed.address)).wait(2);
 
     // 8) Send FTM to CoinFlip
     await(await owner.sendTransaction({to:coinflip_deployed.address,
                                        value: ethers.utils.parseEther("1"), 
-                                       gasLimit:2500000})).wait(1);
+                                       gasLimit:2500000})).wait(2);
 
 
     // 9) Send Link to Random
@@ -51,7 +51,7 @@ async function main() {
     Linkdeployed = Link.attach(LINK_ADDRESS);
 
 
-    await(await Linkdeployed.transfer(randomn_deployed.address, ethers.utils.parseEther("0.1"))).wait(1);
+    await(await Linkdeployed.transfer(randomn_deployed.address, ethers.utils.parseEther("0.1"))).wait(2);
 
 }
 

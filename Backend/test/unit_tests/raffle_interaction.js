@@ -7,7 +7,7 @@ const {expect}=require("chai");
 // Note : Before running the tests, make sure to fund the random number generator with LINK tokens
 // And double check the tx went trough, Fantom Testnet can be buggy sometimes
 
-// Note : For this tests, we need to manually keep track of the NFTs we are using. They are transfered randomly
+// Note : For these tests, we need to manually keep track of the NFTs we are using. They are transfered randomly
 // We can just forget about the NFTs that were won, and set up the accounts with NFTs beforehand
 
 describe("Raffle", function () {
@@ -37,10 +37,10 @@ describe("Raffle", function () {
         owner = new ethers.Wallet(process.env.PRIVATE_KEY, provider);
         alice = new ethers.Wallet(process.env.PRIVATE_KEY_ALICE, provider);
         bob = new ethers.Wallet(process.env.PRIVATE_KEY_BOB, provider);
+        jack = new ethers.Wallet(process.env.PRIVATE_KEY_JACK, provider);
 
-
-        raffle_deployed = await raffle.attach("0xC76a241c2a24c069203750998449C347D1D4f0c9")
-        random_number_generator_deployed = await random_number_generator.attach("0xf5aAd3A4f8c7bc353d97C5BA68EcD9888010D6bC");
+        raffle_deployed = await raffle.attach("0x346e571EC4A1A31d95Adb810Ba9F59d8dBd3801F")
+        //random_number_generator_deployed = await random_number_generator.attach("0x1DFdAf125e9F45a1d5A3F2d84999879B169198A3");
         // CoinFlip : 0x978760A2Fb864D80E36513CA9D467B6c3A20cf63
 
         // Owner approve the raffle contract to transfer NFTs
@@ -55,6 +55,47 @@ describe("Raffle", function () {
         console.log("Raffle info:", raffle_info);
     }
 
+
+    it("should test two lotteries at the same time and query info", async function () {
+    
+        // Owner needs to approve the raffle contract to transfer NFTs (Beagles #3)
+        //await(await beagle_deployed.approve(raffle_deployed.address, 3)).wait(2); // wait for 2 blocks to be mined
+
+        // Owner starts a new raffle (Beagle #3, 5 tickets, 0.1 FTM per ticket)
+        await(await raffle_deployed.start_new_raffle(
+                                                        Beagles,                            
+                                                        3,
+                                                        ethers.utils.parseEther("0.1"),
+                                                        5)).wait(3); // wait for 2 blocks to be mined
+
+        // Jack needs to approve the raffle contract to transfer NFTs (Beagles #1)
+        //await(await beagle_deployed.connect(bob).approve(raffle_deployed.address, 2)).wait(2); // wait for 2 blocks to be mined                                                        
+
+        // Jack starts a new raffle (Beagle #1, 5 tickets, 0.1 FTM per ticket)
+        await(await raffle_deployed.connect(bob).start_new_raffle(
+                    Beagles,
+                    2,
+                    ethers.utils.parseEther("0.1"),
+                    5)).wait(3); // wait for 2 blocks to be mined
+
+
+        // Query id
+        raffleId = await raffle_deployed.raffleId();
+        console.log("Raffle id:", raffleId.toString());
+
+        // query main info
+        let raffles = await raffle_deployed.get_current_raffles();
+
+        console.log("Raffles:", raffles);
+
+    });
+
+    // it("should end lotteries currently running to get back the NFTs", async function () {
+
+    //     await(await raffle_deployed.end_raffle(1)).wait(2);
+    //     await(await raffle_deployed.connect(bob).end_raffle(2)).wait(2);
+
+    // });
 
     // it("Should call emergency withdraw", async function () {
     //     // Owner calls emergency withdraw

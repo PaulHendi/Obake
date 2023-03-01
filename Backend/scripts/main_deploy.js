@@ -77,6 +77,7 @@ async function main() {
 
 
     // What's missing : Basically only unpausing contracts, then everything is ready :)
+    // To verify the contracts use the dedicated bash script
 
     // MintObake deployed to: 0x975C87aAabb4dc42336b3E7bb9f1Bd922a7b7CeC
     // Staking deployed to: 0xC26d81929ABC1E74bF39bcA1D0EC7001628e273E
