@@ -73,18 +73,15 @@ async function main() {
     const Linkdeployed = await Link.attach(LINK_ADDRESS);
 
 
-    await Linkdeployed.transfer(RandomDeployed.address, ethers.utils.parseEther("0.1"));
+    await(await Linkdeployed.transfer(RandomDeployed.address, ethers.utils.parseEther("0.1"))).wait(2);
+
+    // Unpause Obake contract
+    await (await MintObakeDeployed.setPaused(false)).wait(2);
 
 
-    // What's missing : Basically only unpausing contracts, then everything is ready :)
-    // To verify the contracts use the dedicated bash script
+    // What's missing : Verify the contracts using the dedicated bash script
+    // Copy paste the addresses in the script and run it
 
-    // MintObake deployed to: 0x975C87aAabb4dc42336b3E7bb9f1Bd922a7b7CeC
-    // Staking deployed to: 0xC26d81929ABC1E74bF39bcA1D0EC7001628e273E
-    // Random deployed to: 0xF87133647aC1748D0e439de5C18eeeF99163e0fe
-    // FundsManager deployed to: 0xa81Caa87B38aD4585EF9F3F1f5D2d27fCE9F824E
-    // CoinFlip deployed to: 0xc40b2CA628e3a1CACCe531F1927246CE27bc59B0
-    // Raffle deployed to: 0xe1eff0832aDac5910B110DDD5E4B9C4FB9b21A47
 
 }
 

@@ -31,24 +31,24 @@ contract Raffle is Ownable {
     // Raffle struct to store raffle info
     struct raffle {
         address owner;                              // Owner of the raffle
-        RAFFLE_STATE raffle_state;                // State of the raffle
+        RAFFLE_STATE raffle_state;                  // State of the raffle
         uint256 ticket_price;                       // Price of a ticket
         uint256 ticket_amount;                      // Amount of tickets to be sold
         uint256 ticket_sold;                        // Amount of tickets sold
         address NFTcontract;                        // NFT contract address to be won
         uint256 NFTid;                              // NFT id to be won
-        //address[] players;                          // Players who bought tickets
-        //mapping(address => uint256) player_total_paid; // Player => amount of tickets
         address winner;                             // Winner of the raffle
     }
  
-    // (CHANGED)
+    // Player info struct to store player info
+    // Note : this is not included in the struct above for easier info retrieval from the frontend
     struct PlayerInfo{
         address player;
         uint256 amount_paid;
     }
 
-    mapping(uint256 => PlayerInfo[]) public raffleId_to_playerInfo; // (CHANGED)
+    // RaffleId => PlayerInfo[]
+    mapping(uint256 => PlayerInfo[]) public raffleId_to_playerInfo; 
 
     // RaffleId => raffle
     mapping(uint256 => raffle) public lotteries;
@@ -59,6 +59,7 @@ contract Raffle is Ownable {
 
     // RequestId => RaffleId
     mapping(uint256 => uint256) public requestId_to_raffleId;
+
 
     // Winning fee
     uint256 public winning_fee = 2;
@@ -316,7 +317,7 @@ contract Raffle is Ownable {
     function get_current_raffles() public view returns(raffle[] memory) {
         raffle[] memory _current_raffles = new raffle[](get_current_raffle_num());
         uint256 index = 0;
-        for (uint256 i = 1; i < raffleId; i++) { // Start at 1
+        for (uint256 i = 1; i < raffleId; i++) { // Starts at 1
             if (lotteries[i].raffle_state == RAFFLE_STATE.OPEN || 
                 lotteries[i].raffle_state == RAFFLE_STATE.CALCULATING_WINNER) {
                 _current_raffles[index] = lotteries[i];
@@ -327,21 +328,33 @@ contract Raffle is Ownable {
     }
 
 
+    function get_past_raffle_num() internal view returns(uint256){
+        uint256 counter = 0;
+        for (uint256 i = 1; i < raffleId; i++) { // Start at 1
+            if (lotteries[i].raffle_state == RAFFLE_STATE.CLOSED) {
+                    counter++;
+            }
+        }
+        return counter;
+    }        
 
-    // /**
-    // * Getter to get the previous raffles (To be tested with a unit test before)
-    // */
-    // function get_previous_raffles() public view returns(raffle[] memory) {
-    //     raffle[] memory _previous_raffles;
-    //     uint256 _counter = 0;
-    //     for (uint256 i = 1; i <= raffleId; i++) { 
-    //         if (lotteries[i].raffle_state == RAFFLE_STATE.CLOSED) {
-    //             _previous_raffles[_counter] = lotteries[i];
-    //             _counter++;
-    //         }
-    //     }
-    //     return _previous_raffles;
-    // }
+    /**
+    * Getter to get the current raffles 
+    */
+    function get_past_raffles() public view returns(raffle[] memory) {
+        raffle[] memory _current_raffles = new raffle[](get_past_raffle_num());
+        uint256 index = 0;
+        for (uint256 i = 1; i < raffleId; i++) { // Starts at 1
+            if (lotteries[i].raffle_state == RAFFLE_STATE.CLOSED) {
+                _current_raffles[index] = lotteries[i];
+                index++;
+            }
+        }
+        return _current_raffles;
+    }
+
+
+
 
     /** 
     * Utils function to get the winner for a given raffle
