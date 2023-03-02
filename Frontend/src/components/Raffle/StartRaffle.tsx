@@ -76,7 +76,8 @@ export default function StartRaffle() {
       setNFTInfo({loading : false, nft : nft_url});
     })
    
-  }, [account]);
+  }, [account]); 
+  // Need to recall the useEffect when account list NFT (useState with a new state that checks if a new raflle has been created)
 
 
   const { loading, nft } = nftInfo;
@@ -104,7 +105,7 @@ export default function StartRaffle() {
 
   }
 
-
+  // TODO : Pb when creating a lottery, the query getAproved is set to false, hence approve button appears
 
   const StartNewLottery = () => {
 
@@ -117,9 +118,10 @@ export default function StartRaffle() {
     let reponse = useCall({contract : NFTContract, 
              method : 'getApproved', 
              args :[nft_selected["id"]]})
-
+    
 
     if(reponse?.value?.toString() !== RAFFLE_ADDRESS) {
+      
       return (
         <StartLotteryContainer>
           <img src={nft_selected["url"]}/>
@@ -132,6 +134,7 @@ export default function StartRaffle() {
     else {
       console.log("Start new lottery");
       // Get NFT info
+      setContractApproved(true);
       console.log(nft_selected);
       return (
         <StartLotteryContainer>
@@ -145,7 +148,7 @@ export default function StartRaffle() {
                                               document.getElementsByClassName('ticket_amount')[0].value,
                                               document.getElementsByClassName('ticket_price')[0].value
                                     )}}>Start a new lottery</button>
-            <button onClick={() => {setNFTSelected("")}}>Cancel</button>
+            <button onClick={() => {setNFTSelected(""); setContractApproved(false);}}>Cancel</button>
           
         </StartLotteryContainer>
       )
@@ -166,7 +169,7 @@ export default function StartRaffle() {
       {account && nft_selected && contract_approved && (<h1>Set ticket price and quantity</h1>)}
 
       <ScanWalletContainer>
-      {loading ? <p>Loading...</p> : Object.keys(nft).length === 0 ? <p>No NFT found</p> : 
+      {loading ? account ? <p>Loading...</p> : <p></p> : Object.keys(nft).length === 0 ? <p>No NFT found</p> : 
       account && !nft_selected && Object.keys(nft).map((key) => {
                                           return ( <ImageContainer onClick={() => {setNFTSelected(nft[key])}}>  
                                                       <img src={nft[key]["url"]} />

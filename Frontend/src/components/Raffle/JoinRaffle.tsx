@@ -28,72 +28,86 @@ export default function JoinRaffle() {
     const RaffleContract = new Contract(RAFFLE_ADDRESS, RaffleInterface, provider)
     const { account } = useEthers();
     const { state : state_enter, send : enterTx } = useContractFunction(RaffleContract, 'enter', { transactionName: 'enter' })
-
-
-    const [currentRaffle, setCurrentRaffle] = useState({
-                                                            loading: true,
-                                                            raffle_id: 0,
-                                                            owner: "",
-                                                            ticket_price: 0,
-                                                            ticket_amount: 0,
-                                                            ticket_sold: 0,
-                                                            nft_url: ""
-                                                        });
+    const { state : state_endRaffle, send : endRaffleTx } = useContractFunction(RaffleContract, 'end_raffle', { transactionName: 'end_raffle' })
+    
+    const [currentRaffle, setCurrentRaffle] = useState({loading: true,
+                                                        existsRaffle: false,
+                                                        raffles : [{}]});
 
 
 
 
     useEffect(() => {
 
-        RaffleContract.raffleId().then((raffle_id : ethers.BigNumber) => {
-            let raffleId : number = parseInt(raffle_id.toString())-1
-            RaffleContract.lotteries(raffleId).then((current_raffle : any) => {
+        if (!currentRaffle.loading) return;
 
-                let nft_id : number = parseInt(current_raffle.NFTid?.toString())
-                let nft_contract : string = current_raffle.NFTcontract?.toString()
-                let owner : string = current_raffle.owner?.toString().substring(0, 6) + "..." + current_raffle.owner?.toString().substring(38, 42)
-                let ticket_price : number = parseInt(utils.formatEther(current_raffle.ticket_price?.toString()));
-                let ticket_amount : number = current_raffle.ticket_amount?.toString()
-                let ticket_sold : number = current_raffle.ticket_sold?.toString()
+        RaffleContract.get_current_raffles().then((raffles : Array<any>) => {
+            let raffles_length = raffles.length;
+
+            if (raffles_length == 0) {
+                setCurrentRaffle({...currentRaffle, loading : false, existsRaffle: false});
+                return;
+            }
+            
+            raffles.map((raffle : any, i) => {
+                console.log(i)
+                console.log("Raffle len",raffles_length)
+
+                if (i == raffles_length-1) currentRaffle.loading = false
+                    
+
+                let nft_id : number = parseInt(raffle.NFTid?.toString())
+                let nft_contract : string = raffle.NFTcontract?.toString()
+                let owner : string = raffle.owner?.toString().substring(0, 6) + "..." + raffle.owner?.toString().substring(38, 42)
+                let ticket_price : number = parseInt(utils.formatEther(raffle.ticket_price?.toString()));
+                let ticket_amount : number = raffle.ticket_amount?.toString()
+                let ticket_sold : number = raffle.ticket_sold?.toString()
         
-                
-
                 // Get NFT metadata
                 const MintNFTContractAddress = nft_contract 
                 const MintNFTInterface = new utils.Interface(NFT.abi)
                 const NFTContract = new Contract(MintNFTContractAddress, MintNFTInterface, provider) 
+
+
                 NFTContract.tokenURI(nft_id).then((response : string) => {
 
                     axios.get(response).then((res) => {
 
+
                         setCurrentRaffle(
                             {
-                                loading: false,
-                                raffle_id: raffleId,
-                                owner: owner,
-                                ticket_price: ticket_price,
-                                ticket_amount: ticket_amount,
-                                ticket_sold: ticket_sold,
-                                nft_url: res.data.image
+                                ...currentRaffle,
+                                existsRaffle: true,
+                                raffles: [...currentRaffle.raffles, {owner: owner,
+                                                                    isOwner: account == raffle.owner,
+                                                                    ticket_price: ticket_price,
+                                                                    ticket_amount: ticket_amount,
+                                                                    ticket_sold: ticket_sold,
+                                                                    nft_url: res.data.image}]
+                                
                             }
                         )});                                
                 });
 
-
             })
+        })
 
-        });
-    }, [account]);        
+    }, []);        
     
     
-    const { loading , raffle_id, owner, ticket_price, ticket_amount, ticket_sold, nft_url } = currentRaffle;
+    const { loading , existsRaffle, raffles } = currentRaffle;
 
-
+    console.log("Loading outside useEffect",loading)
+    console.log("Raffles",raffles)
 
     const buyTickets = async (raffle_id : number, ticket_price : number) => { 
         let ticket_amount : number = document.getElementsByClassName("number_of_tickets")[0]?.value;
 
         void enterTx(raffle_id, ticket_amount, {value: utils.parseEther((ticket_price*ticket_amount).toString())})
+    }
+
+    const endRaffle = async (raffle_id : number) => {
+        void endRaffleTx(raffle_id)
     }
 
 
@@ -103,21 +117,29 @@ export default function JoinRaffle() {
             
 
             {loading? <p>Loading...</p> : 
-            <ImageContainer>
-                <img src={nft_url}/>
-                <p>Owner: {owner}</p>
-                <p>Ticket price: {ticket_price}</p>
-                <p>Tickets left: {ticket_amount-ticket_sold}/{ticket_amount}</p>
-                <InputRow>
-                    <Input type="number" placeholder="ticket to buy" className='number_of_tickets' />
-                    <SmallButton onClick={() => buyTickets(raffle_id, ticket_price)}>Buy ticket</SmallButton>
-                </InputRow>
-            </ImageContainer>} 
+              existsRaffle && raffles.map((raffle : any, i) => { 
+                return ( i>0 &&
+                    <ImageContainer key={i}>
+                        <img src={raffle["nft_url"]}/>
+                        <p>Owner: {raffle["owner"]}</p>
+                        <p>Ticket price: {raffle["ticket_price"]}</p>
+                        <p>Tickets left: {raffle["ticket_amount"]-raffle["ticket_sold"]}/{raffle["ticket_amount"]}</p>
+                        {raffle["isOwner"]} &&
+                        <InputRow>
+                            <SmallButton onClick={() => endRaffle(0)}>End Raffle</SmallButton>
+                        </InputRow>
+                         : 
+                        <InputRow>
+                            <Input type="number" placeholder="ticket to buy" className='number_of_tickets' />
+                            <SmallButton onClick={() => buyTickets(0, raffle["ticket_price"])}>Buy ticket</SmallButton>
+                        </InputRow>
+                    </ImageContainer> )})}
             
 
             <NavbarRaffleLink to="/raffle/start_new_raffle">Start a new raffle</NavbarRaffleLink>
             {state_enter.status !== 'PendingSignature' && <StatusAnimation transaction={state_enter} />}
-            {state_enter.status === 'Success' && <GetTxInfo/>}
+            {(state_enter.status === 'Success' ||
+            state_endRaffle.status === 'Success') && <GetTxInfo/>}
 
         </JoinRaffleContainer>
     );
