@@ -53,7 +53,7 @@ export const StartLotteryContainer = styled.div`
     padding: 20px;
 
     img{
-        width: 60%;
+        width: 40%;
         height: auto;
         align-items: center;
         justify-content: center;

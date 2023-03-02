@@ -16,7 +16,7 @@ export const HomeContainer = styled.div`
     font-family: Arial, Helvetica, sans-serif;
     font-size: large;
     text-align: left;
-    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
+   // box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
 
     h1 {
     font-size: 24px;
