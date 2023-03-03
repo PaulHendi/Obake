@@ -38,6 +38,13 @@ export const ScanWalletContainer = styled.div`
         border-radius: 10px;
         margin-bottom: 20px;
     }
+    p {
+        margin-left: 35%;
+        margin-right: 35%;
+        text-align: center;
+        align-items: center;
+        justify-content: center;
+    }
  
     
 

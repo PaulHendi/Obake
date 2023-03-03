@@ -135,7 +135,7 @@ export default function JoinRaffle() {
             
 
             {loading? <p>Loading...</p> : 
-              existsRaffle && raffles.map((raffle : any, i) => { 
+              existsRaffle ? raffles.map((raffle : any, i) => { 
                 return ( i>0 &&
                     <ImageContainer key={i}>
                         <img src={raffle["nft_url"]}/>
@@ -144,10 +144,9 @@ export default function JoinRaffle() {
                         <p>Tickets left: {raffle["ticket_amount"]-raffle["ticket_sold"]}/{raffle["ticket_amount"]}</p>
                         <LotteryInput Owner = {raffle["owner"]} isOwner={raffle["is_owner"]} ticketPrice = {raffle["ticket_price"]}/>
    
-                    </ImageContainer> )})}
+                    </ImageContainer> )}) : <p>No raffle available at the moment</p>}
             
 
-            <NavbarRaffleLink to="/raffle/start_new_raffle">Start a new raffle</NavbarRaffleLink>
             {state_enter.status !== 'None' && <StatusAnimation transaction={state_enter} />}
             {state_endRaffle.status !== 'None' && <StatusAnimation transaction={(state_endRaffle)}/>}
             {(state_enter.status === 'Success' ||

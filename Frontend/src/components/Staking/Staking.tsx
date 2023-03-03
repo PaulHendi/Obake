@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import {StakingContainer, Input, InputRow, SmallButton, UserRewardContainer} from "../../styles/Staking.styles";
+import {StakingContainer, Input, InputRow, SmallButton, StakingSubContainer, ApproveContainer} from "../../styles/Staking.styles";
 import { Contract } from '@ethersproject/contracts'
 import { utils, ethers } from 'ethers'
 import { useCall, useContractFunction, useEthers } from '@usedapp/core'
@@ -36,7 +36,7 @@ export default function(){
     const [disabled, setDisabled] = useState(false)
     const [userInfo, setUserInfo] = useState({loading: true, balance: 0, isStaking : false});
     const [userApproved, setUserApproved] = useState({loading: true, approved : false});
-
+    const [balanceUnstaked, setBalanceUnstaked] = useState({loading: true, balance_unstaked :0});
 
     // Note : There's still an error of promise due to useEffect it seems
     // However it seems to work fine, and I don't how to debug it yet
@@ -51,13 +51,23 @@ export default function(){
             let approved : boolean = res;
             setUserApproved({loading: false, approved : approved})
         })
+
+        ObakeContract.balanceOf(account, 1).then((res:BigInt) => {
+            let balance_user : number = parseInt(res.toString());
+            setBalanceUnstaked({loading:false, balance_unstaked: balance_user})});
+        setDisabled(false);
         
-    }, [account])
+    }, [account, 
+        state_approve.status==='Success', 
+        state_stake.status==='Success', 
+        state_unstake.status==='Success', 
+        state_claimReward.status==='Success'])
 
 
 
     const { loading : loading_user_info, balance, isStaking } = userInfo;
     const { loading : loading_user_approved, approved } = userApproved;
+    const { loading : loading_balance_unstaked, balance_unstaked } = balanceUnstaked;
 
 
 
@@ -88,7 +98,6 @@ export default function(){
         if (loading_user_approved || approved) {
             return (
                 <div>
-                    <p>You can stake your NFTs here</p>
                     <InputRow>
                         <Input type="number" placeholder="amount" name="NFT_to_stake"/>
                         <SmallButton onClick={() => stake()} disabled={!account || disabled}>Stake</SmallButton>
@@ -97,12 +106,11 @@ export default function(){
         }
         else  {
 
-
             return (
-                <div>
+                <ApproveContainer>
                     <p>You need to approve the contract to stake your NFTs</p>
                     <SmallButton onClick={() => approveStakingContract()} disabled={!account || disabled}>Approve</SmallButton>
-                </div>
+                </ApproveContainer>
             )
         }
         
@@ -117,34 +125,38 @@ export default function(){
 
 
         return ( 
-            <UserRewardContainer>
-                <p>Current user reward : </p>
-                <p>{user_reward && formatter.format(utils.formatEther(user_reward))} FTM</p>
-            </UserRewardContainer>)
+            <div>
+                <p>Current reward : {user_reward && formatter.format(utils.formatEther(user_reward))} FTM</p>
+            </div>)
     }
 
 
     return(
         <StakingContainer>
             <h1>Staking</h1>
+
+            {account && loading_balance_unstaked ? <p>Loading...</p> : 
+                    (<StakingSubContainer>
+                    <p>Stake NFT (balance : {balance_unstaked} NFT)</p> 
+                     <StartStaking/>
+                     </StakingSubContainer>)}
             
-            <StartStaking/>
+            
 
             {account && loading_user_info ? <p>Loading...</p> : isStaking  && 
-            <div>
+            <StakingSubContainer>
                 <UserReward />
                 <SmallButton onClick={() => claimReward()} disabled={!account || disabled}>ClaimReward</SmallButton>
             
                 <div>
-                    <p>You can unstake your NFTs here</p>
-                    <p>Staking : {balance}</p>
+                    <p>Unstake NFT (current stake :  {balance} NFT)</p>
                 </div>
              
                 <InputRow>
                     <Input type="number" placeholder="amount" name="NFT_to_unstake"/>
                     <SmallButton onClick={() => unstake()} disabled={!account || disabled}>Unstake</SmallButton>
                 </InputRow> 
-            </div>}   
+            </StakingSubContainer>}   
 
             {state_stake.status !== 'None' && <StatusAnimation transaction={(state_stake)}/>}
             {state_unstake.status !== 'None'  && <StatusAnimation transaction={(state_unstake)}/>}

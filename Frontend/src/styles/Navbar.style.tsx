@@ -33,6 +33,30 @@ export const NavbarLinkCointainer = styled.div`
     display: flex;
 `
 
+export const DropdownContent = styled.div`
+        display: none;
+        position: absolute;
+        //margin-top: 5%;
+        background-color: #041B15;
+        min-width: 150px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 1;
+`
+
+export const DropdownLink = styled(Link)`
+    color: #FFFFFF;
+    padding: 12px 16px;
+    margin: 10px;
+    text-decoration: none;
+    display: block;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size:medium;
+    &:hover {
+        color: #9381FF;
+        transform: translate(0,  -2px);
+    }
+`
+
 export const NavbarLink = styled(Link)`
     color : #FFFFFF;
     font-size: x-large;
@@ -42,6 +66,9 @@ export const NavbarLink = styled(Link)`
     &:hover {
         color: #9381FF;
         transform: translate(0,  -2px);
+    }
+    &:hover ${DropdownContent}{
+        display: block;
     }
 `    
 
@@ -57,4 +84,12 @@ export const Name = styled.h1`
     `
     
 export const NavbarExtendedContainer = styled.div``
+
+
+
+
+
+
+
+
 

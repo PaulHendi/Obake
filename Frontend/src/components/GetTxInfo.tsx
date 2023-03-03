@@ -6,6 +6,9 @@ export default function GetTxInfo() {
     const { transactions } = useTransactions()
 
     let tx = transactions[0].receipt?.transactionHash;
+
+    if (tx == undefined) return ( <div></div> )
+
     let tx_link = "https://testnet.ftmscan.com/tx/" + tx;
 
     // Get first six and last four characters of the hash

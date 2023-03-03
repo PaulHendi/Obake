@@ -2,7 +2,7 @@ import { Contract } from '@ethersproject/contracts'
 import { utils } from 'ethers'
 import { useCall, useContractFunction } from '@usedapp/core'
 import CoinFlip from '../../abi/CoinFlip.json'
-import {CoinFlipContainer,Wrapper, CustomInput, LabelInput, RadioInput, Label} from  "../../styles/HeadsOrTail.js"
+import {CoinFlipContainer,Wrapper, CustomInput, LabelInput, RadioInput, Label, OutcomContainer} from  "../../styles/HeadsOrTail.js"
 import { StatusAnimation } from '../TransactionAnimation'
 import { useEthers } from '@usedapp/core'
 import { COINFLIP_ADDRESS } from '../../env'
@@ -68,16 +68,16 @@ export default function CoinFlipPlay() {
           }
       }    
   
-      return (<div>
+      return (<OutcomContainer>
                   <h1>Results</h1>
                   <p>{result}</p>
-              </div>)}
+              </OutcomContainer>)}
         
      
     return (
       <CoinFlipContainer>
-        <h1>Play</h1>
-        <p>How much ?</p>
+        <h1>CoinFlip</h1>
+        <p>How much ? (FTM)</p>
         <Wrapper>
            <CustomInput>
              <Label>
@@ -98,7 +98,7 @@ export default function CoinFlipPlay() {
               </Label>
            </CustomInput>           
         </Wrapper>        
-        <p>Which side of a coin ?</p>
+        <p>Which side of the coin ?</p>
         <Wrapper>
            <CustomInput>
              <Label>

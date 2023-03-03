@@ -14,6 +14,7 @@ import { StatusAnimation } from '../TransactionAnimation'
 import GetTxInfo  from '../GetTxInfo'
 
 import {RAFFLE_ADDRESS, PROVIDER_URL} from "../../env";
+import { NavLink } from "react-router-dom";
 
 
 
@@ -37,7 +38,7 @@ export default function StartRaffle() {
 
   const [nft_selected, setNFTSelected] = React.useState("");
   const [contract_approved, setContractApproved] = React.useState(false);
-
+  const [raffle_started, setRaffleStarted] = React.useState(false);
   const [nftInfo, setNFTInfo] = useState({loading: true, nft: {}});
 
 
@@ -76,7 +77,7 @@ export default function StartRaffle() {
       setNFTInfo({loading : false, nft : nft_url});
     })
    
-  }, [account]); 
+  }, [account, raffle_started]); 
   // Need to recall the useEffect when account list NFT (useState with a new state that checks if a new raflle has been created)
 
 
@@ -90,6 +91,7 @@ export default function StartRaffle() {
 
 
     void start_raffle(contract_address, nft_id, utils.parseEther(ticket_price.toString()), ticket_amount, {gasLimit: 2500000});
+    setRaffleStarted(true);
   }
 
 
@@ -120,7 +122,7 @@ export default function StartRaffle() {
              args :[nft_selected["id"]]})
     
 
-    if(reponse?.value?.toString() !== RAFFLE_ADDRESS) {
+    if(reponse?.value?.toString() !== RAFFLE_ADDRESS && !raffle_started) {
       
       return (
         <StartLotteryContainer>
@@ -132,10 +134,8 @@ export default function StartRaffle() {
     }
 
     else {
-      console.log("Start new lottery");
       // Get NFT info
       setContractApproved(true);
-      console.log(nft_selected);
       return (
         <StartLotteryContainer>
           
@@ -165,18 +165,22 @@ export default function StartRaffle() {
       
       {!account && (<h1>Connect your wallet</h1>)}
       {account && !nft_selected && (<h1>Select an NFT</h1>)}
-      {account && nft_selected && !contract_approved && (<h1>Approve the contract first</h1>)}
-      {account && nft_selected && contract_approved && (<h1>Set ticket price and quantity</h1>)}
+      {account && nft_selected && !contract_approved && state_start_raffle.status !== 'Success' && (<h1>Approve the contract first</h1>)}
+      {account && nft_selected && contract_approved && state_start_raffle.status !== 'Success' && (<h1>Set ticket price and quantity</h1>)}
+      {account && state_start_raffle.status === 'Success' && (<h1>Congrats for your new raffle !</h1>)}
 
       <ScanWalletContainer>
-      {loading ? account ? <p>Loading...</p> : <p></p> : Object.keys(nft).length === 0 ? <p>No NFT found</p> : 
-      account && !nft_selected && Object.keys(nft).map((key) => {
-                                          return ( <ImageContainer onClick={() => {setNFTSelected(nft[key])}}>  
-                                                      <img src={nft[key]["url"]} />
+      {loading ? 
+          account ? <p>Loading...</p> : <p></p> 
+          : Object.keys(nft).length === 0 ? <p>No NFT found in wallet</p> : 
+            account && !nft_selected && Object.keys(nft).map((key, i) => {
+                                          return ( <ImageContainer onClick={() => {setNFTSelected(nft[key])}} key={i}>  
+                                                      <img src={nft[key]["url"]} key={i} />
                                                       <h2>{key}</h2> 
                                                   </ImageContainer>)})}
                   
-        {account && nft_selected && <StartNewLottery/>}
+        {account && nft_selected && state_start_raffle.status !== 'Success' && <StartNewLottery/>}
+        {account && nft_selected && state_start_raffle.status === 'Success' && <NavLink to="/raffle">Go to the raffle page</NavLink>}
 
         <StatusAnimation transaction={state_start_raffle} />
         {state_start_raffle.status === 'Success' && <GetTxInfo/>}

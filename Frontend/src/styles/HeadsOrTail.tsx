@@ -18,19 +18,40 @@ export const CoinFlipContainer = styled.div`
     -moz-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
 
     button{
-        width: 30%;
-        height: 30px;
-        border-radius: 24px;
+
         margin: 5%;
-        font-size: large;
         font-family: Arial, Helvetica, sans-serif;
         text-align: center;
         justify-content: center;
         background-color: #FFFFFF;
+
+        display: flex;
+  justify-content: center;
+  min-width: 95px;
+  height: unset;
+  padding: 8px 24px;
+  border-radius: 24px;
     }
         
 `
 
+export const OutcomContainer = styled.div`
+    display: flex;
+    border-radius: 4px;
+    margin-left: 20%;
+    margin-right: 20%;
+    margin-top: 2%;
+    margin-bottom: 2%;
+    height: 100%;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;    
+    background-color: #F5F5F5;
+    padding: 20px;
+
+
+        
+`
 
 export const Wrapper = styled.div`
     display: flex;
