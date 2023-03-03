@@ -328,32 +328,6 @@ contract Raffle is Ownable {
     }
 
 
-    function get_past_raffle_num() internal view returns(uint256){
-        uint256 counter = 0;
-        for (uint256 i = 1; i < raffleId; i++) { // Start at 1
-            if (lotteries[i].raffle_state == RAFFLE_STATE.CLOSED) {
-                    counter++;
-            }
-        }
-        return counter;
-    }        
-
-    /**
-    * Getter to get the current raffles 
-    */
-    function get_past_raffles() public view returns(raffle[] memory) {
-        raffle[] memory _current_raffles = new raffle[](get_past_raffle_num());
-        uint256 index = 0;
-        for (uint256 i = 1; i < raffleId; i++) { // Starts at 1
-            if (lotteries[i].raffle_state == RAFFLE_STATE.CLOSED) {
-                _current_raffles[index] = lotteries[i];
-                index++;
-            }
-        }
-        return _current_raffles;
-    }
-
-
 
 
     /** 
