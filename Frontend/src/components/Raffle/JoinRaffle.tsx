@@ -89,7 +89,7 @@ export default function JoinRaffle() {
             })
         })
 
-    }, [account]);        
+    }, [account, state_endRaffle.status=== "Success"]);        
     
     
     const { loading , existsRaffle, raffles } = currentRaffle;
@@ -123,7 +123,7 @@ export default function JoinRaffle() {
             return (
                 <InputRow>
                 <Input type="number" placeholder="ticket to buy" className='number_of_tickets' />
-                    <SmallButton onClick={() => buyTickets(Owner, ticketPrice)}>Buy ticket</SmallButton>
+                    <SmallButton onClick={() => buyTickets(Owner, ticketPrice)} disabled={!account}>Buy ticket</SmallButton>
                 </InputRow>)
         }
 
