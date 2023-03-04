@@ -25,10 +25,8 @@ Then start the server :
 
 Many things, but basically : 
 
-- Handle the wallet connection by spreading the address everywhere it's needed. But also force the user to set up the right network
-- Add the staking ABI and finish the page
-- Maybe do a better UI for the CoinFlip page, with an animation for example. Recode the didWin component
-- Finish scanning the wallet, and get the address and ID of the NFT selected, in order to prepare a tx
-- Code a second page in the raffle page, to see current raffles
-- Finish the UI
-- Maybe launch the website in prod with Heroku, so that people can test the dApp
+- If there's time : force the user to set up the right network
+- Maybe do a better UI for the CoinFlip page, with an animation for example.
+- Better UI globally if there's time
+- See the winner of the raffle once it's over and if there's one
+- Maybe launch the website in prod with Heroku, netlify, so that people can test the dApp
