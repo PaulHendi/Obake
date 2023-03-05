@@ -9,7 +9,7 @@ import {NavbarContainer,
         Logo,
         Name,
         DropdownContent,
-        Dropdown,
+        NavbarDiv,
         DropdownLink
 } from "../styles/Navbar.style.jsx";
 import Connector from "./Connector"
@@ -52,16 +52,12 @@ function Navbar({config} : ConfigProps) {
           <NavbarLinkCointainer>
             <NavbarLink to="/">Home</NavbarLink>
             <NavbarLink to="/mint">Mint</NavbarLink>
-              
-              <NavbarLink to="/raffle">Raffle
-               
-              
-
-              <DropdownContent>
-              <DropdownLink to="/raffle">Join Raffle</DropdownLink>
-              <DropdownLink to="/raffle/start_new_raffle">Start Raffle</DropdownLink>
-              </DropdownContent>
-              </NavbarLink> 
+              <NavbarDiv>Raffle
+                <DropdownContent>
+                <DropdownLink to="/raffle">Join Raffle</DropdownLink>
+                <DropdownLink to="/raffle/start_new_raffle">Start Raffle</DropdownLink>
+                </DropdownContent>
+              </NavbarDiv> 
             <NavbarLink to="/coinflip">CoinFlip</NavbarLink>
             <NavbarLink to="/staking">Staking</NavbarLink>
             <Connector config={config}/>

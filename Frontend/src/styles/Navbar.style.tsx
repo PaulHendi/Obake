@@ -70,6 +70,21 @@ export const NavbarLink = styled(Link)`
     &:hover ${DropdownContent}{
         display: block;
     }
+`   
+
+export const NavbarDiv= styled.div`
+    color : #FFFFFF;
+    font-size: x-large;
+    font-family: Arial, Helvetica, sans-serif;
+    text-decoration: none;
+    margin: 10px;
+    &:hover {
+        color: #9381FF;
+        transform: translate(0,  -2px);
+    }
+    &:hover ${DropdownContent}{
+        display: block;
+    }
 `    
 
 export const Logo = styled.img`
