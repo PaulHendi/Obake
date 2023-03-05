@@ -203,31 +203,16 @@ contract CoinFlip is Ownable {
     //                               SETTERS                                         //
     // ***************************************************************************** //
 
-    /**
-    * @dev Function to set the address of the RandomNumberConsumer contract
-    * @param random_address Address of the RandomNumberConsumer contract
-    */
-    function setRandomContract(address random_address) public onlyOwner {
-        random_contract = RandomNumberConsumer(random_address);
-    }
 
     /**
-    * @dev Function to set the contract of the funds manager
-    * @param _funds_manager_address Address of the funds manager contract
-    */
-    function setFundsManagerContract(address _funds_manager_address) public onlyOwner {
-        funds_manager = FundsManager(_funds_manager_address);
-    }
-
-    /**
-    * @dev Function to set the winning fee
+    * Function to set the winning fee
     */
     function setWinningFee(uint256 _winning_fee) public onlyOwner {
         winning_fee = _winning_fee;
     }
 
     /**
-    * @dev Function to set the bet amounts
+    * Function to set the bet amounts
     */
     function setAmounts(uint256[] memory _amounts) public onlyOwner {
         require(_amounts.length == 3, "Array must have 3 elements");
@@ -235,7 +220,7 @@ contract CoinFlip is Ownable {
     }
 
     /**
-    * @dev Function to set the minimum fee balance
+    *  Function to set the minimum fee balance
     * @param _min_fee_balance Minimum fee balance
     */
     function setMinFee(uint256 _min_fee_balance) public onlyOwner {

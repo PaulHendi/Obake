@@ -151,9 +151,7 @@ contract Raffle is Ownable {
         // Requires the raffle to not be fully sold
         require((lotteries[_raffleId].ticket_sold + _ticket_amount) <= lotteries[_raffleId].ticket_amount, "The raffle is full");
 
-        // Add the address of the buyer and the amount paid to the raffle info (CHANGED)
-        //lotteries[_raffleId].players.push(msg.sender);
-        //lotteries[_raffleId].player_total_paid[msg.sender] += _ticket_amount*lotteries[_raffleId].ticket_price;
+        // Add the address of the buyer and the amount paid to the raffle info
         raffleId_to_playerInfo[_raffleId].push(PlayerInfo(msg.sender, 
                                                           _ticket_amount*lotteries[_raffleId].ticket_price));
 
@@ -289,16 +287,9 @@ contract Raffle is Ownable {
 
 
 
-    
     /**
-    * Getter to get current pot of a given raffle
-    * @param _raffleId Id of the raffle
+    * Get the number of raffle currently ongoing
     */
-    function get_pot(uint256 _raffleId) public view returns(uint256){
-        return lotteries[_raffleId].ticket_price * lotteries[_raffleId].ticket_amount;
-    }
-
-
     function get_current_raffle_num() internal view returns(uint256){
         uint256 counter = 0;
         for (uint256 i = 1; i < raffleId; i++) { // Start at 1
@@ -312,7 +303,7 @@ contract Raffle is Ownable {
 
     
     /**
-    * Getter to get the current raffles (To be tested with a unit test before)
+    * Getter to get the current raffles 
     */
     function get_current_raffles() public view returns(raffle[] memory) {
         raffle[] memory _current_raffles = new raffle[](get_current_raffle_num());
@@ -329,9 +320,9 @@ contract Raffle is Ownable {
 
 
 
-
     /** 
     * Utils function to get the winner for a given raffle
+    * @param _raffleId The id of the raffle
     */
     function get_winner(uint256 _raffleId) public view returns(address) {
         require(lotteries[_raffleId].raffle_state == RAFFLE_STATE.CLOSED, "Raffle not closed yet!");

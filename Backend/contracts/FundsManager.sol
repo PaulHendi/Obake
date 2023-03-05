@@ -17,6 +17,15 @@ contract FundsManager is Ownable {
     // Address of the random contract 
     address public random_contract_address;
 
+    // Address of the coinflip contract
+    address public coinflip_contract_address;
+
+    // Address of the raffle contract
+    address public raffle_contract_address
+
+    // Counter to check that it was called once
+    uint256 public only_once = 0;
+
 
     // Minimum Link balance 
     uint256 public min_link_balance = 0.1 ether; // (Link also has 18 decimals)
@@ -70,7 +79,10 @@ contract FundsManager is Ownable {
     /** 
     * Handle the funds received by the contract
     */
-    function handle_funds() public payable {  // TODO : needs a require statement
+    function handle_funds() public payable {  // TODO : test the require statement
+
+        require((msg.sender == coinflip_contract_address) || 
+                (msg.sender == raffle_contract_address), "Only the games can call this function");
 
         uint256 _link_balance = IERC20(LINK).balanceOf(random_contract_address);
 
@@ -96,11 +108,6 @@ contract FundsManager is Ownable {
 
     }
 
-    // Note : For tests only
-    function emergencyWithdraw() public onlyOwner{
-        payable(owner()).transfer(address(this).balance);
-        IERC20(LINK).transfer(owner(), IERC20(LINK).balanceOf(address(this)));
-    }
 
 
     // ***************************************************************************** //
@@ -109,21 +116,23 @@ contract FundsManager is Ownable {
 
 
     /**
-    * Set the random contract address (in case of an update of the contract)
-    * @param _random_contract_address The random contract address
+    * Set the CoinFlip and Raffle contract addresses
+    * @param _coinflip_contract_address The CoinFlip contract address
+    * @param _raffle_contract_address The Raffle contract address
     */
-    function setRandomContract(address _random_contract_address) public onlyOwner {
-        random_contract_address = _random_contract_address;
+    function setGamesContractAddresses(address _coinflip_contract_address, address _raffle_contract_address) public onlyOwner {
+        
+        // Check that this function can only be called once
+        require(only_once==0, "Function already called");
+
+        // Set the addresses
+        coinflip_contract_address = _coinflip_contract_address;
+        raffle_contract_address = _raffle_contract_address;
+
+        // Increment only_once
+        only_once+=1;
     }
 
-
-    /**
-    * Set the staking contract address (in case of an update of the contract)
-    * @param _staking_contract_address The staking contract address
-    */
-    function setStakinContract(address _staking_contract_address) public onlyOwner {
-        staking_contract = Staking(_staking_contract_address);
-    }
 
     /**
     * Set the minimum link balance

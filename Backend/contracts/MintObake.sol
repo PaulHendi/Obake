@@ -11,7 +11,7 @@ contract Obake is ERC1155, Ownable {
 
     Counters.Counter public supply;
 
-    uint256 public cost = 0.01 ether;      // Deploying on Fantom, so 0.01 FTM 
+    uint256 public cost = 0.01 ether;      // Deploying on Fantom, so 0.01 FTM (TODO : change the price before launching)
     uint256 public maxSupply = 2500;       // Maximum supply of tokens
     uint256 public maxMintAmountPerTx = 5; // Maximum amount of tokens that can be minted per transaction
 
@@ -88,7 +88,10 @@ contract Obake is ERC1155, Ownable {
     }
 
 
-    // This is only for testing purposes
+    /**
+    * Function to set the maximum of NFT that can be minted in one tx (callable by the owner).
+    * @param _maxMintAmountPerTx The max mint amount of NFT in one tx
+    */    
     function setMaxMintAmountPerTx(uint256 _maxMintAmountPerTx) public onlyOwner {
         maxMintAmountPerTx = _maxMintAmountPerTx;
     }    

@@ -16,6 +16,13 @@ contract Staking is ERC1155Holder, Ownable{
     event RewardsClaimed(address indexed sender, uint256 amount);
 
 
+    // Address of the funds manager contract
+    address public funds_contract_address;
+
+    // Counter to check that it was called once
+    uint256 public only_once = 0;
+
+
     // Total staked (store total amount of tokens staked by all users)
     uint public totalStaked;  
 
@@ -198,15 +205,17 @@ contract Staking is ERC1155Holder, Ownable{
 
 
     /**
-    * This function is called by the fallback function
-    * It checks if the staking period is over and if so, it calculates the reward rate
+    * This function checks if the staking period is over and if so, it calculates the reward rate
     * and updates the staking info
     */
-    function manage_new_funds() public payable { // TODO : needs a require statement
+    function manage_new_funds() public payable { // TODO : test the require statement
+
+        require(msg.sender == funds_contract_address, "Only the funds manager contract can call this function");
+
         uint256 time_since_staking_started = block.timestamp - staking_info.start;
 
-        // Note : We need a minimum amount for staking
-        if (time_since_staking_started > staking_duration) {// && address(this).balance > 0.5 ether) {
+        
+        if (time_since_staking_started > staking_duration) {
 
             // If the period is over, calculate the reward rate
             staking_info.reward_rate = address(this).balance / staking_duration;
@@ -222,7 +231,21 @@ contract Staking is ERC1155Holder, Ownable{
     //                               SETTERS                                         //
     // ***************************************************************************** //
 
+    /**
+    * Set the Fund manager contract address
+    * @param _funds_contract_address The contract address
+    */
+    function setFundsManagerContractAddresses(address _funds_contract_address) public onlyOwner {
+        
+        // Check that this function can only be called once
+        require(only_once==0, "Function already called");
 
+        // Set the address
+        funds_contract_address = _funds_contract_address;
+
+        // Increment only_once
+        only_once+=1;
+    }
 
     /**
      * Allows owner to set the staking duration
