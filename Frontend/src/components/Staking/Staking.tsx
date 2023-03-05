@@ -162,6 +162,8 @@ export default function(){
             {state_unstake.status !== 'None'  && <StatusAnimation transaction={(state_unstake)}/>}
             {state_claimReward.status !== 'None'  && <StatusAnimation transaction={(state_claimReward)}/>}
             {state_approve.status !== 'None'  && <StatusAnimation transaction={(state_approve)}/>}
+
+            
             
             {(state_stake.status === 'Success' || 
              state_unstake.status === 'Success' ||

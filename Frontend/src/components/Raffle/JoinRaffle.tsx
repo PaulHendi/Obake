@@ -37,6 +37,7 @@ export default function JoinRaffle() {
     const [currentRaffle, setCurrentRaffle] = useState({loading: true,
                                                         existsRaffle: false,
                                                         raffles : [{}]});
+    const [endingRaffle, setEndingRaffle] = useState(0)                                                    
     
 
 
@@ -89,7 +90,7 @@ export default function JoinRaffle() {
             })
         })
 
-    }, [account, state_endRaffle.status=== "Success"]);        
+    }, [account, state_endRaffle.status=== "Success", state_enter.status === 'Success']);        
     
     
     const { loading , existsRaffle, raffles } = currentRaffle;
@@ -104,12 +105,25 @@ export default function JoinRaffle() {
 
     const endRaffle = async (raffle_owner : string) => {
         RaffleContract.ownerRaffleId(raffle_owner).then((raffle_id : number) => {
-            console.log(raffle_id)
-            void endRaffleTx(raffle_id)
+            setEndingRaffle(raffle_id);
+            void endRaffleTx(raffle_id, {gasLimit: 2500000})
         })
         
     }
 
+    const Outcome = () => {
+
+        if (endingRaffle == 0) return (<p></p>);
+
+        RaffleContract.lotteries(endingRaffle).then((raffle : any) => {
+            let winner : string = raffle.winner?.toString()
+            console.log(winner)
+
+            if (winner == "0x0000000000000000000000000000000000000000") return (<p>No winner</p>)
+            else return (<p>{winner}</p>)
+        })
+
+    }
 
     const LotteryInput = ({Owner, isOwner, ticketPrice} : LotteryInputProps) => {
     
@@ -151,6 +165,8 @@ export default function JoinRaffle() {
             {state_endRaffle.status !== 'None' && <StatusAnimation transaction={(state_endRaffle)}/>}
             {(state_enter.status === 'Success' ||
             state_endRaffle.status === 'Success') && <GetTxInfo/>}
+            {state_endRaffle.status === 'Success' && <Outcome/>}
+            
 
         </JoinRaffleContainer>
     );
