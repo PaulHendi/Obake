@@ -19,6 +19,7 @@ interface LotteryInputProps {
     Owner : string;
     isOwner: boolean;
     ticketPrice: number;
+    ticketLeft: number;
 }
 
 
@@ -37,7 +38,8 @@ export default function JoinRaffle() {
     const [currentRaffle, setCurrentRaffle] = useState({loading: true,
                                                         existsRaffle: false,
                                                         raffles : [{}]});
-    const [endingRaffle, setEndingRaffle] = useState(0)                                                    
+    const [endingRaffle, setEndingRaffle] = useState(0)   
+    const [winnerAddress, setWinnerAddress] = useState({loading: true, winner: ""})                                                 
     
 
 
@@ -113,19 +115,27 @@ export default function JoinRaffle() {
 
     const Outcome = () => {
 
-        if (endingRaffle == 0) return (<p></p>);
 
         RaffleContract.lotteries(endingRaffle).then((raffle : any) => {
             let winner : string = raffle.winner?.toString()
             console.log(winner)
 
-            if (winner == "0x0000000000000000000000000000000000000000") return (<p>No winner</p>)
-            else return (<p>{winner}</p>)
+            if (winner !== "0x0000000000000000000000000000000000000000")
+                setWinnerAddress({loading: false, winner})
+
         })
+
+        if (winnerAddress.loading) return (<p>Waiting to announce the winner of the raffle...</p>)
+        else return (
+            <div>
+                <p>The winner of the raffle is {winnerAddress.winner}</p>
+            </div>
+        )
+
 
     }
 
-    const LotteryInput = ({Owner, isOwner, ticketPrice} : LotteryInputProps) => {
+    const LotteryInput = ({Owner, isOwner, ticketPrice, ticketLeft} : LotteryInputProps) => {
     
         if (isOwner) { 
             return(
@@ -133,12 +143,14 @@ export default function JoinRaffle() {
                         <SmallButton onClick={() => endRaffle(Owner)}>End Raffle</SmallButton>
                     </InputRow>)
         }
-        else {
+        else if (!isOwner && ticketLeft>0) {
             return (
                 <InputRow>
                 <Input type="number" placeholder="ticket to buy" className='number_of_tickets' />
                     <SmallButton onClick={() => buyTickets(Owner, ticketPrice)} disabled={!account}>Buy ticket</SmallButton>
-                </InputRow>)
+                </InputRow>)}
+        else {
+            return (<p>No more tickets for this raffle</p>)
         }
 
     }
@@ -156,7 +168,9 @@ export default function JoinRaffle() {
                         <p>Owner: {raffle["owner"].substring(0, 6) + "..." + raffle.owner?.toString().substring(38, 42)}</p>
                         <p>Ticket price: {raffle["ticket_price"]}</p>
                         <p>Tickets left: {raffle["ticket_amount"]-raffle["ticket_sold"]}/{raffle["ticket_amount"]}</p>
-                        <LotteryInput Owner = {raffle["owner"]} isOwner={raffle["is_owner"]} ticketPrice = {raffle["ticket_price"]}/>
+                        <LotteryInput Owner = {raffle["owner"]} isOwner={raffle["is_owner"]} ticketPrice = {raffle["ticket_price"]} ticketLeft = {raffle["ticket_amount"]-raffle["ticket_sold"]}/>  
+                           
+                        
    
                     </ImageContainer> )}) : <p>No raffle available at the moment</p>}
             
