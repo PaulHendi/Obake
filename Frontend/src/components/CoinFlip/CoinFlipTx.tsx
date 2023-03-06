@@ -2,11 +2,15 @@ import { Contract } from '@ethersproject/contracts'
 import { utils } from 'ethers'
 import { useCall, useContractFunction } from '@usedapp/core'
 import CoinFlip from '../../abi/CoinFlip.json'
-import {CoinFlipContainer,Wrapper, CustomInput, LabelInput, RadioInput, Label, OutcomContainer} from  "../../styles/HeadsOrTail.js"
+import {CoinFlipContainer,Wrapper, CustomInput, LabelInput, RadioInput, Label, OutcomContainer, CoinWrapper} from  "../../styles/HeadsOrTail.js"
 import { StatusAnimation } from '../TransactionAnimation'
 import { useEthers } from '@usedapp/core'
 import { COINFLIP_ADDRESS } from '../../env'
 import GetTxInfo  from '../GetTxInfo'
+
+import { useState } from 'react'
+
+
 
 
 export default function CoinFlipPlay() {
@@ -18,13 +22,45 @@ export default function CoinFlipPlay() {
     // If won include a link to the Tx on FTMScan
     // Add an animation of a spinning coin while waiting for the outcome
 
-    const {account} = useEthers();
+    // CoinFlip contract
     const CoinFlipInterface = new utils.Interface(CoinFlip.abi)
     const coinFlipcontract = new Contract(COINFLIP_ADDRESS, CoinFlipInterface) 
+
+    // Play tx
     const { state, send } = useContractFunction(coinFlipcontract, 'play', { transactionName: 'play' })
-  
+
+    // Get the account from useEthers
+    const {account} = useEthers();
+
+    // States : Heads or Tails
+    const [result, setResult] = useState("Heads");
+
+    const coinToss = () => {
+      
+
+      if (Math.random() < 0.5) {
+        setResult("heads");
+      } else {
+        setResult("tails");
+
+      }
+      
+    }
+
+    const CoinFlipAnimated = () => (
+      <div className="App">
+       <CoinWrapper className={result}>
+        <div className="side-a">HEADS</div>
+        <div className="side-b">TAILS</div>
+      </CoinWrapper>
+        <h1>Flip a coin</h1>
+        <button id="btn" onClick={coinToss}>
+          Coin Toss
+        </button>
+      </div>)
 
 
+    // Function to play the game
     const play = () => {
 
       const element_heads_or_tail = document.getElementsByName('heads_or_tail')[0] as HTMLInputElement
@@ -43,7 +79,8 @@ export default function CoinFlipPlay() {
     }
     
 
-
+    // Get the outcome of the game (After receiving chainlink's random number)
+    // This component could ne optimized
     const Outcome = () => {
 
       const call_status =
@@ -118,10 +155,9 @@ export default function CoinFlipPlay() {
         {state.status === 'Success' && <GetTxInfo/>}
         {state.status=="Success" && <Outcome/>}
         
+      <CoinFlipAnimated/>
       </CoinFlipContainer>
       
     )
   }
-
-
 

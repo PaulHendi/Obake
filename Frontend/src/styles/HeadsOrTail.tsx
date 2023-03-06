@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 
 export const CoinFlipContainer = styled.div`
     display: flex;
@@ -84,19 +84,72 @@ export const LabelInput = styled.span`
 `
 
 
-// Not used yet
-export const Coin = styled.button`
-    border-radius : 100%;
-    border-style: solid;
-    width: 100px;
-    height: 100px;
-    margin-left: 10px;
-    background-color:gold;
 
-    &:hover{
-        
-            transform: rotate(180deg) scale(1) skew(0deg) translate(-100px);
-            transition: 1s;
-        }
 
-` 
+const flipHeads = keyframes`
+  from {
+    transform: rotateY(0);
+  }
+  to {
+    transform: rotateY(5400deg);
+  }
+`;
+
+const flipTails = keyframes`
+  from {
+    transform: rotateY(0);
+  }
+  to {
+    transform: rotateY(7200deg);
+  }
+`;
+
+export const CoinWrapper = styled.div`
+  position: relative;
+  margin: 0 auto;
+  width: 100px;
+  height: 100px;
+
+  transition: transform 1s ease-in;
+  transform-style: preserve-3d;
+
+  > div {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+
+    border-radius: 50%;
+
+    box-shadow: inset 0 0 45px rgba(255, 255, 255, 0.3),
+      0 12px 20px -10px rgba(0, 0, 0, 0.4);
+
+    backface-visibility: hidden;
+
+    &.side-a {
+      background-color: #bb0000;
+      color: white;
+      text-align: center;
+      z-index: 100;
+    }
+
+    &.side-b {
+      background-color: #3e3e3e;
+      color: white;
+      text-align: center;
+      transform: rotateY(-180deg);
+    }
+  }
+
+  &.heads {
+    animation: ${flipHeads} 20s ease-out forwards;
+  }
+
+  &.tails {
+    animation: ${flipTails} 20s ease-out forwards;
+  }
+`;
+
+
+  
+
+  
