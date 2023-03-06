@@ -3,3 +3,4 @@ export const COINFLIP_ADDRESS : string ="0x3386cedD128c04C615F30EbCbF839481aE7dC
 export const MINTNFT_ADDRESS : string ="0x54676ee3a10F0C6F0632315F5200a7D3C1FCdb04"
 export const STAKING_ADDRESS : string ="0x0Df82C074212A53E89715477f2592CAaeA94a9c8"
 export const PROVIDER_URL : string = "https://rpc.ankr.com/fantom_testnet"
+export const OBAKE_NFT_URL : string = "https://gateway.pinata.cloud/ipfs/QmSe8mwsyJ17QXYn1ka2Tw4z4RSkthoVLJQpvQsoTLgxLD"
