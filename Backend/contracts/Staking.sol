@@ -19,6 +19,9 @@ contract Staking is ERC1155Holder, Ownable{
     // Address of the funds manager contract
     address public funds_contract_address;
 
+    // Balance of funds incoming, waiting to be distributed at the next distribution
+    uint256 public incoming_funds;
+
     // Counter to check that it was called once
     uint256 public only_once = 0;
 
@@ -208,18 +211,24 @@ contract Staking is ERC1155Holder, Ownable{
     * This function checks if the staking period is over and if so, it calculates the reward rate
     * and updates the staking info
     */
-    function manage_new_funds() public payable { // TODO : test the require statement
+    function manage_new_funds() public payable { 
+        
+        // TODO : test the require statement
+        // TODO : Test incoming funds (how to manage funds when no staking?)
 
         require(msg.sender == funds_contract_address, "Only the funds manager contract can call this function");
 
         uint256 time_since_staking_started = block.timestamp - staking_info.start;
+        incoming_funds += msg.value;
 
         
         if (time_since_staking_started > staking_duration) {
 
             // If the period is over, calculate the reward rate
-            staking_info.reward_rate = address(this).balance / staking_duration;
+            staking_info.reward_rate = incoming_funds / staking_duration;
             staking_info.start = block.timestamp;
+
+            incoming_funds = 0;
 
         }
         
