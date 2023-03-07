@@ -57,6 +57,7 @@ export const Wrapper = styled.div`
     display: flex;
     padding: 4px;
     background-color: #9381FF;
+    border-radius: 4px;
 `
 
 export const CustomInput = styled.div`

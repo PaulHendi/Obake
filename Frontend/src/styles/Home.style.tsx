@@ -20,7 +20,8 @@ export const HomeContainer = styled.div`
 
     h1 {
     font-size: 24px;
-    margin-top: 0;
+    margin-top: 1%;
+    margin-bottom: 1%;
     //color :#9381FF;
     }
 
@@ -61,12 +62,3 @@ export const ImgContainer = styled.img`
     margin-right: 1%;
     margin-bottom: 1%;
     `
-
-export const EndStoryContainer = styled.div`
-    font-family: Kanit wght;
-    font-size: x-large;
-    text-align: left;
-    margin-top: 1%;
-    margin-left: 1%;
-    margin-right: 1%;
-    margin-bottom: 1%;`

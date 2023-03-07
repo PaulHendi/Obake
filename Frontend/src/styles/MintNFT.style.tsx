@@ -23,11 +23,24 @@ export const MintNFTContainer = styled.div`
 
 `
 
+export const InputRow = styled.div`
+    display: flex;
+    //margin: 0 auto;
+    margin-left: 25%;
+    margin-right: 25%;
+    color: dark gray;
+    border: gray 1px solid;
+    border-radius: 24px;
+    overflow: hidden;
+    margin-top: 2%;
+    margin-bottom: 5%;
+    background-color: #F5F5F5;
+`
 
 export const Input = styled.input`
-    border-radius:24px;
-    //height: 100%;
+    width: 30%;
     text-align: center;
+    
     border: 0;
     -moz-appearance: textfield;
     &::-webkit-outer-spin-button,
@@ -38,13 +51,20 @@ export const Input = styled.input`
 
 `
 
-export const InputRow = styled.div`
-display: flex;
-margin: 0 auto;
-color: dark gray;
-border: gray 1px solid;
-border-radius: 24px;
-overflow: hidden;
+export const Minus = styled.button`
+    margin-left: 2%;
+    width: 50px;
+    color: black;
+    font-size: 1rem;
+    border: 0;
+    background-color: #F5F5F5;
+`
+export const Plus = styled.button`
+    width: 50px;
+    color: black;
+    font-size: 1rem;
+    border: 0;
+    background-color: #F5F5F5; 
 `
 
 
@@ -55,5 +75,5 @@ export const SmallButton = styled.button`
   height: unset;
   padding: 8px 24px;
   border-radius: 24px;
-
+    
 `

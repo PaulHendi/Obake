@@ -77,8 +77,19 @@ export const ImageContainer = styled.div`
     `
 
 
+export const InputRow = styled.div`
+    display: flex;
+    color: dark gray;
+    border: gray 1px solid;
+    border-radius: 24px;
+    overflow: hidden;
+    margin-top: 5%;
+    height:30px;
+`
+
+
+
 export const Input = styled.input`
-    border-radius:24px;
     //height: 100%;
     text-align: center;
     border: 0;
@@ -88,25 +99,52 @@ export const Input = styled.input`
         -webkit-appearance: none;
         margin: 0;
     }
+    padding:2%;
+    width: 40%;
+
 
 `
 
-export const InputRow = styled.div`
-    display: flex;
-    margin: 0;
-    color: dark gray;
-    border: gray 1px solid;
-    border-radius: 24px;
-    overflow: hidden;
-`
 
 
 export const SmallButton = styled.button`
-  display: flex;
   justify-content: center;
   //min-width: 95px;
   width: 100%;
-  padding: 8px 24px;
+  //padding: 8px 24px;
   border-radius: 24px;
 
 `
+
+export const Minus = styled.button`
+    margin-left: 2%;
+    width: 50px;
+    color: black;
+    font-size: 1rem;
+    border: 0;
+    background-color: #F5F5F5;
+`
+export const Plus = styled.button`
+    width: 50px;
+    color: black;
+    font-size: 1rem;
+    border: 0;
+    background-color: #F5F5F5; 
+`
+
+export const OutcomeContainer = styled.div`
+    margin-top: 2%;
+    margin-bottom: 5%;
+    overflow: hidden; /* clear fix hack */
+    p{
+        text-align:left;
+        margin: 0; 
+        overflow-x: hidden;
+    }
+
+    a{
+        color: #9381FF;
+        float: right; 
+        margin-left: 10px;
+    }
+    ` 

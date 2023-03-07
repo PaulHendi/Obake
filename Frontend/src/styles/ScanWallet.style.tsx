@@ -24,11 +24,10 @@ export const ScanWalletContainer = styled.div`
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    //justify-content: center;
-    margin-top: 100px;
-    margin-bottom: 100px;
-    margin-left: 100px;
-    margin-right: 100px;
+    margin-top: 2%;
+    margin-bottom: 2%;
+    margin-left: 2%;
+    margin-right: 2%;
     background-color: #F5F5F5;
     padding: 20px;
 
@@ -39,7 +38,7 @@ export const ScanWalletContainer = styled.div`
         margin-bottom: 20px;
     }
     p {
-        margin-left: 35%;
+        margin-left: 40%;
         margin-right: 35%;
         text-align: center;
         align-items: center;
@@ -49,6 +48,18 @@ export const ScanWalletContainer = styled.div`
     
 
 `
+
+
+export const RaffleCreatedContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    background-color: #F5F5F5;
+    padding: 20px;
+`
+
 
 export const StartLotteryContainer = styled.div`
     display: flex;
@@ -60,21 +71,15 @@ export const StartLotteryContainer = styled.div`
     padding: 20px;
 
     img{
-        width: 40%;
+        width: 30%;
         height: auto;
         align-items: center;
         justify-content: center;
         border-radius: 10px;
         margin-bottom: 20px;
     }
-    h1{
-        font-size: 20px;
-        font-weight: 500;
-        margin-bottom: 20px;
-
-    }
     input{
-        width: 30%;
+        width: 20%;
         margin-top: 1%;
         border-radius:24px;
         text-align: center;
@@ -84,15 +89,46 @@ export const StartLotteryContainer = styled.div`
         &::-webkit-inner-spin-button {
             -webkit-appearance: none;
             margin: 0;
-        }        
+        }   
+        height: 30px;     
+     
     }
     button{
-        width: 30%;
+        width: 20%;
         margin-top: 1%;
         border-radius:24px;
-        text-align: center;        
+        text-align: center;   
+        height: 30px;     
     }
 `  
+
+export const ApproveContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    background-color: #F5F5F5;
+
+    img{
+        width: 30%;
+        height: auto;
+        align-items: center;
+        justify-content: center;
+        border-radius: 10px;
+        margin-bottom: 20px;
+    }
+  
+    button{
+        width: 20%;
+        margin-top: 1%;
+        border-radius:24px;
+        text-align: center;   
+        height: 30px;     
+    }
+`  
+
+
 
 export const ImageContainer = styled.button`
     margin-left: 30px;

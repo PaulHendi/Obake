@@ -24,12 +24,24 @@ export const StakingContainer = styled.div`
 
 
 
+
+
+export const InputRow = styled.div`
+    display: flex;
+    margin: 0 auto;
+    color: dark gray;
+    border: gray 1px solid;
+    border-radius: 24px;
+    overflow: hidden;
+    margin-top: 1%;
+    margin-bottom: 5%;
+    background-color: #F5F5F5;
+`
+
 export const Input = styled.input`
-    border-radius:24px;
-    //height: 100%;
+    width: 40%;
     text-align: center;
-    //padding: 0 0 0 0;
-    //margin: 0 0 0 0;
+    
     border: 0;
     -moz-appearance: textfield;
     &::-webkit-outer-spin-button,
@@ -40,14 +52,20 @@ export const Input = styled.input`
 
 `
 
-export const InputRow = styled.div`
-display: flex;
-margin: 0 auto;
-color: dark gray;
-border: gray 1px solid;
-border-radius: 24px;
-overflow: hidden;
-margin-top: 1%;
+export const Minus = styled.button`
+    margin-left: 2%;
+    width: 50px;
+    color: black;
+    font-size: 1rem;
+    border: 0;
+    background-color: #F5F5F5;
+`
+export const Plus = styled.button`
+    width: 50px;
+    color: black;
+    font-size: 1rem;
+    border: 0;
+    background-color: #F5F5F5; 
 `
 
 
@@ -60,21 +78,22 @@ export const SmallButton = styled.button`
   border-radius: 24px;
 `
 
+export const ClaimButton = styled(SmallButton)`
+    margin-bottom: 8%;
+`
+
 
 export const StakingSubContainer = styled.div`
-
-display: flex;
-border-radius: 4px;
-margin-left: 30%;
-margin-right: 30%;
-margin-top: 2%;
-height: 100%;
-flex-direction: column;
-justify-content: center;
-align-items: center;    
-background-color: #F5F5F5;
-
-
+    display: flex;
+    border-radius: 4px;
+    margin-left: 30%;
+    margin-right: 30%;
+    margin-top: 2%;
+    height: 100%;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;    
+    background-color: #F5F5F5;
 `
 
 export const ApproveContainer = styled.div`
