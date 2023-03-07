@@ -21,7 +21,7 @@ contract FundsManager is Ownable {
     address public coinflip_contract_address;
 
     // Address of the raffle contract
-    address public raffle_contract_address
+    address public raffle_contract_address;
 
     // Counter to check that it was called once
     uint256 public only_once = 0;
