@@ -45,6 +45,7 @@ function Navbar({config} : ConfigProps) {
               </NavbarDiv> 
             <NavbarLink to="/coinflip">CoinFlip</NavbarLink>
             <NavbarLink to="/staking">Staking</NavbarLink>
+            <NavbarLink to="https://pilu.gitbook.io/obake/" target="_blank">Docs</NavbarLink>
             <Connector config={config}/>
           </NavbarLinkCointainer>
         </RightContainer>

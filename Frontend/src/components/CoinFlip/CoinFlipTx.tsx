@@ -80,15 +80,23 @@ export default function CoinFlipPlay() {
           let value = call_status["value"][0] 
           let bet : number = Number(value["bet"]?.toString())
 
+          console.log(bet)
+          console.log(value["ended"])
+          console.log(value["won"])
+          
 
           if (value["ended"]) {
-            if (bet == 0) setResult("heads");
-            else setResult("tails");
 
-            if (value["won"]) result_text = "You won! :)"
-            else result_text = "You lost! :( Better luck next time!"
-
-
+            if (value["won"]) {
+              result_text = "You won! :)"
+              if (bet == 0) setResult("heads");
+              else setResult("tails");
+            }
+            else {
+              result_text = "You lost! :( Better luck next time!"
+              if (bet == 0) setResult("tails");
+              else setResult("heads");
+            }
           }
 
           else {

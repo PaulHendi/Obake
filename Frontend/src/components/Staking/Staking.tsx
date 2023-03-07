@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import {StakingContainer, Input, InputRow, SmallButton, StakingSubContainer, ApproveContainer} from "../../styles/Staking.styles";
+import {StakingContainer, Input, InputRow, SmallButton, StakingSubContainer, ApproveContainer, Plus, Minus, ClaimButton} from "../../styles/Staking.styles";
 import { Contract } from '@ethersproject/contracts'
 import { utils, ethers } from 'ethers'
 import { useCall, useContractFunction, useEthers } from '@usedapp/core'
@@ -40,6 +40,7 @@ export default function(){
     const [userInfo, setUserInfo] = useState({loading: true, balance: 0, isStaking : false});
     const [userApproved, setUserApproved] = useState({loading: true, approved : false});
     const [balanceUnstaked, setBalanceUnstaked] = useState({loading: true, balance_unstaked :0});
+    const [currentTx, setCurrentTx] = useState("")
 
     // In this UseEffect we do 3 queries : 
     // 1) Check if the user is staking (the balance of the user in the staking contract)
@@ -80,13 +81,16 @@ export default function(){
     // Stake Tx async function
     const stake = async () => {
         setDisabled(true);
+        setCurrentTx("stake")
         const NFT_to_stake = document.getElementsByName('NFT_to_stake')[0] as HTMLInputElement
         void stakeTx(NFT_to_stake.value)
+        
     }
 
     // Unstake Tx async function
     const unstake = async () => {
         setDisabled(true);
+        setCurrentTx("unstake")
         const NFT_to_unstake = document.getElementsByName('NFT_to_unstake')[0] as HTMLInputElement
         void unstakeTx(NFT_to_unstake.value)
     }
@@ -94,12 +98,14 @@ export default function(){
     // Claim reward Tx async function
     const claimReward = async () => {
         setDisabled(true);
+        setCurrentTx("claimReward")
         void claimRewardTx();
     }
 
     // Approve Tx async function
     const approveStakingContract = async () => {
         setDisabled(true);
+        setCurrentTx("approve")
         void approveContract(STAKING_ADDRESS, true);
     }
  
@@ -111,10 +117,14 @@ export default function(){
         if (loading_user_approved || approved) {
             return (
                 <div>
-                    <InputRow>
-                        <Input type="number" placeholder="amount" name="NFT_to_stake"/>
-                        <SmallButton onClick={() => stake()} disabled={!account || disabled}>Stake</SmallButton>
-                    </InputRow>
+
+                <InputRow>
+                    <Minus onClick={() => StakeDown()}>-</Minus>
+                    <Input type="number" placeholder="amount" name="NFT_to_stake" defaultValue="0" readonly="readonly"/>
+                    <Plus onClick={() => StakeUp()}>+</Plus>
+                    <SmallButton onClick={() => stake()} disabled={!account || disabled}>Stake</SmallButton>
+                </InputRow> 
+
                 </div>)
         }
         else  {
@@ -149,13 +159,49 @@ export default function(){
 
         //TODO : Rethink this part
 
-        if (state_stake.status !== 'None') return  (<StatusAnimation transaction={(state_stake)}/>)
-        else if (state_unstake.status !== 'None') return  (<StatusAnimation transaction={(state_unstake)}/>)
-        else if (state_claimReward.status !== 'None') return  (<StatusAnimation transaction={(state_claimReward)}/>)
-        else if (state_approve.status !== 'None') return  (<StatusAnimation transaction={(state_approve)}/>)
+        if (state_stake.status !== 'None' && currentTx === "stake")
+            return  (<StatusAnimation transaction={(state_stake)}/>)
+        else if (state_unstake.status !== 'None' && currentTx === "unstake") 
+            return  (<StatusAnimation transaction={(state_unstake)}/>)
+        else if (state_claimReward.status !== 'None' && currentTx === "claimReward") 
+            return  (<StatusAnimation transaction={(state_claimReward)}/>)
+        else if (state_approve.status !== 'None' && currentTx === "approve") 
+            return  (<StatusAnimation transaction={(state_approve)}/>)
         else return (<></>)
     }
 
+    const UnstakeDown = () => {       
+        let NFT_to_unstake = document.getElementsByName('NFT_to_unstake')[0] as HTMLInputElement;
+        let input = parseInt(NFT_to_unstake.value);
+        input-=1;
+        if (input < 0) input = 0;
+        NFT_to_unstake.value = input.toString();
+    }    
+
+    const UnstakeUp = () => {       
+        let NFT_to_unstake = document.getElementsByName('NFT_to_unstake')[0] as HTMLInputElement;
+        let input = parseInt(NFT_to_unstake.value);
+        input+=1;
+        if (input >= balance) input = balance;
+        NFT_to_unstake.value = input.toString();
+    }
+
+
+    const StakeDown = () => {       
+        let NFT_to_unstake = document.getElementsByName('NFT_to_stake')[0] as HTMLInputElement;
+        let input = parseInt(NFT_to_unstake.value);
+        input-=1;
+        if (input < 0) input = 0;
+        NFT_to_unstake.value = input.toString();
+    }    
+
+    const StakeUp = () => {       
+        let NFT_to_unstake = document.getElementsByName('NFT_to_stake')[0] as HTMLInputElement;
+        let input = parseInt(NFT_to_unstake.value);
+        input+=1;
+        if (input >= balance_unstaked) input = balance_unstaked;
+        NFT_to_unstake.value = input.toString();
+    }    
 
     return(
         <StakingContainer>
@@ -169,17 +215,19 @@ export default function(){
             
             
 
-            {account && loading_user_info ? <p>Loading...</p> : isStaking  && 
+            {account && loading_user_info ? <p></p> : isStaking  && 
             <StakingSubContainer>
                 <UserReward />
-                <SmallButton onClick={() => claimReward()} disabled={!account || disabled}>ClaimReward</SmallButton>
+                <ClaimButton onClick={() => claimReward()} disabled={!account || disabled}>ClaimReward</ClaimButton>
             
                 <div>
-                    <p>Unstake NFT (current stake :  {balance} NFT)</p>
+                    <p>Unstake NFT (staking :  {balance} NFT)</p>
                 </div>
              
                 <InputRow>
-                    <Input type="number" placeholder="amount" name="NFT_to_unstake"/>
+                    <Minus onClick={() => UnstakeDown()} className="minus">-</Minus>
+                    <Input type="number" placeholder="amount" name="NFT_to_unstake" defaultValue="0" readOnly="readonly"/>
+                    <Plus onClick={() => UnstakeUp()} className="plus">+</Plus>
                     <SmallButton onClick={() => unstake()} disabled={!account || disabled}>Unstake</SmallButton>
                 </InputRow> 
             </StakingSubContainer>}   

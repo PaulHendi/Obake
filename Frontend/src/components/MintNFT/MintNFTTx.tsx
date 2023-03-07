@@ -2,7 +2,7 @@ import { Contract } from '@ethersproject/contracts'
 import { utils, ethers } from 'ethers'
 import { useCall, useContractFunction } from '@usedapp/core'
 import Obake from '../../abi/Obake.json'
-import { MintNFTContainer, Input, InputRow, SmallButton } from '../../styles/MintNFT.style'
+import { MintNFTContainer, Input, InputRow, SmallButton, Plus, Minus } from '../../styles/MintNFT.style'
 import { StatusAnimation } from '../TransactionAnimation'
 import { useEthers } from '@usedapp/core'
 import { MINTNFT_ADDRESS, PROVIDER_URL, OBAKE_NFT_URL } from '../../env'
@@ -47,6 +47,22 @@ export default function MintNFT() {
       void send(amount, {value: utils.parseEther(price), gasLimit: 2500000})
     }
 
+    const StepDown = () => {       
+      let NFT_number = document.getElementsByClassName('NFT_number')[0] as HTMLInputElement;
+      let input = parseInt(NFT_number.value);
+      input-=1;
+      if (input < 0) input = 0;
+      NFT_number.value = input.toString();
+  }    
+
+  const StepUp = () => {       
+      let NFT_number = document.getElementsByClassName('NFT_number')[0] as HTMLInputElement;
+      let input = parseInt(NFT_number.value);
+      input+=1;
+      if (input > 5) input = 5;
+      NFT_number.value = input.toString();
+  }       
+
 
     // This component is used to display the mint price and the supply minted
     // We query the contract to get the supply minted with a useCall here
@@ -78,10 +94,13 @@ export default function MintNFT() {
 
         {loading ? <p>Loading...</p> :  <GetMintInfo/>}
 
+
         <InputRow>
-          <Input type="number" placeholder="How many NFT?" className='NFT_number' />
-          <SmallButton onClick={() => mint()} disabled={!account}>Mint</SmallButton>
-        </InputRow>
+            <Minus onClick={() => StepDown()}>-</Minus>
+            <Input type="number" defaultValue="0" className='NFT_number' readonly="readonly"/>
+            <Plus onClick={() => StepUp()}>+</Plus>
+            <SmallButton onClick={() => mint()} disabled={!account}>Mint</SmallButton>
+        </InputRow>         
         
         {state.status !== 'PendingSignature' && <StatusAnimation transaction={state} />}
         {state.status === 'Success' && <GetTxInfo/>}

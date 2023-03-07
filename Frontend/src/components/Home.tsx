@@ -24,12 +24,7 @@ export default function Home() {
                 </StoryTextContainer>
                 <ImgContainer src={ObakeLogo} alt="Obake" />
             </StoryContainer>
-            <EndStoryContainer>
-                
-            </EndStoryContainer>
-
-            <h1>Disclaimer</h1>
-            <p>This is not a financial advice. Do your own research and seek independent advice when required. Investing carries risks.</p>
+      
         </HomeContainer>
     );
 }

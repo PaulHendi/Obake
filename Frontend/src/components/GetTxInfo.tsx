@@ -14,7 +14,7 @@ export default function GetTxInfo() {
     // Get first six and last four characters of the hash
     let tx_hash = tx?.slice(0, 6) + "..." + tx?.slice(-4);
   
-    return (  <a href={tx_link} target="_blank">{tx_hash}</a> )
+    return (  <a href={tx_link} target="_blank">Transaction details</a> )
          
     
 }

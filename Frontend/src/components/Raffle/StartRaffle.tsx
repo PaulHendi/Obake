@@ -3,7 +3,7 @@ import {useState} from 'react';
 import  axios  from "axios";
 import { MetaMaskInpageProvider } from "@metamask/providers";
 
-import {ScanWalletContainer, ImageContainer, StartLotteryContainer, NewLotteryContainer} from "../../styles/ScanWallet.style";
+import {ScanWalletContainer, ImageContainer, StartLotteryContainer, NewLotteryContainer, RaffleCreatedContainer,ApproveContainer} from "../../styles/ScanWallet.style";
 import { useCall, useEthers } from "@usedapp/core";
 import Raffle from '../../abi/Raffle.json'
 import ERC721 from '../../abi/ERC721.json'
@@ -97,8 +97,6 @@ export default function StartRaffle() {
 
   const approveContract = (contract : Contract, id: number) => {
     // This workaround works but there's no state hence no transactionAnimation
-    // And there's no error handling 
-    // Idea : Define 'Success' if the transaction is mined and 'Error' if it fails
     contract.connect(provider.getSigner(account)).approve(RAFFLE_ADDRESS, id).then((response : any) => {
                 console.log(response)
               }).catch((error : any) => {
@@ -108,7 +106,6 @@ export default function StartRaffle() {
   }
 
   // TODO : Pb when creating a lottery, the query getAproved is set to false, hence approve button appears
-
   const StartNewLottery = () => {
 
     const NFTContractAddress = nft_selected["sc_contract"]
@@ -125,11 +122,11 @@ export default function StartRaffle() {
     if(reponse?.value?.toString() !== RAFFLE_ADDRESS && !raffle_started) {
       
       return (
-        <StartLotteryContainer>
+        <ApproveContainer>
           <img src={nft_selected["url"]}/>
           <button onClick={() => {approveContract(NFTContract, nft_selected["id"])}}>Approve</button>
           <button onClick={() => {setNFTSelected("")}}>Cancel</button>
-        </StartLotteryContainer>
+        </ApproveContainer>
       )
     }
 
@@ -156,6 +153,19 @@ export default function StartRaffle() {
   }
 
 
+  const RaffleCreated = () => {
+
+    return (
+      <RaffleCreatedContainer>
+        <img src={nft_selected["url"]} width="30%"/>
+        <br/>
+        <NavLink to="/raffle">Go to the raffle page</NavLink> 
+        <br/>       
+        <GetTxInfo/>
+      </RaffleCreatedContainer>
+    )
+  }
+
 
   
 
@@ -170,8 +180,9 @@ export default function StartRaffle() {
       {account && state_start_raffle.status === 'Success' && (<h1>Congrats for your new raffle !</h1>)}
 
       <ScanWalletContainer>
+
       {loading ? 
-          account ? <p>Loading...</p> : <p></p> 
+          account ? <p>Loading...</p> : <></> 
           : Object.keys(nft).length === 0 ? <p>No NFT found in wallet</p> : 
             account && !nft_selected && Object.keys(nft).map((key, i) => {
                                           return ( <ImageContainer onClick={() => {setNFTSelected(nft[key])}} key={i}>  
@@ -179,14 +190,17 @@ export default function StartRaffle() {
                                                       <h2>{key}</h2> 
                                                   </ImageContainer>)})}
                   
-        {account && nft_selected && state_start_raffle.status !== 'Success' && <StartNewLottery/>}
-        {account && nft_selected && state_start_raffle.status === 'Success' && <NavLink to="/raffle">Go to the raffle page</NavLink>}
-
-        <StatusAnimation transaction={state_start_raffle} />
-        {state_start_raffle.status === 'Success' && <GetTxInfo/>}
-       
-
+        
+      
       </ScanWalletContainer>
+      {account && nft_selected && state_start_raffle.status !== 'Success' && <StartNewLottery/>}
+
+
+
+      {account && nft_selected && state_start_raffle.status === 'Success' && <RaffleCreated/>}
+      {account && nft_selected && state_start_raffle.status !== 'PendingSignature' && <StatusAnimation transaction={state_start_raffle} /> }
+
+      
     </NewLotteryContainer>
   );
 }
