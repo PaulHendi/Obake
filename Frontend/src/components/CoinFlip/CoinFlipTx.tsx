@@ -11,16 +11,22 @@ import GetTxInfo  from '../GetTxInfo'
 import { useState } from 'react'
 
 
+interface GameInfo {
+  bet: number,
+  ended: boolean,
+  won: boolean,
+  amount: number,
+  owner: string
+}
 
 
 export default function CoinFlipPlay() {
 
 
     // TODO : 
-    // Reorg a bit
+    // Clean code
     // See if there's a way to wait for the results and not display previous results 
     // If won include a link to the Tx on FTMScan
-    // Add an animation of a spinning coin while waiting for the outcome
 
     // CoinFlip contract
     const CoinFlipInterface = new utils.Interface(CoinFlip.abi)
@@ -33,31 +39,8 @@ export default function CoinFlipPlay() {
     const {account} = useEthers();
 
     // States : Heads or Tails
-    const [result, setResult] = useState("Heads");
+    const [result, setResult] = useState("");
 
-    const coinToss = () => {
-      
-
-      if (Math.random() < 0.5) {
-        setResult("heads");
-      } else {
-        setResult("tails");
-
-      }
-      
-    }
-
-    const CoinFlipAnimated = () => (
-      <div className="App">
-       <CoinWrapper className={result}>
-        <div className="side-a">HEADS</div>
-        <div className="side-b">TAILS</div>
-      </CoinWrapper>
-        <h1>Flip a coin</h1>
-        <button id="btn" onClick={coinToss}>
-          Coin Toss
-        </button>
-      </div>)
 
 
     // Function to play the game
@@ -69,21 +52,21 @@ export default function CoinFlipPlay() {
 
       const choice = element_heads_or_tail.checked as boolean
       const price =  element_price_first.checked as boolean ? 0.1 : element_price_second.checked as boolean ? 0.5 : 1
-                                            
+                   
 
       if (choice) {
-        void send(1, {value: utils.parseEther(price.toString()), gasLimit: 2500000})}
-      else {
         void send(0, {value: utils.parseEther(price.toString()), gasLimit: 2500000})}
+      else {
+        void send(1, {value: utils.parseEther(price.toString()), gasLimit: 2500000})}
 
     }
     
 
     // Get the outcome of the game (After receiving chainlink's random number)
-    // This component could ne optimized
+    // This component could ne optimized (And we shouldn't setState within a component)
     const Outcome = () => {
 
-      const call_status =
+      const call_status : GameInfo  | any =
           useCall( account &&  {
               contract: coinFlipcontract, // instance of called contract
               method: "getGameInfo", // Method to be called
@@ -91,23 +74,35 @@ export default function CoinFlipPlay() {
               }) ?? {};
   
   
-      let result = ""
+      let result_text = ""
       if ("value" in call_status) {
+
           let value = call_status["value"][0] 
-          if (value["ended"] && value["won"]) {
-              result = "You won! :)"
+          let bet : number = Number(value["bet"]?.toString())
+
+
+          if (value["ended"]) {
+            if (bet == 0) setResult("heads");
+            else setResult("tails");
+
+            if (value["won"]) result_text = "You won! :)"
+            else result_text = "You lost! :( Better luck next time!"
+
+
           }
-          else if (value["ended"] && !value["won"]) {
-              result = "You lost! :( Better luck next time!"
-          }
+
           else {
-              result = "Wait a bit for the outcome ..."
+              setResult("loading");
+              result_text = "Wait a bit for the outcome ..."
           }
       }    
   
       return (<OutcomContainer>
-                  <h1>Results</h1>
-                  <p>{result}</p>
+                  <CoinWrapper className={result}>
+                    <div className="side-a"><br/><br/>Heads</div>
+                    <div className="side-b"><br/><br/>Tails</div>
+                  </CoinWrapper>
+                  <p>{result_text}</p>
               </OutcomContainer>)}
         
      
@@ -146,16 +141,16 @@ export default function CoinFlipPlay() {
            <CustomInput>
              <Label>
                <RadioInput id="tail" name="heads_or_tail"/>
-               <LabelInput htmlFor="tail">Tail</LabelInput>
+               <LabelInput htmlFor="tail">Tails</LabelInput>
               </Label>
            </CustomInput>
         </Wrapper>
         <button onClick={() => play()} disabled={!account}>Play</button>
+        {state.status=="Success" && <Outcome/>}
         {state.status !== 'PendingSignature' &&<StatusAnimation transaction={state} />}
         {state.status === 'Success' && <GetTxInfo/>}
-        {state.status=="Success" && <Outcome/>}
         
-      <CoinFlipAnimated/>
+      
       </CoinFlipContainer>
       
     )

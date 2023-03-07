@@ -91,7 +91,7 @@ const flipHeads = keyframes`
     transform: rotateY(0);
   }
   to {
-    transform: rotateY(5400deg);
+    transform: rotateY(720deg);
   }
 `;
 
@@ -100,9 +100,20 @@ const flipTails = keyframes`
     transform: rotateY(0);
   }
   to {
-    transform: rotateY(7200deg);
+    transform: rotateY(540deg);
   }
 `;
+
+const flipHeadsLoading = keyframes`
+  from {
+    transform: rotateY(0);
+  }
+  to {
+    transform: rotateY(72000deg);
+  }
+`;
+
+
 
 export const CoinWrapper = styled.div`
   position: relative;
@@ -117,7 +128,6 @@ export const CoinWrapper = styled.div`
     position: absolute;
     width: 100%;
     height: 100%;
-
     border-radius: 50%;
 
     box-shadow: inset 0 0 45px rgba(255, 255, 255, 0.3),
@@ -126,14 +136,15 @@ export const CoinWrapper = styled.div`
     backface-visibility: hidden;
 
     &.side-a {
-      background-color: #bb0000;
+      background-color: #FFD700;
       color: white;
       text-align: center;
+      
       z-index: 100;
     }
 
     &.side-b {
-      background-color: #3e3e3e;
+      background-color: #DAA520;
       color: white;
       text-align: center;
       transform: rotateY(-180deg);
@@ -141,11 +152,16 @@ export const CoinWrapper = styled.div`
   }
 
   &.heads {
-    animation: ${flipHeads} 20s ease-out forwards;
+    animation: ${flipHeads} 2s ease-out forwards;
   }
 
   &.tails {
-    animation: ${flipTails} 20s ease-out forwards;
+    animation: ${flipTails} 2s ease-out forwards;
+  }
+
+
+  &.loading {
+    animation: ${flipHeadsLoading} 200s ease-out forwards;
   }
 `;
 
