@@ -187,7 +187,7 @@ contract Raffle is Ownable {
                                                                     lotteries[_raffleId].owner, 
                                                                     lotteries[_raffleId].NFTid);
 
-            // Transfer the ticket price back to the players    (CHANGED)  
+            // Transfer the ticket price back to the players      
             for (uint256 i = 0; i < raffleId_to_playerInfo[_raffleId].length; i++) {
                 address _current_player = raffleId_to_playerInfo[_raffleId][i].player;
                 uint256 _total_paid = raffleId_to_playerInfo[_raffleId][i].amount_paid;
@@ -238,7 +238,7 @@ contract Raffle is Ownable {
         // Reset the owner raffleId
         ownerRaffleId[lotteries[curr_raffle_id].owner] = 0;
 
-        // Calculate the winner (CHANGED)
+        // Calculate the winner 
         uint256 index = random % raffleId_to_playerInfo[curr_raffle_id].length;
         address winner = raffleId_to_playerInfo[curr_raffle_id][index].player;
 
@@ -335,6 +335,14 @@ contract Raffle is Ownable {
     //                               SETTERS                                         //
     // ***************************************************************************** //
 
+
+    /**
+    * Set the winning fee
+    * @param _winning_fee The winning fee
+    */
+    function setWinningFee(uint256 _winning_fee) public onlyOwner {
+        winning_fee = _winning_fee;
+    }
 
     /**
     * Function to set the minimum fee balance

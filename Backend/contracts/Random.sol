@@ -12,15 +12,17 @@ contract RandomNumberConsumer is VRFV2WrapperConsumerBase, Ownable {
     CoinFlip public flip_contract;
     Raffle public raffle_contract;
 
+    // Mapping to store the caller of the request 
     mapping(uint256 => address) caller;
 
-
+    // Mapping to store the random number
     mapping(uint256 => uint256) public random_numbers; 
 
-    // Works for now
-    uint32 callbackGasLimit = 2400000; // Increase in case of fund manager that needs gas to swap to link and send FTM..
+    // The gas limit for the callback has been increased in case 
+    // fund manager needs gas to swap to link and send FTM
+    uint32 callbackGasLimit = 2400000; 
 
-    // 5 confirmations
+    // 3 confirmations
     uint16 requestConfirmations = 3; 
 
     // Only one random number at a time for both CoinFlip and Raffle
@@ -50,6 +52,8 @@ contract RandomNumberConsumer is VRFV2WrapperConsumerBase, Ownable {
      * @dev This function is called by the CoinFlip/Raffle contract to request randomness
      */
     function getRandom() external returns (uint256) {
+
+        // Make sure the function is called by the CoinFlip/Raffle contract
         require(msg.sender == address(flip_contract) || 
                 msg.sender == address(raffle_contract),
                      "Only the CoinFlip/Raffle contract can call this function");
@@ -102,7 +106,7 @@ contract RandomNumberConsumer is VRFV2WrapperConsumerBase, Ownable {
 
 
     /**
-    * @dev Sets the callback gas limit
+    * Sets the callback gas limit
     * @param gas_limit The gas limit for the callback
     */
     function set_callback_gas_limit(uint32 gas_limit) public onlyOwner{
@@ -110,7 +114,7 @@ contract RandomNumberConsumer is VRFV2WrapperConsumerBase, Ownable {
     }
 
     /**
-     * @dev Sets the number of request confirmations for a random number request
+     * Sets the number of request confirmations for a random number request
      * @param confirmations The number of confirmations
      */
     function set_request_confirmations(uint16 confirmations) public onlyOwner{
@@ -118,7 +122,7 @@ contract RandomNumberConsumer is VRFV2WrapperConsumerBase, Ownable {
     }
 
     /**
-     * @dev Sets the address of the LINK token
+     * Sets the address of the LINK token
      * @param link_address The address of the LINK token
      */
     function set_link_address(address link_address) public onlyOwner{
@@ -126,7 +130,7 @@ contract RandomNumberConsumer is VRFV2WrapperConsumerBase, Ownable {
     }
 
     /**
-     * @dev Sets the address of the VRF_V2_WRAPPER contract
+     * Sets the address of the VRF_V2_WRAPPER contract
      * @param wrapper_address The address of the VRF_V2_WRAPPER contract
      */
     function set_wrapper_address(address wrapper_address) public onlyOwner{
@@ -135,7 +139,7 @@ contract RandomNumberConsumer is VRFV2WrapperConsumerBase, Ownable {
 
 
     /**
-     * @dev Sets the address of the CoinFlip and Raffle contracts
+     * Sets the address of the CoinFlip and Raffle contracts
      * @param flip_address The address of the CoinFlip contract (payable because of it can receive FTM)
      * @param raffle_address The address of the Raffle contract
      */

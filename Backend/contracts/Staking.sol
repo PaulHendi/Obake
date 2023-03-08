@@ -10,6 +10,7 @@ contract Staking is ERC1155Holder, Ownable{
 
     IERC1155 public immutable stakingToken;
 
+    // Events
     event FTMReceived(address indexed sender, uint256 amount);
     event NFTStaked(address indexed sender, uint256 amount);
     event NFTUnstaked(address indexed sender, uint256 amount);
@@ -153,11 +154,9 @@ contract Staking is ERC1155Holder, Ownable{
   
 
     /**
-     * Allows user to claim rewards
+     * Allows user to view rewards
      * @param _account - address of particular user
-     * @notice - The rewards depends on current contract's balance, sometimes it worth waiting for a while
-     * to claim rewards :) 
-     * @return rewards - total rewards for user
+     * @return rewards - total rewards for _account
      */
      function getRewards(address _account) public view returns (uint256) {
 
@@ -198,34 +197,26 @@ contract Staking is ERC1155Holder, Ownable{
 
 
     /**
-     * Allows owner to withdraw all funds from the contract
-     * @notice - This function is only for testing (not wasting faucet funds)
-     */
-    function emergencyWithdraw() external onlyOwner{
-        payable(owner()).transfer(address(this).balance);
-    }
-
-
-
-    /**
     * This function checks if the staking period is over and if so, it calculates the reward rate
     * and updates the staking info
     */
     function manage_new_funds() public payable { 
-        
-        // TODO : test the require statement
-        // TODO : Test incoming funds (how to manage funds when no staking?)
 
         require(msg.sender == funds_contract_address, "Only the funds manager contract can call this function");
 
+        // Get the time since staking started
         uint256 time_since_staking_started = block.timestamp - staking_info.start;
+
+        // Add the incoming funds to the incoming funds variable
         incoming_funds += msg.value;
 
-        
+        // If the staking period is over, calculate the new reward rate
         if (time_since_staking_started > staking_duration) {
 
-            // If the period is over, calculate the reward rate
+            // Calculate the reward rate
             staking_info.reward_rate = incoming_funds / staking_duration;
+
+            // Update the start time
             staking_info.start = block.timestamp;
 
             incoming_funds = 0;
@@ -244,7 +235,7 @@ contract Staking is ERC1155Holder, Ownable{
     * Set the Fund manager contract address
     * @param _funds_contract_address The contract address
     */
-    function setFundsManagerContractAddresses(address _funds_contract_address) public onlyOwner {
+    function setFundsManagerContractAddress(address _funds_contract_address) public onlyOwner {
         
         // Check that this function can only be called once
         require(only_once==0, "Function already called");

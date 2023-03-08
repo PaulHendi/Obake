@@ -69,6 +69,7 @@ contract FundsManager is Ownable {
         path[0] = WFTM;
         path[1] = LINK;
 
+        // Call the swap function (ETH will be wrapped to WFTM automatically, then swapped to LINK)
         router.swapExactETHForTokens{value: _amount}(0, 
                                                      path, 
                                                      random_contract_address, 
@@ -79,13 +80,16 @@ contract FundsManager is Ownable {
     /** 
     * Handle the funds received by the contract
     */
-    function handle_funds() public payable {  // TODO : test the require statement
+    function handle_funds() public payable {  
 
         require((msg.sender == coinflip_contract_address) || 
                 (msg.sender == raffle_contract_address), "Only the games can call this function");
 
+        // Retrieve the balance of Link in the random contract
         uint256 _link_balance = IERC20(LINK).balanceOf(random_contract_address);
 
+
+        // Depending on the balance of Link in the random contract, swap FTM to Link or not
         if (_link_balance < min_link_balance) {
 
             // Define the amount of FTM to swap to Link
@@ -141,6 +145,7 @@ contract FundsManager is Ownable {
     function setMinLinkBalance(uint256 _min_link_balance) public onlyOwner {
         min_link_balance = _min_link_balance;
     }
+    
 
     /**
     * Set the percentage of the balance to swap to Link
