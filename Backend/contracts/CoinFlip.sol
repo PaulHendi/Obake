@@ -86,7 +86,7 @@ contract CoinFlip is Ownable {
     * Play a game
     * @param _bet 0 = heads, 1 = tails
     */
-    function play(uint256 _bet) public payable {
+    function play(uint256 _bet) external payable {
 
         // Check if the bet is valid
         require(_bet == uint256(Bet.HEADS) || _bet == uint256(Bet.TAILS), 
@@ -186,7 +186,7 @@ contract CoinFlip is Ownable {
     /**
     * Send the fee balance to the funds manager
     */
-    function send_fee_balance() internal {
+    function send_fee_balance() private {
         uint256 _fee_balance = fee_balance;
         fee_balance = 0;
         funds_manager.handle_funds{value: _fee_balance}();
@@ -210,14 +210,14 @@ contract CoinFlip is Ownable {
     /**
     * Set the winning fee
     */
-    function setWinningFee(uint256 _winning_fee) public onlyOwner {
+    function setWinningFee(uint256 _winning_fee) external onlyOwner {
         winning_fee = _winning_fee;
     }
 
     /**
     * Set the bet amounts
     */
-    function setAmounts(uint256[] memory _amounts) public onlyOwner {
+    function setAmounts(uint256[] memory _amounts) external onlyOwner {
         require(_amounts.length == 3, "Array must have 3 elements");
         amounts = _amounts;
     }
@@ -226,7 +226,7 @@ contract CoinFlip is Ownable {
     * Set the minimum fee balance
     * @param _min_fee_balance Minimum fee balance
     */
-    function setMinFee(uint256 _min_fee_balance) public onlyOwner {
+    function setMinFee(uint256 _min_fee_balance) external onlyOwner {
         min_fee_balance = _min_fee_balance;
     }
 

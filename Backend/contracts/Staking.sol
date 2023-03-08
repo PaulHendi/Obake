@@ -134,7 +134,7 @@ contract Staking is ERC1155Holder, Ownable{
     /**
      * Allows user to claim rewards
      */
-     function claimRewards() public updateRewards(msg.sender) {
+     function claimRewards() external updateRewards(msg.sender) {
 
         // Get user current reward (Note that this reward is updated via the modifier)
         uint reward = rewards[msg.sender];
@@ -235,7 +235,7 @@ contract Staking is ERC1155Holder, Ownable{
     * Set the Fund manager contract address
     * @param _funds_contract_address The contract address
     */
-    function setFundsManagerContractAddress(address _funds_contract_address) public onlyOwner {
+    function setFundsManagerContractAddress(address _funds_contract_address) external onlyOwner {
         
         // Check that this function can only be called once
         require(only_once==0, "Function already called");

@@ -1,6 +1,7 @@
 require("@nomicfoundation/hardhat-toolbox");
 require("@nomicfoundation/hardhat-network-helpers");
 require("dotenv").config();
+require('hardhat-docgen');
 
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
@@ -26,5 +27,10 @@ module.exports = {
     forking: {
       url: "https://rpc.ankr.com/fantom_testnet",
     }
+  },
+  docgen: {
+    path: './docs',
+    clear: true,
+    runOnCompile: true,
   }
 };

@@ -1,4 +1,5 @@
 const {ethers} = require("hardhat");
+const { time } = require("@nomicfoundation/hardhat-network-helpers"); // Useful when testing with forked testnet
 
 // This script is useful to go step by step
 // Waiting for the txs to appear in the explorer
@@ -19,15 +20,17 @@ describe("Staking", function () {
 
         // Get the Stacking contract
         staking_contract = await ethers.getContractFactory("Staking");
-        staking_contract_deployed = await staking_contract.deploy("0x6643fBC0D66fc580de15a0A0678D4c1f41b0071b");
+
+        // Use the script deploy_set_up_staking to set up the staking contract (with approval and all)
+        staking_contract_deployed = await staking_contract.attach("0x302e0957744Fd06C8fC2c8949605F862E8421667");
 
         await staking_contract_deployed.deployed();
 
-        console.log("Staking deployed to:", staking_contract_deployed.address)
+        console.log("Staking address:", staking_contract_deployed.address)
 
         // Approve the staking contract to spend the SFTs
-        sft_contract = await ethers.getContractFactory("SFT");
-        sft_contract_deployed = await sft_contract.attach("0x6643fBC0D66fc580de15a0A0678D4c1f41b0071b");
+        sft_contract = await ethers.getContractFactory("Obake");
+        sft_contract_deployed = await sft_contract.attach("0xFF0B9b82716f5E1816790D6aA3D56d28A9dCd0f6");
 
         const provider = new ethers.providers.JsonRpcProvider("https://rpc.ankr.com/fantom_testnet");
 
@@ -82,21 +85,24 @@ describe("Staking", function () {
 
     }
 
-
+    // Changing this function to progressively test the contract (staking, unstaking, claiming rewards,..)
     it("Should test a normal scenario", async function () {
 
         await queryData();
         await queryDataForUser(owner.address, "owner");
 
-        // Owner staked 2 NFT
-        await staking_contract_deployed.connect(alice).claimRewards();
-
-        // Wait 10 seconds
-        await new Promise(r => setTimeout(r, 10000));
+        // Owner stake 1 NFT
+        await(await staking_contract_deployed.stake(1)).wait(2);
 
         await queryData();
         await queryDataForUser(owner.address, "owner");
-        await queryDataForUser(alice.address, "alice");
+
+        // Wait 60 seconds (Testing duration period)
+        console.log("Waiting 60 seconds")
+        await new Promise(r => setTimeout(r, 60000));
+
+        await queryData();
+        await queryDataForUser(owner.address, "owner");
         
 
     });

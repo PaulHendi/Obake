@@ -61,13 +61,21 @@ async function main() {
     await(await RandomDeployed.set_contracts(CoinFlipDeployed.address, RaffleDeployed.address)).wait(2);
 
 
-    // 8) Send FTM to CoinFlip
+    // 8) Set CoinFlip and Raffle addresses in FundsManager
+    await(await FundsManagerDeployed.setGamesContractAddresses(CoinFlipDeployed.address, RaffleDeployed.address)).wait(2);
+
+
+    // 9) Set Funds manager address in Staking
+    await(await StakingDeployed.setFundsManagerContractAddress(FundsManagerDeployed.address)).wait(2);
+
+
+    // 10) Send FTM to CoinFlip
     await(await owner.sendTransaction({to:CoinFlipDeployed.address,
                                        value: ethers.utils.parseEther("1"), 
                                        gasLimit:2500000})).wait(2);
 
 
-    // 9) Send Link to Random
+    // 11) Send Link to Random
     LINK_ADDRESS = "0xfaFedb041c0DD4fA2Dc0d87a6B0979Ee6FA7af5F"
     const Link = await ethers.getContractFactory("ERC20")
     const Linkdeployed = await Link.attach(LINK_ADDRESS);
@@ -75,12 +83,13 @@ async function main() {
 
     await(await Linkdeployed.transfer(RandomDeployed.address, ethers.utils.parseEther("0.1"))).wait(2);
 
-    // Unpause Obake contract
+    // 12) Unpause Obake contract
     await (await MintObakeDeployed.setPaused(false)).wait(2);
 
 
-    // What's missing : Verify the contracts using the dedicated bash script
+    // What's missing : Verify the contracts using the dedicated bash script (verify_contracts.sh)
     // Copy paste the addresses in the script and run it
+    // Then copy the addresses and the ABI in the frontend
 
 
 }

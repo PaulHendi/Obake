@@ -2,8 +2,8 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "/Users/pilu/Desktop/Obake/Backend/contracts/CoinFlip.sol": {
-      "lastModificationDate": 1677500690895,
-      "contentHash": "7f8f07818c8e9c879a201263e7920eec",
+      "lastModificationDate": 1678270526487,
+      "contentHash": "8ca01f4dc2a82f7f5f35511ee08e41d0",
       "sourceName": "contracts/CoinFlip.sol",
       "solcConfig": {
         "version": "0.8.17",
@@ -19,7 +19,9 @@
                 "evm.bytecode",
                 "evm.deployedBytecode",
                 "evm.methodIdentifiers",
-                "metadata"
+                "metadata",
+                "devdoc",
+                "userdoc"
               ],
               "": [
                 "ast"
@@ -41,8 +43,8 @@
       ]
     },
     "/Users/pilu/Desktop/Obake/Backend/contracts/Random.sol": {
-      "lastModificationDate": 1677497329492,
-      "contentHash": "9e06dbabad64a16c90b691f895b4fd96",
+      "lastModificationDate": 1678270213906,
+      "contentHash": "66d692c22004a11b4749a999c7924388",
       "sourceName": "contracts/Random.sol",
       "solcConfig": {
         "version": "0.8.17",
@@ -58,7 +60,9 @@
                 "evm.bytecode",
                 "evm.deployedBytecode",
                 "evm.methodIdentifiers",
-                "metadata"
+                "metadata",
+                "devdoc",
+                "userdoc"
               ],
               "": [
                 "ast"
@@ -98,7 +102,9 @@
                 "evm.bytecode",
                 "evm.deployedBytecode",
                 "evm.methodIdentifiers",
-                "metadata"
+                "metadata",
+                "devdoc",
+                "userdoc"
               ],
               "": [
                 "ast"
@@ -118,8 +124,8 @@
       ]
     },
     "/Users/pilu/Desktop/Obake/Backend/contracts/FundsManager.sol": {
-      "lastModificationDate": 1677500233123,
-      "contentHash": "0d861524537f8f28bbaea0176d0466fe",
+      "lastModificationDate": 1678270293629,
+      "contentHash": "6f8340cf833146d1474b278b7b1b319a",
       "sourceName": "contracts/FundsManager.sol",
       "solcConfig": {
         "version": "0.8.17",
@@ -135,7 +141,9 @@
                 "evm.bytecode",
                 "evm.deployedBytecode",
                 "evm.methodIdentifiers",
-                "metadata"
+                "metadata",
+                "devdoc",
+                "userdoc"
               ],
               "": [
                 "ast"
@@ -158,8 +166,8 @@
       ]
     },
     "/Users/pilu/Desktop/Obake/Backend/contracts/Raffle.sol": {
-      "lastModificationDate": 1677790665503,
-      "contentHash": "058e7246238d9dbd43f29b3b6059f398",
+      "lastModificationDate": 1678270561906,
+      "contentHash": "4909487a4589fcc7c2f614486c8bf154",
       "sourceName": "contracts/Raffle.sol",
       "solcConfig": {
         "version": "0.8.17",
@@ -175,7 +183,9 @@
                 "evm.bytecode",
                 "evm.deployedBytecode",
                 "evm.methodIdentifiers",
-                "metadata"
+                "metadata",
+                "devdoc",
+                "userdoc"
               ],
               "": [
                 "ast"
@@ -215,7 +225,9 @@
                 "evm.bytecode",
                 "evm.deployedBytecode",
                 "evm.methodIdentifiers",
-                "metadata"
+                "metadata",
+                "devdoc",
+                "userdoc"
               ],
               "": [
                 "ast"
@@ -253,7 +265,9 @@
                 "evm.bytecode",
                 "evm.deployedBytecode",
                 "evm.methodIdentifiers",
-                "metadata"
+                "metadata",
+                "devdoc",
+                "userdoc"
               ],
               "": [
                 "ast"
@@ -273,8 +287,8 @@
       ]
     },
     "/Users/pilu/Desktop/Obake/Backend/contracts/Staking.sol": {
-      "lastModificationDate": 1677664595610,
-      "contentHash": "90b83fed5cdf9994d854199a7a1784ec",
+      "lastModificationDate": 1678270166811,
+      "contentHash": "d94cbb2fd65dadf911565adfbf1f5e7a",
       "sourceName": "contracts/Staking.sol",
       "solcConfig": {
         "version": "0.8.17",
@@ -290,7 +304,9 @@
                 "evm.bytecode",
                 "evm.deployedBytecode",
                 "evm.methodIdentifiers",
-                "metadata"
+                "metadata",
+                "devdoc",
+                "userdoc"
               ],
               "": [
                 "ast"
@@ -329,7 +345,9 @@
                 "evm.bytecode",
                 "evm.deployedBytecode",
                 "evm.methodIdentifiers",
-                "metadata"
+                "metadata",
+                "devdoc",
+                "userdoc"
               ],
               "": [
                 "ast"
@@ -364,7 +382,9 @@
                 "evm.bytecode",
                 "evm.deployedBytecode",
                 "evm.methodIdentifiers",
-                "metadata"
+                "metadata",
+                "devdoc",
+                "userdoc"
               ],
               "": [
                 "ast"
@@ -399,7 +419,9 @@
                 "evm.bytecode",
                 "evm.deployedBytecode",
                 "evm.methodIdentifiers",
-                "metadata"
+                "metadata",
+                "devdoc",
+                "userdoc"
               ],
               "": [
                 "ast"
@@ -436,7 +458,9 @@
                 "evm.bytecode",
                 "evm.deployedBytecode",
                 "evm.methodIdentifiers",
-                "metadata"
+                "metadata",
+                "devdoc",
+                "userdoc"
               ],
               "": [
                 "ast"
@@ -473,7 +497,9 @@
                 "evm.bytecode",
                 "evm.deployedBytecode",
                 "evm.methodIdentifiers",
-                "metadata"
+                "metadata",
+                "devdoc",
+                "userdoc"
               ],
               "": [
                 "ast"
@@ -511,7 +537,9 @@
                 "evm.bytecode",
                 "evm.deployedBytecode",
                 "evm.methodIdentifiers",
-                "metadata"
+                "metadata",
+                "devdoc",
+                "userdoc"
               ],
               "": [
                 "ast"
@@ -548,7 +576,9 @@
                 "evm.bytecode",
                 "evm.deployedBytecode",
                 "evm.methodIdentifiers",
-                "metadata"
+                "metadata",
+                "devdoc",
+                "userdoc"
               ],
               "": [
                 "ast"
@@ -585,7 +615,9 @@
                 "evm.bytecode",
                 "evm.deployedBytecode",
                 "evm.methodIdentifiers",
-                "metadata"
+                "metadata",
+                "devdoc",
+                "userdoc"
               ],
               "": [
                 "ast"
@@ -620,7 +652,9 @@
                 "evm.bytecode",
                 "evm.deployedBytecode",
                 "evm.methodIdentifiers",
-                "metadata"
+                "metadata",
+                "devdoc",
+                "userdoc"
               ],
               "": [
                 "ast"
@@ -655,7 +689,9 @@
                 "evm.bytecode",
                 "evm.deployedBytecode",
                 "evm.methodIdentifiers",
-                "metadata"
+                "metadata",
+                "devdoc",
+                "userdoc"
               ],
               "": [
                 "ast"
@@ -690,7 +726,9 @@
                 "evm.bytecode",
                 "evm.deployedBytecode",
                 "evm.methodIdentifiers",
-                "metadata"
+                "metadata",
+                "devdoc",
+                "userdoc"
               ],
               "": [
                 "ast"
@@ -725,7 +763,9 @@
                 "evm.bytecode",
                 "evm.deployedBytecode",
                 "evm.methodIdentifiers",
-                "metadata"
+                "metadata",
+                "devdoc",
+                "userdoc"
               ],
               "": [
                 "ast"
@@ -768,7 +808,9 @@
                 "evm.bytecode",
                 "evm.deployedBytecode",
                 "evm.methodIdentifiers",
-                "metadata"
+                "metadata",
+                "devdoc",
+                "userdoc"
               ],
               "": [
                 "ast"
@@ -805,7 +847,9 @@
                 "evm.bytecode",
                 "evm.deployedBytecode",
                 "evm.methodIdentifiers",
-                "metadata"
+                "metadata",
+                "devdoc",
+                "userdoc"
               ],
               "": [
                 "ast"
@@ -840,7 +884,9 @@
                 "evm.bytecode",
                 "evm.deployedBytecode",
                 "evm.methodIdentifiers",
-                "metadata"
+                "metadata",
+                "devdoc",
+                "userdoc"
               ],
               "": [
                 "ast"
@@ -875,7 +921,9 @@
                 "evm.bytecode",
                 "evm.deployedBytecode",
                 "evm.methodIdentifiers",
-                "metadata"
+                "metadata",
+                "devdoc",
+                "userdoc"
               ],
               "": [
                 "ast"
@@ -912,7 +960,9 @@
                 "evm.bytecode",
                 "evm.deployedBytecode",
                 "evm.methodIdentifiers",
-                "metadata"
+                "metadata",
+                "devdoc",
+                "userdoc"
               ],
               "": [
                 "ast"
@@ -947,7 +997,9 @@
                 "evm.bytecode",
                 "evm.deployedBytecode",
                 "evm.methodIdentifiers",
-                "metadata"
+                "metadata",
+                "devdoc",
+                "userdoc"
               ],
               "": [
                 "ast"
@@ -989,7 +1041,9 @@
                 "evm.bytecode",
                 "evm.deployedBytecode",
                 "evm.methodIdentifiers",
-                "metadata"
+                "metadata",
+                "devdoc",
+                "userdoc"
               ],
               "": [
                 "ast"
@@ -1009,8 +1063,8 @@
       ]
     },
     "/Users/pilu/Desktop/Obake/Backend/contracts/MintObake.sol": {
-      "lastModificationDate": 1677102831430,
-      "contentHash": "6e24e224056e9c8c1b7af936b1c99572",
+      "lastModificationDate": 1678270258161,
+      "contentHash": "7162843c6b7670c11c747bfceda8a416",
       "sourceName": "contracts/MintObake.sol",
       "solcConfig": {
         "version": "0.8.17",
@@ -1026,7 +1080,9 @@
                 "evm.bytecode",
                 "evm.deployedBytecode",
                 "evm.methodIdentifiers",
-                "metadata"
+                "metadata",
+                "devdoc",
+                "userdoc"
               ],
               "": [
                 "ast"
@@ -1065,7 +1121,9 @@
                 "evm.bytecode",
                 "evm.deployedBytecode",
                 "evm.methodIdentifiers",
-                "metadata"
+                "metadata",
+                "devdoc",
+                "userdoc"
               ],
               "": [
                 "ast"
@@ -1100,7 +1158,9 @@
                 "evm.bytecode",
                 "evm.deployedBytecode",
                 "evm.methodIdentifiers",
-                "metadata"
+                "metadata",
+                "devdoc",
+                "userdoc"
               ],
               "": [
                 "ast"
@@ -1139,7 +1199,9 @@
                 "evm.bytecode",
                 "evm.deployedBytecode",
                 "evm.methodIdentifiers",
-                "metadata"
+                "metadata",
+                "devdoc",
+                "userdoc"
               ],
               "": [
                 "ast"

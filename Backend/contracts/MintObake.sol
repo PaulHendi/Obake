@@ -45,7 +45,7 @@ contract Obake is ERC1155, Ownable {
     * Function to mint tokens.
     * @param _mintAmount - amount of tokens to mint
     */
-    function mint(uint256 _mintAmount) public payable { 
+    function mint(uint256 _mintAmount) external payable { 
 
         // Requires the contract to not be paused 
         require(!paused, "The contract is paused!");         
@@ -73,7 +73,7 @@ contract Obake is ERC1155, Ownable {
     * Function the contract to paused/not paused.
     * @param _state - maximum supply of tokens
     */
-    function setPaused(bool _state) public onlyOwner {
+    function setPaused(bool _state) external onlyOwner {
         paused = _state;
     }
 
@@ -81,7 +81,7 @@ contract Obake is ERC1155, Ownable {
     /**
     * Function to withdraw the FTM from the contract (callable by the owner).
     */
-    function withdraw() public onlyOwner { 
+    function withdraw() external onlyOwner { 
         (bool os,) = payable(owner()).call{ value: address(this).balance }(""); 
         // Requires the transfer succeeds 
         require(os, "Failed to transfer funds to owner"); 
@@ -92,7 +92,7 @@ contract Obake is ERC1155, Ownable {
     * Function to set the maximum of NFT that can be minted in one tx (callable by the owner).
     * @param _maxMintAmountPerTx The max mint amount of NFT in one tx
     */    
-    function setMaxMintAmountPerTx(uint256 _maxMintAmountPerTx) public onlyOwner {
+    function setMaxMintAmountPerTx(uint256 _maxMintAmountPerTx) external onlyOwner {
         maxMintAmountPerTx = _maxMintAmountPerTx;
     }    
 

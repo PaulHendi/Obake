@@ -62,7 +62,7 @@ contract FundsManager is Ownable {
     * Swap FTM to LINK
     * @param _amount The amount of FTM to swap
     */
-    function swapFTMToLink(uint256 _amount) internal {
+    function swapFTMToLink(uint256 _amount) private {
 
         // Define the path
         address[] memory path = new address[](2);
@@ -124,7 +124,7 @@ contract FundsManager is Ownable {
     * @param _coinflip_contract_address The CoinFlip contract address
     * @param _raffle_contract_address The Raffle contract address
     */
-    function setGamesContractAddresses(address _coinflip_contract_address, address _raffle_contract_address) public onlyOwner {
+    function setGamesContractAddresses(address _coinflip_contract_address, address _raffle_contract_address) external onlyOwner {
         
         // Check that this function can only be called once
         require(only_once==0, "Function already called");
@@ -142,16 +142,16 @@ contract FundsManager is Ownable {
     * Set the minimum link balance
     * @param _min_link_balance The minimum link balance
     */
-    function setMinLinkBalance(uint256 _min_link_balance) public onlyOwner {
+    function setMinLinkBalance(uint256 _min_link_balance) external onlyOwner {
         min_link_balance = _min_link_balance;
     }
-    
+
 
     /**
     * Set the percentage of the balance to swap to Link
     * @param _percentage_balance_link The percentage of the balance to swap to Link
     */
-    function setPercentageBalanceLink(uint256 _percentage_balance_link) public onlyOwner {
+    function setPercentageBalanceLink(uint256 _percentage_balance_link) external onlyOwner {
         percentage_balance_link = _percentage_balance_link;
     }
 

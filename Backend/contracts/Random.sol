@@ -109,7 +109,7 @@ contract RandomNumberConsumer is VRFV2WrapperConsumerBase, Ownable {
     * Sets the callback gas limit
     * @param gas_limit The gas limit for the callback
     */
-    function set_callback_gas_limit(uint32 gas_limit) public onlyOwner{
+    function set_callback_gas_limit(uint32 gas_limit) external onlyOwner{
         callbackGasLimit = gas_limit;
     }
 
@@ -117,7 +117,7 @@ contract RandomNumberConsumer is VRFV2WrapperConsumerBase, Ownable {
      * Sets the number of request confirmations for a random number request
      * @param confirmations The number of confirmations
      */
-    function set_request_confirmations(uint16 confirmations) public onlyOwner{
+    function set_request_confirmations(uint16 confirmations) external onlyOwner{
         requestConfirmations = confirmations;
     }
 
@@ -125,7 +125,7 @@ contract RandomNumberConsumer is VRFV2WrapperConsumerBase, Ownable {
      * Sets the address of the LINK token
      * @param link_address The address of the LINK token
      */
-    function set_link_address(address link_address) public onlyOwner{
+    function set_link_address(address link_address) external onlyOwner{
         linkAddress = link_address;
     }
 
@@ -133,7 +133,7 @@ contract RandomNumberConsumer is VRFV2WrapperConsumerBase, Ownable {
      * Sets the address of the VRF_V2_WRAPPER contract
      * @param wrapper_address The address of the VRF_V2_WRAPPER contract
      */
-    function set_wrapper_address(address wrapper_address) public onlyOwner{
+    function set_wrapper_address(address wrapper_address) external onlyOwner{
         wrapperAddress = wrapper_address;
     }
 
@@ -143,7 +143,7 @@ contract RandomNumberConsumer is VRFV2WrapperConsumerBase, Ownable {
      * @param flip_address The address of the CoinFlip contract (payable because of it can receive FTM)
      * @param raffle_address The address of the Raffle contract
      */
-    function set_contracts(address payable flip_address, address raffle_address) public onlyOnce onlyOwner{
+    function set_contracts(address payable flip_address, address raffle_address) external onlyOnce onlyOwner{
         flip_contract = CoinFlip(flip_address);
         raffle_contract = Raffle(raffle_address);
         only_once_counter += 1;
