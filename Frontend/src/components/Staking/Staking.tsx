@@ -1,10 +1,21 @@
 import { useState, useEffect } from "react";
-import {StakingContainer, Input, InputRow, SmallButton, StakingSubContainer, ApproveContainer, Plus, Minus, ClaimButton} from "../../styles/Staking.styles";
+import {StakingContainer, 
+        Input, 
+        InputRow, 
+        SmallButton, 
+        StakingSubContainer, 
+        ApproveContainer, 
+        Plus, 
+        Minus, 
+        ClaimButton} from "../../styles/Staking.styles";
+        
 import { Contract } from '@ethersproject/contracts'
 import { utils, ethers } from 'ethers'
 import { useCall, useContractFunction, useEthers } from '@usedapp/core'
+
 import Staking from '../../abi/Staking.json'
 import Obake from   '../../abi/Obake.json'
+
 import { StatusAnimation } from "../TransactionAnimation";
 import { STAKING_ADDRESS, MINTNFT_ADDRESS, PROVIDER_URL } from "../../env";
 import GetTxInfo  from '../GetTxInfo'
@@ -170,36 +181,39 @@ export default function(){
         else return (<></>)
     }
 
+    // UnstakeDown : Decrease the amount of NFTs to unstake (UI button)
     const UnstakeDown = () => {       
         let NFT_to_unstake = document.getElementsByName('NFT_to_unstake')[0] as HTMLInputElement;
         let input = parseInt(NFT_to_unstake.value);
         input-=1;
-        if (input < 0) input = 0;
+        if (input < 0) input = 0; // Cannot be negative
         NFT_to_unstake.value = input.toString();
     }    
 
+    // UnstakeUp : Increase the amount of NFTs to unstake (UI button)
     const UnstakeUp = () => {       
         let NFT_to_unstake = document.getElementsByName('NFT_to_unstake')[0] as HTMLInputElement;
         let input = parseInt(NFT_to_unstake.value);
         input+=1;
-        if (input >= balance) input = balance;
+        if (input >= balance) input = balance; // Note : balance is the amount of NFTs staked
         NFT_to_unstake.value = input.toString();
     }
 
-
+    // StakeDown : Decrease the amount of NFTs to stake (UI button)
     const StakeDown = () => {       
         let NFT_to_unstake = document.getElementsByName('NFT_to_stake')[0] as HTMLInputElement;
         let input = parseInt(NFT_to_unstake.value);
         input-=1;
-        if (input < 0) input = 0;
+        if (input < 0) input = 0;  // Cannot be negative
         NFT_to_unstake.value = input.toString();
     }    
 
+    // StakeUp : Increase the amount of NFTs to stake (UI button)
     const StakeUp = () => {       
         let NFT_to_unstake = document.getElementsByName('NFT_to_stake')[0] as HTMLInputElement;
         let input = parseInt(NFT_to_unstake.value);
         input+=1;
-        if (input >= balance_unstaked) input = balance_unstaked;
+        if (input >= balance_unstaked) input = balance_unstaked;  // Note : balance_unstaked is the amount of NFTs unstaked
         NFT_to_unstake.value = input.toString();
     }    
 

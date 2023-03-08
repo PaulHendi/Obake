@@ -6,6 +6,8 @@ import { SpinnerIcon, CheckIcon, ExclamationIcon } from '../assets/Icons'
 import { AnimatePresence, motion } from 'framer-motion'
 
 
+// Note : This component was taken from the usedapp example
+
 interface StatusBlockProps {
   color: string
   text: string

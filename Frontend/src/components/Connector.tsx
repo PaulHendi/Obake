@@ -1,5 +1,4 @@
-import React from "react";
-import { useEthers, useEtherBalance, Config} from '@usedapp/core'
+import { useEthers, Config} from '@usedapp/core'
 import styled from "styled-components";
 
 const ConnectWalletButton = styled.button`
@@ -20,6 +19,8 @@ const ConnectWalletButton = styled.button`
 `;
 
 
+// Futur todo : Add a generic wallet connector (Not only metmask)
+
 interface ConnectorProps {
     config: Config
   }
@@ -27,9 +28,6 @@ interface ConnectorProps {
 function Connector({config} : ConnectorProps) {
     const { account, activateBrowserWallet, deactivate, chainId, switchNetwork } = useEthers()
 
-    //if(chainId !== 4002) {
-    //  await switchNetwork(4002); // Okay ça marche mais async fout la merde je crois
-    //}
 
     const ConnectButton = () => (
         <div>
@@ -45,11 +43,7 @@ function Connector({config} : ConnectorProps) {
           {account && <ConnectWalletButton onClick={deactivate}>Disconnect Wallet</ConnectWalletButton>}
         </div>
       )
-
- 
-
-
-          
+   
     
 
   return (

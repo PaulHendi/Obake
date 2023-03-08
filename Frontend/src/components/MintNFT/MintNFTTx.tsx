@@ -2,7 +2,12 @@ import { Contract } from '@ethersproject/contracts'
 import { utils, ethers } from 'ethers'
 import { useCall, useContractFunction } from '@usedapp/core'
 import Obake from '../../abi/Obake.json'
-import { MintNFTContainer, Input, InputRow, SmallButton, Plus, Minus } from '../../styles/MintNFT.style'
+import { MintNFTContainer, 
+         Input, 
+         InputRow, 
+         SmallButton, 
+         Plus, 
+         Minus } from '../../styles/MintNFT.style'
 import { StatusAnimation } from '../TransactionAnimation'
 import { useEthers } from '@usedapp/core'
 import { MINTNFT_ADDRESS, PROVIDER_URL, OBAKE_NFT_URL } from '../../env'
@@ -47,19 +52,21 @@ export default function MintNFT() {
       void send(amount, {value: utils.parseEther(price), gasLimit: 2500000})
     }
 
+    // Function to decrease the number of NFT to mint (UI element)
     const StepDown = () => {       
       let NFT_number = document.getElementsByClassName('NFT_number')[0] as HTMLInputElement;
       let input = parseInt(NFT_number.value);
       input-=1;
-      if (input < 0) input = 0;
+      if (input < 0) input = 0; // Cannot be negative
       NFT_number.value = input.toString();
   }    
 
+  // Function to increase the number of NFT to mint (UI element)
   const StepUp = () => {       
       let NFT_number = document.getElementsByClassName('NFT_number')[0] as HTMLInputElement;
       let input = parseInt(NFT_number.value);
       input+=1;
-      if (input > 5) input = 5;
+      if (input > 5) input = 5; // Max 5 NFTs per transaction
       NFT_number.value = input.toString();
   }       
 
@@ -72,7 +79,7 @@ export default function MintNFT() {
       useCall( {
           contract: contract, // instance of called contract
           method: "supply", // Method to be called
-          args: [], // Method arguments - address to be checked for balance
+          args: [], 
           }
       ) ?? {};      
       const MaxSupply = 2500;

@@ -3,17 +3,23 @@ import {useState} from 'react';
 import  axios  from "axios";
 import { MetaMaskInpageProvider } from "@metamask/providers";
 
-import {ScanWalletContainer, ImageContainer, StartLotteryContainer, NewLotteryContainer, RaffleCreatedContainer,ApproveContainer} from "../../styles/ScanWallet.style";
+import {ScanWalletContainer, 
+        ImageContainer, 
+        StartLotteryContainer, 
+        NewLotteryContainer, 
+        RaffleCreatedContainer,
+        ApproveContainer} from "../../styles/ScanWallet.style";
+
 import { useCall, useEthers } from "@usedapp/core";
 import Raffle from '../../abi/Raffle.json'
 import ERC721 from '../../abi/ERC721.json'
 import { utils, ethers } from 'ethers'
 import { Contract } from '@ethersproject/contracts'
-import { useContractFunction, transactionErrored } from "@usedapp/core";
+import { useContractFunction } from "@usedapp/core";
 import { StatusAnimation } from '../TransactionAnimation'
 import GetTxInfo  from '../GetTxInfo'
 
-import {RAFFLE_ADDRESS, PROVIDER_URL} from "../../env";
+import {RAFFLE_ADDRESS} from "../../env";
 import { NavLink } from "react-router-dom";
 
 
@@ -26,34 +32,42 @@ declare global {
 
 export default function StartRaffle() {
   
-  const {account} = useEthers()
 
+  // Raffle contract
   const RaffleInterface = new utils.Interface(Raffle.abi)
-  const provider = new ethers.providers.Web3Provider(window.ethereum)//(PROVIDER_URL)
-  
-
   const RaffleContract = new Contract(RAFFLE_ADDRESS, RaffleInterface) 
 
+  // Define the provider (Used for the approve transaction, that is made without the useContractFunction)
+  const provider = new ethers.providers.Web3Provider(window.ethereum)
+
+  // Get the account from useEthers
+  const {account} = useEthers()
+
+  // Start raffle tx
   const { state : state_start_raffle, send :start_raffle } = useContractFunction(RaffleContract, 'start_new_raffle', { transactionName: 'start_new_raffle' })
 
+  // States : NFT selected, contract approved, raffle started, NFT info
   const [nft_selected, setNFTSelected] = React.useState("");
   const [contract_approved, setContractApproved] = React.useState(false);
   const [raffle_started, setRaffleStarted] = React.useState(false);
   const [nftInfo, setNFTInfo] = useState({loading: true, nft: {}});
 
 
+  // Get the list of NFT of the connected wallet
   React.useEffect(() => { 
  
+    // If no account is connected, return
     if (account == undefined) {
       return;
     }
-    console.log(account);
 
-
+    // Get the list of NFT in the wallet of the account (using Covalent API)
     let url = `https://api.covalenthq.com/v1/4002/address/${account}/balances_v2/?quote-currency=USD&format=JSON&nft=true&no-nft-fetch=false&key=ckey_96a32bab72724e39a3e5011afe2`;
 
 
+    
     axios.get(url).then(response => {
+
       let nft_url : any = {}
       let response_data = response.data.data.items;
 
@@ -64,6 +78,8 @@ export default function StartRaffle() {
           for (let j=0; j<response_data[i].nft_data.length;j++) {
 
             // Replace https://ipfs.io by https://gateway.pinata.cloud/ to get the image quicker
+            // Note : this is a workaround, the image should be fetched directly from the contract
+            // This needs to be change when launching the app
             let image_url : string = response_data[i].nft_data[j].external_data.image.replace("https://ipfs.io", "https://gateway.pinata.cloud");
             let nft_name : string = response_data[i].nft_data[j].external_data.name;
             let nft_sc : string = response_data[i].contract_address;
@@ -78,24 +94,26 @@ export default function StartRaffle() {
     })
    
   }, [account, raffle_started]); 
-  // Need to recall the useEffect when account list NFT (useState with a new state that checks if a new raflle has been created)
-
+  
 
   const { loading, nft } = nftInfo;
 
 
+  // Start a new raffle transaction
   const startRaffleTx = (contract_address : string, 
                            nft_id :string, 
                            ticket_amount: number, 
                            ticket_price: number) => {
 
-
+    // Send the transaction
     void start_raffle(contract_address, nft_id, utils.parseEther(ticket_price.toString()), ticket_amount, {gasLimit: 2500000});
     setRaffleStarted(true);
   }
 
 
+  // Approve the contract to transfer the NFT
   const approveContract = (contract : Contract, id: number) => {
+
     // This workaround works but there's no state hence no transactionAnimation
     contract.connect(provider.getSigner(account)).approve(RAFFLE_ADDRESS, id).then((response : any) => {
                 console.log(response)
@@ -105,9 +123,10 @@ export default function StartRaffle() {
 
   }
 
-  // TODO : Pb when creating a lottery, the query getAproved is set to false, hence approve button appears
+  // This component handles the creation of a new raffle (approving the contract, starting the raffle)
   const StartNewLottery = () => {
 
+    // Create a new instance of an ERC721 contract (with given address)
     const NFTContractAddress = nft_selected["sc_contract"]
     const NFTInterface = new utils.Interface(ERC721.abi)
     const NFTContract = new Contract(NFTContractAddress, NFTInterface, provider)
@@ -119,6 +138,7 @@ export default function StartRaffle() {
              args :[nft_selected["id"]]})
     
 
+    // If the contract is not approved, display the approve button
     if(reponse?.value?.toString() !== RAFFLE_ADDRESS && !raffle_started) {
       
       return (
@@ -130,9 +150,10 @@ export default function StartRaffle() {
       )
     }
 
+    // If the contract is approved, display the start raffle button
     else {
-      // Get NFT info
       setContractApproved(true);
+
       return (
         <StartLotteryContainer>
           
@@ -153,6 +174,7 @@ export default function StartRaffle() {
   }
 
 
+  // This component is displayed when a raffle is created
   const RaffleCreated = () => {
 
     return (

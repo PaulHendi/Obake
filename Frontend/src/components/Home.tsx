@@ -1,5 +1,4 @@
-import React from "react";
-import { HomeContainer, ImgContainer, StoryContainer, StoryTextContainer, EndStoryContainer } from "../styles/Home.style";
+import { HomeContainer, ImgContainer, StoryContainer, StoryTextContainer } from "../styles/Home.style";
 import ObakeLogo from "../assets/ObakeLogo.jpg";
 
 export default function Home() {

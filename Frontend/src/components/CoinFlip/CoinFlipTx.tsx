@@ -1,14 +1,22 @@
+import { useState } from 'react'
 import { Contract } from '@ethersproject/contracts'
 import { utils } from 'ethers'
-import { useCall, useContractFunction } from '@usedapp/core'
+import { useEthers, useCall, useContractFunction } from '@usedapp/core'
+
 import CoinFlip from '../../abi/CoinFlip.json'
-import {CoinFlipContainer,Wrapper, CustomInput, LabelInput, RadioInput, Label, OutcomContainer, CoinWrapper} from  "../../styles/HeadsOrTail.js"
+import {CoinFlipContainer,
+        Wrapper, 
+        CustomInput, 
+        LabelInput, 
+        RadioInput, 
+        Label, 
+        OutcomContainer, 
+        CoinWrapper} from  "../../styles/HeadsOrTail.js"
+
 import { StatusAnimation } from '../TransactionAnimation'
-import { useEthers } from '@usedapp/core'
 import { COINFLIP_ADDRESS } from '../../env'
 import GetTxInfo  from '../GetTxInfo'
 
-import { useState } from 'react'
 
 
 interface GameInfo {
@@ -23,10 +31,6 @@ interface GameInfo {
 export default function CoinFlipPlay() {
 
 
-    // TODO : 
-    // Clean code
-    // See if there's a way to wait for the results and not display previous results 
-    // If won include a link to the Tx on FTMScan
 
     // CoinFlip contract
     const CoinFlipInterface = new utils.Interface(CoinFlip.abi)
@@ -79,10 +83,6 @@ export default function CoinFlipPlay() {
 
           let value = call_status["value"][0] 
           let bet : number = Number(value["bet"]?.toString())
-
-          console.log(bet)
-          console.log(value["ended"])
-          console.log(value["won"])
           
 
           if (value["ended"]) {
