@@ -21,12 +21,25 @@ Then start the server :
 
 `npm run dev`
 
+
+If you just updated the contract, don't forget to update the ABIs and set the correct addresses in the env.js file
+
 ## Todo 
 
 Many things, but basically : 
 
-- If there's time : force the user to set up the right network
-- Maybe do a better UI for the CoinFlip page, with an animation for example.
-- Better UI globally if there's time
-- See the winner of the raffle once it's over and if there's one
-- Maybe launch the website in prod with Heroku, netlify, so that people can test the dApp
+- Force the user to set up the right network
+- Better UI globally 
+- Correct some bugs 
+- Before launching on the mainnet, use Moralis NFT API to scan the wallet
+
+## Futur improvements 
+
+We could add many dApps to improve the experience : 
+
+- English auction
+- A roulette
+- A lending platform
+- A peer-to-peer NFT marketplace
+
+All those dApps could generate revenues and distribute them to holders.

@@ -68,7 +68,7 @@ export default function StartRaffle() {
             let nft_name : string = response_data[i].nft_data[j].external_data.name;
             let nft_sc : string = response_data[i].contract_address;
             let nft_id : string = response_data[i].nft_data[j].token_id;
-            nft_url[nft_name+ "_" + nft_sc.slice(0,6)] = {"url" : image_url, "sc_contract" : nft_sc, "id" : nft_id}
+            nft_url[nft_name] = {"url" : image_url, "sc_contract" : nft_sc, "id" : nft_id}
           }
               
         }
